@@ -1,190 +1,264 @@
 <body class="hold-transition sidebar-mini">
 	<div class="wrapper">
-		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h5>Itsbat Nikah</h5>
+							<h1 class="m-0 text-dark"><i class="fas fa-certificate mr-2"></i> Itsbat Nikah</h1>
 						</div>
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
-								<li class="breadcrumb-item active">#</li>
+								<li class="breadcrumb-item"><a href="<?= site_url('Admin/Dashboard') ?>">Home</a></li>
+								<li class="breadcrumb-item">Permohonan</li>
+								<li class="breadcrumb-item active">Itsbat Nikah</li>
 							</ol>
 						</div>
 					</div>
-				</div><!-- /.container-fluid -->
+				</div>
 			</section>
-			<!-- Main content -->
+
 			<section class="content">
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-12">
-							<div class="card">
-								<div class="card-header">
-									<form action="<?php echo base_url() ?>index.php/Itsbat" method="POST">
-										Laporan Bulan :
-										<select name="lap_bulan" required="">
-											<option value="01" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '01') ? 'selected' : ''; ?>>Januari</option>
-											<option value="02" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '02') ? 'selected' : ''; ?>>Februari</option>
-											<option value="03" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '03') ? 'selected' : ''; ?>>Maret</option>
-											<option value="04" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '04') ? 'selected' : ''; ?>>April</option>
-											<option value="05" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '05') ? 'selected' : ''; ?>>Mei</option>
-											<option value="06" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '06') ? 'selected' : ''; ?>>Juni</option>
-											<option value="07" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '07') ? 'selected' : ''; ?>>Juli</option>
-											<option value="08" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '08') ? 'selected' : ''; ?>>Agustus</option>
-											<option value="09" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '09') ? 'selected' : ''; ?>>September</option>
-											<option value="10" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '10') ? 'selected' : ''; ?>>Oktober</option>
-											<option value="11" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '11') ? 'selected' : ''; ?>>Nopember</option>
-											<option value="12" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '12') ? 'selected' : ''; ?>>Desember</option>
-										</select>
-										Tahun :
-										<select name="lap_tahun" required="">
-											<option value="2016" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2016') ? 'selected' : ''; ?>>2016</option>
-											<option value="2017" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2017') ? 'selected' : ''; ?>>2017</option>
-											<option value="2018" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2018') ? 'selected' : ''; ?>>2018</option>
-											<option value="2019" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2019') ? 'selected' : ''; ?>>2019</option>
-											<option value="2020" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2020') ? 'selected' : ''; ?>>2020</option>
-											<option value="2021" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2021') ? 'selected' : ''; ?>>2021</option>
-											<option value="2022" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2022') ? 'selected' : ''; ?>>2022</option>
-											<option value="2023" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2023') ? 'selected' : ''; ?>>2023</option>
-											<option value="2024" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2024') ? 'selected' : ''; ?>>2024</option>
-											<option value="2025" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2025') ? 'selected' : ''; ?>>2025</option>
-										</select>
-										<input class="btn btn-primary" type="submit" name="btn" value="Tampilkan" />
-
-								</div>
-								<!-- /.card-header -->
-								<div class="card-body">
-									<table class="table table-bordered table-striped" id="example1">
-										<thead>
-											<tr>
-												<th>Nomor</th>
-												<th>Nomor Perkara</th>
-												<th>Tanggal Pendaftaran</th>
-												<th>Tanggal Putus</th>
-												<th>Jenis Putusan</th>
-
-												<th>Tahun Nikah</th>
-												<th>Pemohon I</th>
-												<th>Tanggal Lahir PI</th>
-												<th>Usia Pemohon I</th>
-
-												<th>Pemohon II</th>
-												<th>Tanggal Lahir PII</th>
-												<th>Usia Pemohon II</th>
-
-											</tr>
-										</thead>
-										<tbody>
-											<?php
-											$no = 1;
-											$baris1 = 3;
-											$baris2 = 3;
-											$baris3 = 3;
-											$baris4 = 3;
-											foreach ($datafilter as $row) : ?>
-												<tr>
-													<td><?php echo $no++ ?></td>
-													<td><?php echo $row->nomor_perkara ?></td>
-													<td><?php echo $row->tanggal_pendaftaran ?></td>
-													<td><?php echo $row->tanggal_putusan ?></td>
-													<td><?php echo $row->jenis_putusan ?></td>
-
-													<td><?php
-														// Contoh string, gantikan dengan $row->tahun_nikah atau sumber data Anda
-														$string = $row->tahun_nikah;
-
-														// Menggunakan regex untuk mengekstrak tanggal
-														preg_match('/\d{1,2}\s\w+\s\d{4}/', $string, $matches);
-
-														// Menampilkan tanggal yang diekstrak
-														echo $matches[0];
-														?> </td>
-													<td><?php echo $row->nama_p1 ?></td>
-													<?php
-													// Contoh tanggal dari database
-													$tanggal_lahir = $row->tanggal_lahir_p1; // Misal: "2021-01-31"
-
-													// Ubah ke format tanggal PHP
-													$tanggal = new DateTime($tanggal_lahir);
-
-													// Buat array nama bulan dalam Bahasa Indonesia
-													$bulanIndonesia = [
-														'01' => 'Januari',
-														'02' => 'Februari',
-														'03' => 'Maret',
-														'04' => 'April',
-														'05' => 'Mei',
-														'06' => 'Juni',
-														'07' => 'Juli',
-														'08' => 'Agustus',
-														'09' => 'September',
-														'10' => 'Oktober',
-														'11' => 'November',
-														'12' => 'Desember',
-													];
-
-													// Format tanggal ke dd-mm-yyyy
-													$tanggalIndonesia = $tanggal->format('d') . ' ' . $bulanIndonesia[$tanggal->format('m')] . ' ' . $tanggal->format('Y');
-
-													// Tampilkan tanggal dalam format Indonesia
-													echo "<td>$tanggalIndonesia</td>";
-													?>
-													<td><?php echo $row->usia_p1 ?> tahun</td>
-
-													<td><?php echo $row->nama_p2 ?></td>
-													<?php
-													// Contoh tanggal dari database
-													$tanggal_lahir = $row->tanggal_lahir_p2; // Misal: "2021-01-31"
-
-													// Ubah ke format tanggal PHP
-													$tanggal = new DateTime($tanggal_lahir);
-
-													// Buat array nama bulan dalam Bahasa Indonesia
-													$bulanIndonesia = [
-														'01' => 'Januari',
-														'02' => 'Februari',
-														'03' => 'Maret',
-														'04' => 'April',
-														'05' => 'Mei',
-														'06' => 'Juni',
-														'07' => 'Juli',
-														'08' => 'Agustus',
-														'09' => 'September',
-														'10' => 'Oktober',
-														'11' => 'November',
-														'12' => 'Desember',
-													];
-
-													// Format tanggal ke dd-mm-yyyy
-													$tanggalIndonesia = $tanggal->format('d') . ' ' . $bulanIndonesia[$tanggal->format('m')] . ' ' . $tanggal->format('Y');
-
-													// Tampilkan tanggal dalam format Indonesia
-													echo "<td>$tanggalIndonesia</td>";
-													?>
-													<td><?php echo $row->usia_p2 ?> tahun</td>
-
-												</tr>
-											<?php endforeach; ?>
-										</tbody>
-									</table>
-								</div>
-								<!-- /.card-body -->
-								</form>
-							</div>
-							<!-- /.card -->
+					<!-- Filter Card -->
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filter Data</h3>
 						</div>
-						<!-- /.col -->
+						<div class="card-body">
+							<form action="<?php echo base_url() ?>index.php/Itsbat" method="POST" class="form-horizontal">
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Laporan Bulan:</label>
+									<div class="col-sm-4">
+										<select name="lap_bulan" class="form-control select2" required="">
+											<?php
+											$months = [
+												'01' => 'Januari',
+												'02' => 'Februari',
+												'03' => 'Maret',
+												'04' => 'April',
+												'05' => 'Mei',
+												'06' => 'Juni',
+												'07' => 'Juli',
+												'08' => 'Agustus',
+												'09' => 'September',
+												'10' => 'Oktober',
+												'11' => 'November',
+												'12' => 'Desember'
+											];
+
+											foreach ($months as $value => $label) {
+												$selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : '';
+												echo "<option value=\"$value\" $selected>$label</option>";
+											}
+											?>
+										</select>
+									</div>
+
+									<label class="col-sm-2 col-form-label">Tahun:</label>
+									<div class="col-sm-4">
+										<select name="lap_tahun" class="form-control select2" required="">
+											<?php
+											$currentYear = date('Y');
+											for ($year = 2016; $year <= $currentYear + 1; $year++) {
+												$selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year)
+													? 'selected'
+													: ($year == $currentYear && !isset($_POST['lap_tahun']) ? 'selected' : '');
+												echo "<option value=\"$year\" $selected>$year</option>";
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-4 offset-sm-8">
+										<button type="submit" name="btn" class="btn btn-primary btn-block">
+											<i class="fas fa-search mr-2"></i> Tampilkan Data
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
 					</div>
-					<!-- /.row -->
+
+					<?php if (isset($_POST['btn'])): ?>
+						<!-- Data Card -->
+						<div class="card">
+							<div class="card-header bg-success">
+								<h3 class="card-title">
+									<i class="fas fa-certificate mr-1"></i>
+									Data Itsbat Nikah -
+									<?php
+									echo isset($months[$_POST['lap_bulan']]) ? $months[$_POST['lap_bulan']] : '';
+									echo " ";
+									echo isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : '';
+									?>
+								</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-tool" data-card-widget="maximize">
+										<i class="fas fa-expand"></i>
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<?php if (!empty($datafilter)): ?>
+									<div class="table-responsive">
+										<table id="example1" class="table table-bordered table-striped table-hover">
+											<thead class="bg-info">
+												<tr>
+													<th width="3%" class="text-center">No</th>
+													<th width="12%">Nomor Perkara</th>
+													<th width="10%">Tanggal Daftar</th>
+													<th width="10%">Tanggal Putus</th>
+													<th width="10%">Status Putusan</th>
+													<th width="8%">Tahun Nikah</th>
+													<th width="10%">Pemohon I</th>
+													<th width="9%">Usia I</th>
+													<th width="10%">Pemohon II</th>
+													<th width="9%">Usia II</th>
+													<th width="9%">Durasi</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+												$no = 1;
+												foreach ($datafilter as $row):
+													// Calculate marriage duration
+													$marriageYear = null;
+													$duration = null;
+													if (!empty($row->tahun_nikah)) {
+														preg_match('/\b(19|20)\d{2}\b/', $row->tahun_nikah, $matches);
+														if (!empty($matches[0])) {
+															$marriageYear = (int)$matches[0];
+															$currentYear = date('Y');
+															$duration = $currentYear - $marriageYear;
+														}
+													}
+												?>
+													<tr>
+														<td class="text-center"><?= $no++ ?></td>
+														<td>
+															<span class="badge badge-primary"><?= $row->nomor_perkara ?></span>
+														</td>
+														<td><?= date('d-m-Y', strtotime($row->tanggal_pendaftaran)) ?></td>
+														<td><?= !empty($row->tanggal_putusan) ? date('d-m-Y', strtotime($row->tanggal_putusan)) : '-' ?></td>
+														<td>
+															<?php if (!empty($row->jenis_putusan)): ?>
+																<span class="badge badge-success"><?= $row->jenis_putusan ?></span>
+															<?php else: ?>
+																<span class="badge badge-warning">Belum Putus</span>
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php
+															if (!empty($marriageYear)) {
+																echo "<span class='badge badge-info'>$marriageYear</span>";
+															} else {
+																echo '-';
+															}
+															?>
+														</td>
+														<td>
+															<strong><?= $row->nama_p1 ?></strong>
+															<?php if (!empty($row->tanggal_lahir_p1)): ?>
+																<div class="small text-muted">
+																	<?= date('d-m-Y', strtotime($row->tanggal_lahir_p1)) ?>
+																</div>
+															<?php endif; ?>
+														</td>
+														<td class="text-center">
+															<span class="badge badge-secondary">
+																<?= $row->usia_p1 ?> tahun
+															</span>
+														</td>
+														<td>
+															<strong><?= $row->nama_p2 ?></strong>
+															<?php if (!empty($row->tanggal_lahir_p2)): ?>
+																<div class="small text-muted">
+																	<?= date('d-m-Y', strtotime($row->tanggal_lahir_p2)) ?>
+																</div>
+															<?php endif; ?>
+														</td>
+														<td class="text-center">
+															<span class="badge badge-secondary">
+																<?= $row->usia_p2 ?> tahun
+															</span>
+														</td>
+														<td class="text-center">
+															<?php if (!empty($duration)): ?>
+																<span class="badge badge-dark">
+																	<?= $duration ?> tahun
+																</span>
+															<?php else: ?>
+																-
+															<?php endif; ?>
+														</td>
+													</tr>
+												<?php endforeach; ?>
+											</tbody>
+										</table>
+									</div>
+								<?php else: ?>
+									<div class="alert alert-info">
+										<h5><i class="icon fas fa-info"></i> Informasi</h5>
+										Tidak ada data Itsbat Nikah pada periode yang dipilih.
+									</div>
+								<?php endif; ?>
+							</div>
+
+							<?php if (!empty($datafilter)): ?>
+								<div class="card-footer">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="info-box bg-light">
+												<div class="info-box-content">
+													<span class="info-box-text text-center text-muted">Total Perkara</span>
+													<span class="info-box-number text-center text-muted mb-0"><?= count($datafilter) ?></span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="info-box bg-light">
+												<div class="info-box-content">
+													<span class="info-box-text text-center text-muted">Rata-rata Usia Pemohon I</span>
+													<span class="info-box-number text-center text-muted mb-0">
+														<?php
+														$totalUsia = 0;
+														foreach ($datafilter as $row) {
+															$totalUsia += $row->usia_p1;
+														}
+														echo round($totalUsia / count($datafilter), 1) . ' tahun';
+														?>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="info-box bg-light">
+												<div class="info-box-content">
+													<span class="info-box-text text-center text-muted">Rata-rata Usia Pemohon II</span>
+													<span class="info-box-number text-center text-muted mb-0">
+														<?php
+														$totalUsia = 0;
+														foreach ($datafilter as $row) {
+															$totalUsia += $row->usia_p2;
+														}
+														echo round($totalUsia / count($datafilter), 1) . ' tahun';
+														?>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
 				</div>
-				<!-- /.container-fluid -->
 			</section>
-			<!-- /.content -->
 		</div>
 	</div>
 	<!-- ./wrapper -->
