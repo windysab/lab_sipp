@@ -458,19 +458,32 @@
 					$("#bulan_container").hide();
 					$("#lap_bulan").prop("required", false);
 					$("#lap_bulan").prop("disabled", true);
+					// Force select2 to update its state
+					if ($.fn.select2) {
+						$("#lap_bulan").select2("enable", false);
+					}
 				} else {
 					$("#bulan_container").show();
 					$("#lap_bulan").prop("required", true);
 					$("#lap_bulan").prop("disabled", false);
+					// Force select2 to update its state
+					if ($.fn.select2) {
+						$("#lap_bulan").select2("enable", true);
+					}
 				}
 			}
 
-			// Initial state
+			// Initial state - make sure this runs immediately
 			toggleBulanField();
 
 			// Listen for changes
 			$("input[name='jenis_laporan']").change(function() {
 				toggleBulanField();
 			});
+
+			// Ensure the function is called after page load
+			setTimeout(function() {
+				toggleBulanField();
+			}, 100);
 		});
 	</script>
