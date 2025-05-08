@@ -4,15 +4,15 @@
 			<strong>Sistem Informasi Pengadilan Agama Amuntai &copy; <?php echo date('Y'); ?></strong>
 		</div>
 		<div>
-			<span class="text-muted">Developed by</span>
-			<a href="https://lupiananda.com" class="text-primary">Lupi Ananda, S.Kom</a>
-			<span class="badge badge-info">v2.0</span>
+			<span class="text-muted">Dikembangkan oleh</span>
+			<a href="#" class="text-primary">Tim IT Pengadilan Agama Amuntai</a>
+			<span class="badge badge-info">v2.1</span>
 		</div>
 	</div>
 </footer>
 
 <aside class="control-sidebar control-sidebar-dark">
-	<!-- Control sidebar content goes here -->
+	<!-- Control sidebar content goes here --> 
 </aside>
 </div>
 <!-- ./wrapper -->

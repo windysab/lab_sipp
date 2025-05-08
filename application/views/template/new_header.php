@@ -44,11 +44,13 @@
 
 		.main-sidebar {
 			background-color: #046354;
+			background-image: linear-gradient(to bottom, #046354, #024a3e);
 		}
 
 		.sidebar-dark-green .nav-sidebar>.nav-item>.nav-link.active {
 			background-color: #035045;
 			color: #ffffff;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 		}
 
 		.brand-image-xl {
@@ -70,6 +72,8 @@
 			color: #d0d0d0 !important;
 			font-size: 0.9rem;
 			padding: 0.5rem 1rem 0.5rem 1rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
 		}
 
 		.user-panel .image {
@@ -84,6 +88,108 @@
 
 		.dropdown-menu-lg {
 			min-width: 280px;
+		}
+
+		.card {
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+			transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+			margin-bottom: 1.5rem;
+		}
+
+		.card:hover {
+			box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		}
+
+		.card-header {
+			border-bottom: none;
+		}
+
+		.card-primary.card-outline {
+			border-top: 3px solid #046354;
+		}
+
+		.btn-primary {
+			background-color: #046354;
+			border-color: #035045;
+		}
+
+		.btn-primary:hover,
+		.btn-primary:active,
+		.btn-primary:focus {
+			background-color: #035045 !important;
+			border-color: #023a30 !important;
+		}
+
+		.page-item.active .page-link {
+			background-color: #046354;
+			border-color: #035045;
+		}
+
+		.main-footer {
+			padding: 0.8rem;
+			border-top: 1px solid #dee2e6;
+			background-color: #f8f9fa;
+		}
+
+		.table-striped tbody tr:nth-of-type(odd) {
+			background-color: rgba(4, 99, 84, 0.05);
+		}
+
+		.avatar-initial {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background-color: #046354;
+			color: #fff;
+			font-weight: bold;
+		}
+
+		.bg-light-success {
+			background-color: rgba(40, 167, 69, 0.1) !important;
+		}
+
+		.text-success {
+			color: #28a745 !important;
+		}
+
+		.content-wrapper {
+			background-color: #f8f9fa;
+		}
+
+		/* Animation for cards */
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translate3d(0, 20px, 0);
+			}
+
+			to {
+				opacity: 1;
+				transform: none;
+			}
+		}
+
+		.card {
+			animation: fadeInUp 0.4s ease-out forwards;
+		}
+
+		/* Breadcrumb styling */
+		.breadcrumb {
+			background-color: transparent;
+			padding: 0.5rem 0;
+		}
+
+		/* Info box enhancement */
+		.info-box {
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		}
+
+		/* Table head styling */
+		.table thead th {
+			border-bottom: 2px solid #046354;
 		}
 	</style>
 
