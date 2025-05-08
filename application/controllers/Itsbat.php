@@ -17,7 +17,7 @@ class Itsbat extends CI_Controller
 		// Load necessary models and libraries
 		$this->load->model("M_Itsbat");
 		$this->load->library('form_validation');
-		$this->load->helper('date');
+		$this->load->helper(['date', 'itsbat']);
 	}
 
 	/**

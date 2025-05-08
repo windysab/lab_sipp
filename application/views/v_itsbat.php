@@ -114,25 +114,74 @@
 													<th width="10%">Tanggal Daftar</th>
 													<th width="10%">Tanggal Putus</th>
 													<th width="10%">Status Putusan</th>
-													<th width="8%">Tahun Nikah</th>
-													<th width="10%">Pemohon I</th>
-													<th width="9%">Usia I</th>
-													<th width="10%">Pemohon II</th>
-													<th width="9%">Usia II</th>
-													<th width="9%">Durasi</th>
+													<th width="12%">Tanggal Nikah</th>
+													<th width="15%">Pemohon I</th>
+													<th width="15%">Pemohon II</th>
+													<th width="8%">Durasi Nikah</th>
 												</tr>
 											</thead>
 											<tbody>
 												<?php
 												$no = 1;
 												foreach ($datafilter as $row):
-													// Calculate marriage duration
+													// Extract complete marriage date
+													$marriageDate = null;
 													$marriageYear = null;
+													$marriageMonth = null;
+													$marriageDay = null;
+													$marriageInfo = "";
 													$duration = null;
+
 													if (!empty($row->tahun_nikah)) {
-														preg_match('/\b(19|20)\d{2}\b/', $row->tahun_nikah, $matches);
-														if (!empty($matches[0])) {
-															$marriageYear = (int)$matches[0];
+														// Try to find a full date pattern like DD-MM-YYYY or DD/MM/YYYY
+														preg_match('/\b\d{1,2}[\/-]\d{1,2}[\/-](19|20)\d{2}\b/', $row->tahun_nikah, $fullDateMatches);
+
+														if (!empty($fullDateMatches[0])) {
+															// Try to parse the full date
+															$dateStr = str_replace('/', '-', $fullDateMatches[0]);
+															$marriageDate = date_create_from_format('d-m-Y', $dateStr);
+
+															if ($marriageDate) {
+																$marriageYear = date_format($marriageDate, 'Y');
+																$marriageMonth = date_format($marriageDate, 'm');
+																$marriageDay = date_format($marriageDate, 'd');
+																$marriageInfo = date_format($marriageDate, 'd-m-Y');
+															}
+														} else {
+															// If no full date found, try to find just the year
+															preg_match('/\b(19|20)\d{2}\b/', $row->tahun_nikah, $yearMatches);
+															if (!empty($yearMatches[0])) {
+																$marriageYear = (int)$yearMatches[0];
+																$marriageInfo = "Tahun " . $marriageYear;
+
+																// Also try to find month if available
+																preg_match('/\b(?:januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)\b/i', $row->tahun_nikah, $monthMatches);
+																if (!empty($monthMatches[0])) {
+																	$monthNames = array(
+																		'januari' => '01',
+																		'februari' => '02',
+																		'maret' => '03',
+																		'april' => '04',
+																		'mei' => '05',
+																		'juni' => '06',
+																		'juli' => '07',
+																		'agustus' => '08',
+																		'september' => '09',
+																		'oktober' => '10',
+																		'november' => '11',
+																		'desember' => '12'
+																	);
+																	$monthKey = strtolower($monthMatches[0]);
+																	if (array_key_exists($monthKey, $monthNames)) {
+																		$marriageMonth = $monthNames[$monthKey];
+																		$marriageInfo = "Bulan " . ucfirst($monthMatches[0]) . " " . $marriageYear;
+																	}
+																}
+															}
+														}
+
+														// Calculate marriage duration
+														if ($marriageYear) {
 															$currentYear = date('Y');
 															$duration = $currentYear - $marriageYear;
 														}
@@ -153,39 +202,46 @@
 															<?php endif; ?>
 														</td>
 														<td>
-															<?php
-															if (!empty($marriageYear)) {
-																echo "<span class='badge badge-info'>$marriageYear</span>";
-															} else {
-																echo '-';
-															}
-															?>
+															<?php if (!empty($marriageInfo)): ?>
+																<span class="badge badge-info"><?= $marriageInfo ?></span>
+																<?php if (strlen($row->tahun_nikah) > 50): ?>
+																	<span class="d-block mt-1 small text-muted">
+																		<a href="#" data-toggle="tooltip" title="<?= htmlspecialchars(substr($row->tahun_nikah, 0, 200)) ?>...">
+																			<i class="fas fa-info-circle"></i> Detail Posita
+																		</a>
+																	</span>
+																<?php endif; ?>
+															<?php else: ?>
+																-
+															<?php endif; ?>
 														</td>
 														<td>
 															<strong><?= $row->nama_p1 ?></strong>
 															<?php if (!empty($row->tanggal_lahir_p1)): ?>
-																<div class="small text-muted">
-																	<?= date('d-m-Y', strtotime($row->tanggal_lahir_p1)) ?>
+																<div class="d-block mt-1">
+																	<span class="badge badge-light">
+																		<i class="far fa-calendar-alt mr-1"></i>
+																		Lahir: <?= date('d-m-Y', strtotime($row->tanggal_lahir_p1)) ?>
+																	</span>
+																	<span class="badge badge-secondary">
+																		<?= $row->usia_p1 ?> tahun
+																	</span>
 																</div>
 															<?php endif; ?>
-														</td>
-														<td class="text-center">
-															<span class="badge badge-secondary">
-																<?= $row->usia_p1 ?> tahun
-															</span>
 														</td>
 														<td>
 															<strong><?= $row->nama_p2 ?></strong>
 															<?php if (!empty($row->tanggal_lahir_p2)): ?>
-																<div class="small text-muted">
-																	<?= date('d-m-Y', strtotime($row->tanggal_lahir_p2)) ?>
+																<div class="d-block mt-1">
+																	<span class="badge badge-light">
+																		<i class="far fa-calendar-alt mr-1"></i>
+																		Lahir: <?= date('d-m-Y', strtotime($row->tanggal_lahir_p2)) ?>
+																	</span>
+																	<span class="badge badge-secondary">
+																		<?= $row->usia_p2 ?> tahun
+																	</span>
 																</div>
 															<?php endif; ?>
-														</td>
-														<td class="text-center">
-															<span class="badge badge-secondary">
-																<?= $row->usia_p2 ?> tahun
-															</span>
 														</td>
 														<td class="text-center">
 															<?php if (!empty($duration)): ?>

@@ -59,7 +59,10 @@ class M_Itsbat extends CI_Model
 				return array();
 			}
 
-			return $query->result();
+			// Process the results to extract marriage date information
+			$results = $query->result();
+
+			return $results;
 		} catch (Exception $e) {
 			log_message('error', 'Error in itsbat query: ' . $e->getMessage());
 			return array();
