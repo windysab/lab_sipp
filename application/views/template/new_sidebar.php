@@ -1,314 +1,304 @@
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="<?php echo site_url('Admin/Dashboard') ?>" class="brand-link">
-      <img src="<?php echo base_url() ?>assets/dist/img/logo-mahkamah-agung.png" alt="Logo PA Amuntai" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">LABORATORIUM SIPP</span>
-    </a>
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-green elevation-4">
+	<!-- Brand Logo -->
+	<a href="<?php echo site_url('Admin/Dashboard') ?>" class="brand-link navbar-green">
+		<img src="<?php echo base_url() ?>assets/dist/img/logo-mahkamah-agung.png" alt="Logo PA Amuntai" class="brand-image img-circle elevation-2" style="opacity: .8">
+		<span class="brand-text font-weight-light">SIPP PA Amuntai</span>
+	</a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="<?php echo base_url() ?>assets/dist/img/Logo PA Amuntai - Trans.png" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">PA Amuntai</a>
-        </div>
-      </div>
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Sidebar user panel (optional) -->
+		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+			<div class="image">
+				<img src="<?php echo base_url() ?>assets/dist/img/Logo PA Amuntai - Trans.png" class="img-circle elevation-2" alt="User Image">
+			</div>
+			<div class="info">
+				<a href="#" class="d-block">Administrator</a>
+				<span class="badge badge-success">Online</span>
+			</div>
+		</div>
 
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+		<!-- Sidebar Menu -->
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+				<!-- Dashboard -->
+				<li class="nav-item">
+					<a href="<?php echo site_url('Admin/Dashboard') ?>" class="nav-link active">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>Dashboard</p>
+					</a>
+				</li>
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="<?php echo site_url('Admin/Dashboard') ?>" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-          </li>
+				<li class="nav-header">MANAJEMEN PERKARA</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Laporan Kegiatan Hakim
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Sisa_bulan_lalu') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Sisa Perkara Bulan Lalu</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Masuk') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Perkara Masuk</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Putus') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Perkara Putus</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Sisa_bulan_ini') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Sisa Perkara Bulan Ini</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<!-- Laporan Kegiatan Hakim -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-gavel"></i>
+						<p>
+							Laporan Kegiatan Hakim
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Sisa_bulan_lalu') ?>" class="nav-link">
+								<i class="far fa-calendar-minus nav-icon"></i>
+								<p>Sisa Perkara Bulan Lalu</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Masuk') ?>" class="nav-link">
+								<i class="fas fa-inbox nav-icon"></i>
+								<p>Perkara Masuk</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Putus') ?>" class="nav-link">
+								<i class="fas fa-check-circle nav-icon"></i>
+								<p>Perkara Putus</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Sisa_bulan_ini') ?>" class="nav-link">
+								<i class="fas fa-calendar-week nav-icon"></i>
+								<p>Sisa Perkara Bulan Ini</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Ket. Keadaan Perkara
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('PNS') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>PNS</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Ghaib') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ghaib</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Prodeo') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Prodeo</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<!-- Ket. Keadaan Perkara -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-clipboard-list"></i>
+						<p>
+							Ket. Keadaan Perkara
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('PNS') ?>" class="nav-link">
+								<i class="fas fa-user-tie nav-icon"></i>
+								<p>PNS</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Ghaib') ?>" class="nav-link">
+								<i class="fas fa-user-slash nav-icon"></i>
+								<p>Ghaib</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Prodeo') ?>" class="nav-link">
+								<i class="fas fa-hand-holding-usd nav-icon"></i>
+								<p>Prodeo</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Permohonan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Itsbat') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Itsbat Nikah</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Diska') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dispensasi Kawin</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<li class="nav-header">JENIS PERKARA</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Gugatan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Penyerahan_ac') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Penyerahan Akta Cerai</p>
-                </a>
-              </li>
-            </ul>
-       
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Usia_cerai') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Lap. Usia Perceraian</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Cerai_kua') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Lap. Perceraian KUA</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Reg_salput') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Register Salput ke KUA</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<!-- Permohonan -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-file-signature"></i>
+						<p>
+							Permohonan
+							<i class="fas fa-angle-left right"></i>
+							<span class="badge badge-info right">2</span>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Itsbat') ?>" class="nav-link">
+								<i class="fas fa-certificate nav-icon"></i>
+								<p>Itsbat Nikah</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Diska') ?>" class="nav-link">
+								<i class="fas fa-people-arrows nav-icon"></i>
+								<p>Dispensasi Kawin</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                E-Court
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Ecourt') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Perkara E-Court</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Rekap_ecourt') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Rekap E-Court</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<!-- Gugatan -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-balance-scale"></i>
+						<p>
+							Gugatan
+							<i class="fas fa-angle-left right"></i>
+							<span class="badge badge-warning right">4</span>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Penyerahan_ac') ?>" class="nav-link">
+								<i class="fas fa-file-alt nav-icon"></i>
+								<p>Penyerahan Akta Cerai</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Usia_cerai') ?>" class="nav-link">
+								<i class="fas fa-chart-pie nav-icon"></i>
+								<p>Lap. Usia Perceraian</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Cerai_kua') ?>" class="nav-link">
+								<i class="fas fa-mosque nav-icon"></i>
+								<p>Lap. Perceraian KUA</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Reg_salput') ?>" class="nav-link">
+								<i class="fas fa-file-export nav-icon"></i>
+								<p>Register Salput ke KUA</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Catatan Persidangan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Persidangan') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Jurusita</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Hadir_sidang') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Kehadiran Pihak</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<li class="nav-header">LAYANAN ELEKTRONIK</li>
 
-         
+				<!-- E-Court -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-laptop-code"></i>
+						<p>
+							E-Court
+							<i class="fas fa-angle-left right"></i>
+							<span class="badge badge-success right">2</span>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Ecourt') ?>" class="nav-link">
+								<i class="fas fa-list-alt nav-icon"></i>
+								<p>Perkara E-Court</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Rekap_ecourt') ?>" class="nav-link">
+								<i class="fas fa-chart-bar nav-icon"></i>
+								<p>Rekap E-Court</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Usia Pihak
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('usia_pihak_p') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Penggugat/Pemohon</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('usia_pihak_t') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tergugat/Termohon</p>
-                </a>
-              </li>
-          </li>
-        </ul>
-      </li>
+				<!-- One Day -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-business-time"></i>
+						<p>
+							One Day Service
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Odm') ?>" class="nav-link">
+								<i class="fas fa-file-signature nav-icon"></i>
+								<p>One Day Minute</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Odp') ?>" class="nav-link">
+								<i class="fas fa-share-alt nav-icon"></i>
+								<p>One Day Publish</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                One Day
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url('Odm') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>One Day Minut</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url('Odp') ?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>One Day Publish</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+				<li class="nav-header">PERSIDANGAN</li>
 
+				<!-- Catatan Persidangan -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-gavel"></i>
+						<p>
+							Catatan Persidangan
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('Persidangan') ?>" class="nav-link">
+								<i class="fas fa-user-tag nav-icon"></i>
+								<p>Jurusita</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Hadir_sidang') ?>" class="nav-link">
+								<i class="fas fa-users nav-icon"></i>
+								<p>Kehadiran Pihak</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
+				<!-- Usia Pihak -->
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-user-friends"></i>
+						<p>
+							Usia Pihak
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?php echo site_url('usia_pihak_p') ?>" class="nav-link">
+								<i class="fas fa-user-alt nav-icon"></i>
+								<p>Penggugat/Pemohon</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('usia_pihak_t') ?>" class="nav-link">
+								<i class="fas fa-user-alt nav-icon"></i>
+								<p>Tergugat/Termohon</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
-          <li class="nav-header">LABELS</li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-circle text-danger"></i>
-              <p class="text">Penelitian</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo site_url('Grafik') ?>" class="nav-link">
-              <i class="nav-icon far fa-circle text-warning"></i>
-              <p>Grafik Uji Coba</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo site_url('Uji_Chart') ?>" class="nav-link">
-              <i class="nav-icon far fa-circle text-warning"></i>
-              <p>Chart Uji Coba</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo site_url('Data') ?>" class="nav-link">
-              <i class="nav-icon far fa-circle text-info"></i>
-              <p>Data Uji Coba</p>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+				<li class="nav-header">DATA &amp; PENGEMBANGAN</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-flask"></i>
+						<p class="text">Penelitian</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="<?php echo site_url('Grafik') ?>" class="nav-link">
+						<i class="nav-icon fas fa-chart-line"></i>
+						<p>Grafik Uji Coba</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="<?php echo site_url('Uji_Chart') ?>" class="nav-link">
+						<i class="nav-icon fas fa-chart-pie"></i>
+						<p>Chart Uji Coba</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="<?php echo site_url('Data') ?>" class="nav-link">
+						<i class="nav-icon fas fa-database"></i>
+						<p>Data Uji Coba</p>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<!-- /.sidebar-menu -->
+	</div>
+	<!-- /.sidebar -->
+</aside>

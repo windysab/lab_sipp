@@ -1,24 +1,21 @@
-  <footer class="main-footer">
-    <!-- <strong>Copyright &copy; 2014-2021 <a href="https://lupiananda.com">Lupi Ananda</a>.</strong>
-    All rights reserved.
-     -->
-     <strong>Developed by <a href="https://lupiananda.com">Lupi Ananda, S.Kom</a> | 2021.</strong>
-    
-     <div class="float-right d-none d-sm-inline-block">
-    
-      <b>Version</b> 1.0
-    </div>
-  </footer>
+<footer class="main-footer">
+	<div class="d-flex justify-content-between align-items-center">
+		<div>
+			<strong>Sistem Informasi Pengadilan Agama Amuntai &copy; <?php echo date('Y'); ?></strong>
+		</div>
+		<div>
+			<span class="text-muted">Developed by</span>
+			<a href="https://lupiananda.com" class="text-primary">Lupi Ananda, S.Kom</a>
+			<span class="badge badge-info">v2.0</span>
+		</div>
+	</div>
+</footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+	<!-- Control sidebar content goes here -->
+</aside>
 </div>
 <!-- ./wrapper -->
-
-
 
 <!-- jQuery -->
 <script src="<?php echo base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
@@ -26,35 +23,12 @@
 <script src="<?php echo base_url() ?>assets/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button)
+	$.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="<?php echo base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="<?php echo base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="<?php echo base_url() ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo base_url() ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo base_url() ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="<?php echo base_url() ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="<?php echo base_url() ?>assets/plugins/moment/moment.min.js"></script>
-<script src="<?php echo base_url() ?>assets/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="<?php echo base_url() ?>assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="<?php echo base_url() ?>plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="<?php echo base_url() ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo base_url() ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo base_url() ?>assets/dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url() ?>assets/dist/js/pages/dashboard.js"></script>
 
+<!-- DataTables & Plugins -->
 <script src="<?php echo base_url() ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo base_url() ?>assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -68,22 +42,78 @@
 <script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-
+<!-- overlayScrollbars -->
+<script src="<?php echo base_url() ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<?php echo base_url() ?>assets/dist/js/adminlte.js"></script>
 
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+	$(function() {
+		// Initialize DataTables with export buttons
+		$("#example1").DataTable({
+			"responsive": true,
+			"lengthChange": true,
+			"autoWidth": false,
+			"dom": '<"top d-flex justify-content-between"Bf>rt<"bottom d-flex justify-content-between"lip>',
+			"buttons": [{
+					extend: "copy",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-copy"></i> Salin'
+				},
+				{
+					extend: "csv",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-file-csv"></i> CSV'
+				},
+				{
+					extend: "excel",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-file-excel"></i> Excel'
+				},
+				{
+					extend: "pdf",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-file-pdf"></i> PDF'
+				},
+				{
+					extend: "print",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-print"></i> Cetak'
+				},
+				{
+					extend: "colvis",
+					className: "btn-sm btn-secondary",
+					text: '<i class="fas fa-columns"></i> Kolom'
+				}
+			],
+			"language": {
+				"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+				"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+				"infoFiltered": "(disaring dari _MAX_ total data)",
+				"search": "Cari:",
+				"lengthMenu": "Tampilkan _MENU_ data",
+				"zeroRecords": "Tidak ada data yang cocok",
+				"paginate": {
+					"first": "Pertama",
+					"last": "Terakhir",
+					"next": "Selanjutnya",
+					"previous": "Sebelumnya"
+				}
+			}
+		}).buttons().container().appendTo('#example1_wrapper .top');
+
+		// Enable tooltips
+		$('[data-toggle="tooltip"]').tooltip();
+
+		// Highlight active menu
+		const currentPath = window.location.pathname.split('/').pop().toLowerCase();
+		$('.nav-sidebar a').each(function() {
+			const href = $(this).attr('href');
+			if (href && href.toLowerCase().indexOf(currentPath) !== -1) {
+				$(this).addClass('active');
+				$(this).parents('.nav-item').addClass('menu-open');
+				$(this).parents('.nav-item').children('.nav-link').addClass('active');
+			}
+		});
+	});
 </script>
