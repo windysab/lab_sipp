@@ -320,3 +320,91 @@ CREATE TABLE `perkara_mempelai_dk` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1385 DEFAULT CHARSET = latin1
 
 
+CREATE TABLE `perkara_ikrar_talak` (
+    `perkara_id` bigint(20) unsigned NOT NULL,
+    `penetapan_majelis_hakim` date DEFAULT NULL,
+    `majelis_hakim_id` varchar(50) DEFAULT NULL,
+    `majelis_hakim_nama` varchar(500) DEFAULT NULL,
+    `majelis_hakim_text` varchar(500) DEFAULT NULL,
+    `penetapan_panitera_pengganti` date DEFAULT NULL,
+    `panitera_pengganti_id` varchar(50) DEFAULT NULL,
+    `panitera_pengganti_text` varchar(500) DEFAULT NULL,
+    `penetapan_jurusita` date DEFAULT NULL,
+    `jurusita_id` varchar(50) DEFAULT NULL,
+    `jurusita_text` varchar(500) DEFAULT NULL,
+    `sidang_id` bigint(20) DEFAULT NULL,
+    `tanggal_penetapan_sidang_ikrar` date DEFAULT NULL,
+    `tanggal_sidang_pertama` date DEFAULT NULL,
+    `tgl_ikrar_talak` date DEFAULT NULL,
+    `status_penetapan_ikrar_talak_id` char(1) DEFAULT NULL,
+    `amar_ikrar_talak` longtext CHARACTER SET utf8mb4,
+    `ikrar_talak_dok` varchar(255) DEFAULT NULL,
+    `diinput_oleh` varchar(30) DEFAULT NULL,
+    `diinput_tanggal` datetime DEFAULT NULL,
+    `diperbaharui_oleh` varchar(30) DEFAULT NULL,
+    `diperbaharui_tanggal` datetime DEFAULT NULL,
+    PRIMARY KEY (`perkara_id`),
+    CONSTRAINT `perkara_ikrar_talak_fk` FOREIGN KEY (`perkara_id`) REFERENCES `perkara` (`perkara_id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = latin1
+
+CREATE TABLE `perkara_akta_cerai` (
+    `perkara_id` bigint(20) unsigned NOT NULL,
+    `tahun_akta_cerai` int(11) DEFAULT NULL,
+    `nomor_urut_akta_cerai` int(11) DEFAULT NULL,
+    `nomor_akta_cerai` varchar(50) DEFAULT NULL,
+    `tgl_akta_cerai` date DEFAULT NULL,
+    `no_seri_akta_cerai` varchar(50) DEFAULT NULL,
+    `jenis_cerai` varchar(50) DEFAULT NULL,
+    `faktor_perceraian_id` int(11) DEFAULT NULL,
+    `qobla_bada` tinyint(4) DEFAULT NULL,
+    `perceraian_ke` int(11) DEFAULT NULL,
+    `keadaan_istri` tinyint(4) DEFAULT NULL,
+    `tgl_penyerahan_akta_cerai` date DEFAULT NULL,
+    `tgl_penyerahan_akta_cerai_pihak2` date DEFAULT NULL,
+    `akta_cerai_dok` varchar(255) DEFAULT NULL,
+    `blangko_akta_cerai` tinyint(1) DEFAULT '0',
+    `diedit_oleh` varchar(30) DEFAULT NULL,
+    `diedit_tanggal` datetime DEFAULT NULL,
+    `diinput_oleh` varchar(30) DEFAULT NULL,
+    `diinput_tanggal` datetime DEFAULT NULL,
+    `diperbaharui_oleh` varchar(30) DEFAULT NULL,
+    `diperbaharui_tanggal` datetime DEFAULT NULL,
+    PRIMARY KEY (`perkara_id`),
+    CONSTRAINT `perkara_akta_cerai_fk` FOREIGN KEY (`perkara_id`) REFERENCES `perkara` (`perkara_id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = latin1
+
+
+CREATE TABLE `perkara_pihak2` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `perkara_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Id Perkara: merujuk ke tabel perkara kolom perkara_id(by system)',
+    `urutan` int(11) unsigned DEFAULT NULL COMMENT 'Urutan: disii dengan bilangan',
+    `pihak_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Id Pihak: merujuk ke tabel pihak',
+    `jenis_pihak_id` tinyint(1) unsigned DEFAULT NULL COMMENT 'Id Jenis Pihak: merujuk ke tabel pihak kolom jenis_pihak_id(by system)',
+    `nama` varchar(500) DEFAULT NULL COMMENT 'Nama: merujuk ke tabel pihak kolom nama(by system)',
+    `alamat` varchar(500) DEFAULT NULL,
+    `keterangan` varchar(255) DEFAULT NULL COMMENT 'Keterangan: isian bebas',
+    `pangkat` varchar(100) DEFAULT NULL,
+    `nrp` varchar(50) DEFAULT NULL,
+    `jabatan` varchar(100) DEFAULT NULL,
+    `kesatuan` varchar(100) DEFAULT NULL,
+    `ditahan_oleh_id` int(11) unsigned DEFAULT NULL COMMENT 'Ditahan Oleh (terakhir): merujuk ke tabel penahan_terdakwa (by system)',
+    `status_penahanan_id` tinyint(4) unsigned DEFAULT NULL COMMENT 'Status Penahanan (terakhir): merujuk ke tabel status_penahanan kolom id(by system)',
+    `jenis_tahanan_id` tinyint(4) unsigned DEFAULT NULL COMMENT 'Jenis Tahanan (terakhir): merujuk ke tabel jenis_tahanan kolom id (by system)',
+    `ghaib` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Apakah pihak tidak diketahui alamatnya? 1(ya), 0(tidak)',
+    `diedit_oleh` varchar(30) DEFAULT NULL COMMENT 'Diedit Oleh: (by system)',
+    `diedit_tanggal` datetime DEFAULT NULL COMMENT 'Diedit Tanggal: (by system)',
+    `diinput_oleh` varchar(30) DEFAULT NULL COMMENT 'Diinput oleh(by system)',
+    `diinput_tanggal` datetime DEFAULT NULL COMMENT 'Diinput tanggal(by system)',
+    `diperbaharui_oleh` varchar(30) DEFAULT NULL COMMENT 'Diperbaiki oleh(by system)',
+    `diperbaharui_tanggal` datetime DEFAULT NULL COMMENT 'Diperbaiki tanggal(by system)',
+    PRIMARY KEY (`id`),
+    KEY `nama` (`nama`),
+    KEY `perkara_id` (`perkara_id`),
+    KEY `pihak_id` (`pihak_id`),
+    CONSTRAINT `perkara_pihak2_fk` FOREIGN KEY (`perkara_id`) REFERENCES `perkara` (`perkara_id`) ON DELETE CASCADE,
+    CONSTRAINT `perkara_pihak2_fk1` FOREIGN KEY (`pihak_id`) REFERENCES `pihak` (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 6463 DEFAULT CHARSET = latin1 COMMENT = 'Data Pihak Kedua(Tergugat/Termohon/Terdakwa)'
+
+
+
+
