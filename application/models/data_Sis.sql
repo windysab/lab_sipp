@@ -228,3 +228,95 @@ CREATE TABLE `status_putusan` (
     KEY `nama` (`nama`),
     KEY `kode` (`kode`)
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1 COMMENT = 'Referensi Status Putusan'
+
+CREATE TABLE `perkara_jadwal_sidang` (
+    `id` bigint(20) unsigned NOT NULL COMMENT 'Primary key: (by system)',
+    `perkara_id` bigint(20) unsigned NOT NULL COMMENT 'Id Perkara: merujuk ke tabel perkara kolom perkara_id',
+    `verzet` char(1) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT 'T' COMMENT 'flag untuk sidang verzet/biasa (by system)',
+    `keberatan` char(1) DEFAULT 'T' COMMENT 'flag untuk sidang perkara keberatan',
+    `ikrar_talak` char(1) DEFAULT 'T',
+    `urutan` int(11) unsigned NOT NULL DEFAULT '1' COMMENT 'Urutan Jadwal Sidang Salam Satu Hari yang sama: (by system)',
+    `tanggal_sidang` date NOT NULL COMMENT 'Tanggal Sidang: isian tanggal',
+    `jam_sidang` time DEFAULT NULL COMMENT 'Mulai Jam Sidang: isian format jam:menit',
+    `sampai_jam` time DEFAULT NULL COMMENT 'Sampai Jam Sidang : isian format jam:menit',
+    `agenda_id` varchar(50) DEFAULT NULL COMMENT 'Agenda Sidang : merujuk ke tabel agenda_sidang dengan pemisah koma',
+    `agenda` varchar(500) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Agenda Sidang: isian bebas',
+    `ruangan_id` int(11) unsigned DEFAULT NULL COMMENT 'id Ruangan Sidang: merujuk ke tabel ruangan_sidang kolom id',
+    `ruangan` varchar(50) DEFAULT NULL COMMENT 'Ruangan Sidang: merujuk ke tabel ruangan_sidang kolom nama (by system)',
+    `sidang_keliling` char(1) DEFAULT 'T' COMMENT 'Y dan T',
+    `dihadiri_oleh` tinyint(3) DEFAULT NULL,
+    `ditunda` char(1) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT 'T' COMMENT 'Sidang Ditunda: pilihan Y=Ya; T=Tidak',
+    `alasan_ditunda` varchar(500) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Alasan Ditunda: isian bebas',
+    `sidang_ditempat` tinyint(1) DEFAULT '0' COMMENT 'Sidang Di Tempat: 0=Tidak, 1=Ya',
+    `sifat_sidang` char(1) DEFAULT 'Y' COMMENT 'Y: Dibuka Untuk Umum, T: Tertutup Untuk Umum',
+    `keterangan` varchar(500) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Keterangan: isian bebas',
+    `edoc_bas` varchar(250) DEFAULT NULL,
+    `diedit_oleh` varchar(30) DEFAULT NULL COMMENT 'Diedit Oleh: (by system)',
+    `diedit_tanggal` datetime DEFAULT NULL COMMENT 'Diedit Tanggal: (by system)',
+    `diinput_oleh` varchar(30) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Diinput Oleh: (by system)',
+    `diinput_tanggal` datetime DEFAULT NULL COMMENT 'Diinput Tanggal: (by system)',
+    `diperbaharui_oleh` varchar(30) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL COMMENT 'Diperbaharui Oleh: (by system)',
+    `diperbaharui_tanggal` datetime DEFAULT NULL COMMENT 'Diperbaharui Tanggal: (by system)',
+    PRIMARY KEY (`id`),
+    KEY `verzet` (`verzet`),
+    KEY `perkara_id` (`perkara_id`),
+    KEY `ruangan_id` (`ruangan_id`),
+    KEY `tanggal_sidang` (`tanggal_sidang`),
+    KEY `jam_sidang` (`jam_sidang`),
+    CONSTRAINT `perkara_jadwal_sidang_fk` FOREIGN KEY (`perkara_id`) REFERENCES `perkara` (`perkara_id`) ON DELETE CASCADE,
+    CONSTRAINT `perkara_jadwal_sidang_fk1` FOREIGN KEY (`ruangan_id`) REFERENCES `ruangan_sidang` (`id`) ON DELETE SET NULL
+) ENGINE = InnoDB DEFAULT CHARSET = latin1 COMMENT = 'Data Jadwal Pesidangan'
+
+
+CREATE TABLE `perkara_data_pernikahan` (
+    `perkara_id` bigint(20) unsigned NOT NULL,
+    `tgl_nikah` date NOT NULL,
+    `tgl_kutipan_akta_nikah` date NOT NULL,
+    `no_kutipan_akta_nikah` varchar(100) DEFAULT NULL,
+    `kua_tempat_nikah` varchar(255) DEFAULT NULL,
+    `kode_kua` int(11) DEFAULT NULL COMMENT 'merujuk kode_kua ref_kua',
+    `diedit_oleh` varchar(30) DEFAULT NULL,
+    `diedit_tanggal` datetime DEFAULT NULL,
+    `diinput_oleh` varchar(30) DEFAULT NULL,
+    `diinput_tanggal` datetime DEFAULT NULL,
+    `diperbaharui_oleh` varchar(30) DEFAULT NULL,
+    `diperbaharui_tanggal` datetime DEFAULT NULL,
+    PRIMARY KEY (`perkara_id`),
+    CONSTRAINT `perkara_data_pernikahan_fk` FOREIGN KEY (`perkara_id`) REFERENCES `perkara` (`perkara_id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = latin1
+
+
+CREATE TABLE `perkara_alasan_nikah` (
+    `perkara_id` bigint(20) NOT NULL,
+    `jenis_perkara_id` int(4) NOT NULL,
+    `jenis_alasan_id` int(2) NOT NULL,
+    `alasan_id` int(2) NOT NULL,
+    `nama` varchar(255) DEFAULT NULL,
+    `nominal_penghasilan` decimal(20, 0) DEFAULT NULL COMMENT 'khusus poligami',
+    `diinput_oleh` varchar(255) DEFAULT NULL,
+    `diinput_tanggal` datetime DEFAULT NULL,
+    `diperbaharui_oleh` varchar(255) DEFAULT NULL,
+    `diperbaharui_tanggal` datetime DEFAULT NULL,
+    PRIMARY KEY (`perkara_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = latin1
+
+
+CREATE TABLE `perkara_mempelai_dk` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key: (by system)',
+    `perkara_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Id Perkara: merujuk ke tabel perkara kolom perkara_id(by system)',
+    `nama` varchar(255) DEFAULT NULL,
+    `nik` varchar(50) DEFAULT NULL,
+    `tempat_lahir` varchar(255) DEFAULT NULL,
+    `tanggal_lahir` date DEFAULT NULL,
+    `pendidikan` tinyint(1) DEFAULT NULL COMMENT 'merujuk ke ID tabel referensi_tingkat_pendidikan',
+    `jenis_mempelai` char(1) DEFAULT NULL COMMENT '1 mempelai laki-laki, 2 mempelai wanita',
+    `pekerjaan` varchar(255) DEFAULT NULL COMMENT 'merujuk ke ID tabel referensi_pekerjaan',
+    `nominal_penghasilan` decimal(20, 0) unsigned DEFAULT NULL,
+    `diinput_oleh` varchar(30) DEFAULT NULL COMMENT 'Diinput Oleh: (by system)',
+    `diinput_tanggal` datetime DEFAULT NULL COMMENT 'Diinput Tanggal: (by system)',
+    `diperbaharui_oleh` varchar(30) DEFAULT NULL COMMENT 'Diperbaiki Oleh: (by system)',
+    `diperbaharui_tanggal` datetime DEFAULT NULL COMMENT 'Diperbaiki Tanggal: (by system)',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1385 DEFAULT CHARSET = latin1
+
+

@@ -1,134 +1,437 @@
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h5>Dispensasi Kawin</h5>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">#</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>  
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <form action="<?php echo base_url()?>index.php/Diska" method="POST" >
-                Laporan Bulan :
-                <select name="lap_bulan" required="">
-                    <option value="01" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '01') ? 'selected' : ''; ?>>Januari</option>
-                    <option value="02" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '02') ? 'selected' : ''; ?>>Februari</option>
-                    <option value="03" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '03') ? 'selected' : ''; ?>>Maret</option>
-                    <option value="04" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '04') ? 'selected' : ''; ?>>April</option>
-                    <option value="05" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '05') ? 'selected' : ''; ?>>Mei</option>
-                    <option value="06" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '06') ? 'selected' : ''; ?>>Juni</option>
-                    <option value="07" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '07') ? 'selected' : ''; ?>>Juli</option>
-                    <option value="08" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '08') ? 'selected' : ''; ?>>Agustus</option>
-                    <option value="09" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '09') ? 'selected' : ''; ?>>September</option>
-                    <option value="10" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '10') ? 'selected' : ''; ?>>Oktober</option>
-                    <option value="11" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '11') ? 'selected' : ''; ?>>Nopember</option>
-                    <option value="12" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '12') ? 'selected' : ''; ?>>Desember</option>
-                </select>
-                Tahun :
-                <select name="lap_tahun" required="">
-                    <option value="2016" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2016') ? 'selected' : ''; ?>>2016</option>
-                    <option value="2017" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2017') ? 'selected' : ''; ?>>2017</option>
-                    <option value="2018" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2018') ? 'selected' : ''; ?>>2018</option>
-                    <option value="2019" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2019') ? 'selected' : ''; ?>>2019</option>
-                    <option value="2020" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2020') ? 'selected' : ''; ?>>2020</option>
-                    <option value="2021" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2021') ? 'selected' : ''; ?>>2021</option>
-                    <option value="2022" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2022') ? 'selected' : ''; ?>>2022</option>
-                    <option value="2023" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2023') ? 'selected' : ''; ?>>2023</option>
-                    <option value="2024" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2024') ? 'selected' : ''; ?>>2024</option>
-                    <option value="2025" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2025') ? 'selected' : ''; ?>>2025</option>
-                </select>
-                <input class="btn btn-primary" type="submit" name="btn" value="Tampilkan" />
-              
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table class="table table-bordered table-striped" id="example1">
-                  <thead>
-                  <tr>
-                    <th>Nomor</th>
-                    <th>Nomor Perkara</th>
-                    <th>Tanggal Pendaftaran</th>
-                    <th>Tanggal Putus</th>
-                    <th>Jenis Putusan</th>
-                    <th>Usia L</th>
-                    <th>Usia P</th>
-                    <th>Alasan Pengajuan</th>
-                    <th>Keterangan Sidang</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php 
-                    $no = 1;
-                    foreach ($datafilter as $row ) : ?>
-                  <tr>
-                    <td><?php echo $no++?></td>
-                    <td><?php echo $row->nomor_perkara?></td>
-                    <td><?php echo $row->tanggal_pendaftaran?></td>
-                    <td><?php echo $row->tanggal_putusan?></td>
-                    <td><?php echo $row->jenis_putusan?></td>
-                    <td><?php echo ''?></td>
-                    <td><?php echo ''?></td>
-                    <td><?php echo ''?></td>
-                    <td><?php echo $row->tanggal_sidang?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </form>
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-</div>
-<!-- ./wrapper -->
+	<div class="wrapper">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0 text-dark"><i class="fas fa-heart mr-2"></i> Dispensasi Kawin</h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="<?= site_url('Admin/Dashboard') ?>">Home</a></li>
+								<li class="breadcrumb-item">Permohonan</li>
+								<li class="breadcrumb-item active">Dispensasi Kawin</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
 
+			<section class="content">
+				<div class="container-fluid">
+					<!-- Filter Card -->
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filter Data</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<form action="<?php echo base_url() ?>index.php/Diska" method="POST" class="form-horizontal">
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Laporan Bulan:</label>
+									<div class="col-sm-4">
+										<select name="lap_bulan" class="form-control select2" required="">
+											<?php
+											$months = [
+												'01' => 'Januari',
+												'02' => 'Februari',
+												'03' => 'Maret',
+												'04' => 'April',
+												'05' => 'Mei',
+												'06' => 'Juni',
+												'07' => 'Juli',
+												'08' => 'Agustus',
+												'09' => 'September',
+												'10' => 'Oktober',
+												'11' => 'November',
+												'12' => 'Desember'
+											];
 
+											foreach ($months as $value => $label) {
+												$selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : ((!isset($_POST['lap_bulan']) && isset($current_month) && $current_month == $value) ? 'selected' : '');
+												echo "<option value=\"$value\" $selected>$label</option>";
+											}
+											?>
+										</select>
+									</div>
 
+									<label class="col-sm-2 col-form-label">Tahun:</label>
+									<div class="col-sm-4">
+										<select name="lap_tahun" class="form-control select2" required="">
+											<?php
+											$currentYear = date('Y');
+											for ($year = 2016; $year <= $currentYear + 1; $year++) {
+												$selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year) ? 'selected' : ((!isset($_POST['lap_tahun']) && isset($current_year) && $current_year == $year) ? 'selected' : '');
+												echo "<option value=\"$year\" $selected>$year</option>";
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-4 offset-sm-8">
+										<button type="submit" name="btn" class="btn btn-primary btn-block">
+											<i class="fas fa-search mr-2"></i> Tampilkan Data
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 
-<!-- Page specific script -->
-<!-- <script>
-  $(function () {
-    $("#DataTable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#DataTable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script> 
- --></body>
-</html>
- 
+					<?php if (isset($_POST['btn'])): ?>
+
+						<!-- Stats Row -->
+						<?php if (isset($statistics) && !empty($datafilter)): ?>
+							<div class="row">
+								<div class="col-lg-3 col-6">
+									<div class="small-box bg-info">
+										<div class="inner">
+											<h3><?= count($datafilter) ?></h3>
+											<p>Total Perkara</p>
+										</div>
+										<div class="icon">
+											<i class="fas fa-file-alt"></i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-3 col-6">
+									<div class="small-box bg-success">
+										<div class="inner">
+											<h3><?= !empty($statistics->total_kabul) ? $statistics->total_kabul : 0 ?></h3>
+											<p>Dikabulkan</p>
+										</div>
+										<div class="icon">
+											<i class="fas fa-check-circle"></i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-3 col-6">
+									<div class="small-box bg-warning">
+										<div class="inner">
+											<h3><?= round(!empty($statistics->avg_umur_laki) ? $statistics->avg_umur_laki : 0, 1) ?></h3>
+											<p>Rata-rata Usia Laki-laki</p>
+										</div>
+										<div class="icon">
+											<i class="fas fa-male"></i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-3 col-6">
+									<div class="small-box bg-danger">
+										<div class="inner">
+											<h3><?= round(!empty($statistics->avg_umur_perempuan) ? $statistics->avg_umur_perempuan : 0, 1) ?></h3>
+											<p>Rata-rata Usia Perempuan</p>
+										</div>
+										<div class="icon">
+											<i class="fas fa-female"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<!-- Main Data Card -->
+						<div class="card">
+							<div class="card-header bg-gradient-success">
+								<h3 class="card-title">
+									<i class="fas fa-list-alt mr-1"></i>
+									Data Dispensasi Kawin - <?= isset($months[$_POST['lap_bulan']]) ? $months[$_POST['lap_bulan']] : '' ?> <?= isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : '' ?>
+								</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-tool" data-card-widget="maximize">
+										<i class="fas fa-expand"></i>
+									</button>
+									<div class="btn-group ml-2">
+										<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+											<i class="fas fa-download"></i> Export
+										</button>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" class="dropdown-item">
+												<i class="fas fa-file-excel mr-2"></i> Excel
+											</a>
+											<a href="#" class="dropdown-item">
+												<i class="fas fa-file-pdf mr-2"></i> PDF
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-body p-0">
+								<?php if (!empty($datafilter)): ?>
+									<div class="table-responsive">
+										<table id="example1" class="table table-bordered table-striped table-hover">
+											<thead class="bg-light">
+												<tr>
+													<th class="text-center" style="width: 3%">No</th>
+													<th style="width: 12%">Nomor Perkara</th>
+													<th style="width: 12%">Tanggal<br>Pendaftaran</th>
+													<th style="width: 25%">Pihak Laki-laki</th>
+													<th style="width: 25%">Pihak Perempuan</th>
+													<th style="width: 13%">Alasan</th>
+													<th style="width: 10%">Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php $no = 1;
+												foreach ($datafilter as $row): ?>
+													<tr>
+														<td class="text-center"><?= $no++ ?></td>
+														<td>
+															<span class="badge badge-primary d-block"><?= $row->nomor_perkara ?></span>
+															<small class="text-muted"><?= $row->pemohon ?></small>
+														</td>
+														<td>
+															<?= date('d-m-Y', strtotime($row->tanggal_pendaftaran)) ?>
+															<?php if (!empty($row->tanggal_putusan)): ?>
+																<div class="small text-muted mt-1">
+																	<span class="badge badge-light">Putus: <?= date('d-m-Y', strtotime($row->tanggal_putusan)) ?></span>
+																</div>
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php if (!empty($row->nama_laki)): ?>
+																<div class="d-flex">
+																	<div class="mr-2">
+																		<span class="avatar-initial rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+																			<i class="fas fa-male text-white"></i>
+																		</span>
+																	</div>
+																	<div>
+																		<strong><?= $row->nama_laki ?></strong>
+																		<div class="small">
+																			<?php if (!empty($row->tanggal_lahir_laki)): ?>
+																				<div class="text-muted">
+																					Lahir: <?= date('d-m-Y', strtotime($row->tanggal_lahir_laki)) ?>
+																				</div>
+																			<?php endif; ?>
+																			<?php if (!empty($row->umur_laki)): ?>
+																				<span class="badge badge-info"><?= $row->umur_laki ?> tahun</span>
+																			<?php endif; ?>
+																		</div>
+																	</div>
+																</div>
+															<?php else: ?>
+																<span class="text-muted"><i>Data tidak tersedia</i></span>
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php if (!empty($row->nama_perempuan)): ?>
+																<div class="d-flex">
+																	<div class="mr-2">
+																		<span class="avatar-initial rounded-circle bg-gradient-danger d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+																			<i class="fas fa-female text-white"></i>
+																		</span>
+																	</div>
+																	<div>
+																		<strong><?= $row->nama_perempuan ?></strong>
+																		<div class="small">
+																			<?php if (!empty($row->tanggal_lahir_perempuan)): ?>
+																				<div class="text-muted">
+																					Lahir: <?= date('d-m-Y', strtotime($row->tanggal_lahir_perempuan)) ?>
+																				</div>
+																			<?php endif; ?>
+																			<?php if (!empty($row->umur_perempuan)): ?>
+																				<span class="badge badge-danger"><?= $row->umur_perempuan ?> tahun</span>
+																			<?php endif; ?>
+																		</div>
+																	</div>
+																</div>
+															<?php else: ?>
+																<span class="text-muted"><i>Data tidak tersedia</i></span>
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php if (!empty($row->alasan_nikah)): ?>
+																<span class="badge badge-warning"><?= $row->alasan_nikah ?></span>
+															<?php else: ?>
+																<span class="text-muted"><i>Tidak tercatat</i></span>
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php if (!empty($row->jenis_putusan)): ?>
+																<?php
+																$statusClass = '';
+																$statusIcon = '';
+																$statusText = $row->jenis_putusan;
+
+																if (stripos($row->jenis_putusan, 'KABUL') !== false) {
+																	$statusClass = 'success';
+																	$statusIcon = 'check-circle';
+																} elseif (stripos($row->jenis_putusan, 'TOLAK') !== false) {
+																	$statusClass = 'danger';
+																	$statusIcon = 'times-circle';
+																} elseif (stripos($row->jenis_putusan, 'GUGUR') !== false) {
+																	$statusClass = 'warning';
+																	$statusIcon = 'exclamation-circle';
+																} elseif (stripos($row->jenis_putusan, 'CABUT') !== false) {
+																	$statusClass = 'secondary';
+																	$statusIcon = 'undo';
+																} else {
+																	$statusClass = 'primary';
+																	$statusIcon = 'info-circle';
+																}
+																?>
+																<div class="badge badge-<?= $statusClass ?> d-block">
+																	<i class="fas fa-<?= $statusIcon ?> mr-1"></i> <?= $statusText ?>
+																</div>
+															<?php else: ?>
+																<span class="badge badge-secondary">Dalam Proses</span>
+																<?php if (!empty($row->tahapan_terakhir_text)): ?>
+																	<div class="small text-muted mt-1"><?= $row->tahapan_terakhir_text ?></div>
+																<?php endif; ?>
+															<?php endif; ?>
+														</td>
+													</tr>
+												<?php endforeach; ?>
+											</tbody>
+										</table>
+									</div>
+								<?php else: ?>
+									<div class="alert alert-info m-3">
+										<h5><i class="icon fas fa-info"></i> Informasi</h5>
+										Tidak ada data Dispensasi Kawin pada periode yang dipilih.
+									</div>
+								<?php endif; ?>
+							</div>
+						</div>
+
+						<?php if (!empty($datafilter) && count($datafilter) > 0): ?>
+							<!-- Age Distribution Card -->
+							<div class="card card-info">
+								<div class="card-header">
+									<h3 class="card-title">
+										<i class="fas fa-chart-bar mr-1"></i>
+										Statistik Usia Pada Dispensasi Kawin
+									</h3>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-minus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="chart-title text-center mb-2">Usia Laki-laki</div>
+											<table class="table table-bordered">
+												<tr class="bg-light">
+													<th>Statistik</th>
+													<th>Nilai (Tahun)</th>
+												</tr>
+												<tr>
+													<td>Rata-rata Usia</td>
+													<td><?= round(!empty($statistics->avg_umur_laki) ? $statistics->avg_umur_laki : 0, 1) ?></td>
+												</tr>
+												<tr>
+													<td>Usia Terendah</td>
+													<td><?= !empty($statistics->min_umur_laki) ? $statistics->min_umur_laki : '-' ?></td>
+												</tr>
+												<tr>
+													<td>Usia Tertinggi</td>
+													<td><?= !empty($statistics->max_umur_laki) ? $statistics->max_umur_laki : '-' ?></td>
+												</tr>
+											</table>
+										</div>
+										<div class="col-md-6">
+											<div class="chart-title text-center mb-2">Usia Perempuan</div>
+											<table class="table table-bordered">
+												<tr class="bg-light">
+													<th>Statistik</th>
+													<th>Nilai (Tahun)</th>
+												</tr>
+												<tr>
+													<td>Rata-rata Usia</td>
+													<td><?= round(!empty($statistics->avg_umur_perempuan) ? $statistics->avg_umur_perempuan : 0, 1) ?></td>
+												</tr>
+												<tr>
+													<td>Usia Terendah</td>
+													<td><?= !empty($statistics->min_umur_perempuan) ? $statistics->min_umur_perempuan : '-' ?></td>
+												</tr>
+												<tr>
+													<td>Usia Tertinggi</td>
+													<td><?= !empty($statistics->max_umur_perempuan) ? $statistics->max_umur_perempuan : '-' ?></td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+					<?php endif; ?>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			// Initialize DataTable with export buttons
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": true,
+				"autoWidth": false,
+				"dom": '<"top d-flex justify-content-between"Bf>rt<"bottom d-flex justify-content-between"lip>',
+				"buttons": [{
+						extend: "copy",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-copy"></i> Salin'
+					},
+					{
+						extend: "csv",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-file-csv"></i> CSV'
+					},
+					{
+						extend: "excel",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-file-excel"></i> Excel'
+					},
+					{
+						extend: "pdf",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-file-pdf"></i> PDF'
+					},
+					{
+						extend: "print",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-print"></i> Cetak'
+					},
+					{
+						extend: "colvis",
+						className: "btn-sm btn-secondary",
+						text: '<i class="fas fa-columns"></i> Kolom'
+					}
+				],
+				"language": {
+					"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+					"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+					"infoFiltered": "(disaring dari _MAX_ total data)",
+					"search": "Cari:",
+					"lengthMenu": "Tampilkan _MENU_ data",
+					"zeroRecords": "Tidak ada data yang cocok",
+					"paginate": {
+						"first": "Pertama",
+						"last": "Terakhir",
+						"next": "Selanjutnya",
+						"previous": "Sebelumnya"
+					}
+				}
+			});
+
+			// Enable tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
