@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
 // $config['base_url'] = 'http://192.168.1.11/lab_sipp/';
@@ -43,6 +43,9 @@ $config['log_file_permissions'] = 0644;
 
 
 $config['log_date_format'] = 'Y-m-d H:i:s';
+
+
+$config['log_threshold'] = 1;
 
 
 $config['error_views_path'] = '';
