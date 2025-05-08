@@ -38,17 +38,26 @@ class Diska extends CI_Controller
 
 		// Process form submission
 		if ($this->input->method() === 'post') {
+			// Get report type
+			$jenis_laporan = $this->input->post('jenis_laporan', TRUE);
+
 			// Set validation rules
-			$this->form_validation->set_rules('lap_bulan', 'Bulan Laporan', 'required|trim|in_list[01,02,03,04,05,06,07,08,09,10,11,12]');
-			$this->form_validation->set_rules('lap_tahun', 'Tahun Laporan', 'required|trim|numeric|min_length[4]|max_length[4]');
+			if ($jenis_laporan === 'tahunan') {
+				$this->form_validation->set_rules('lap_tahun', 'Tahun Laporan', 'required|trim|numeric|min_length[4]|max_length[4]');
+			} else {
+				$this->form_validation->set_rules('lap_bulan', 'Bulan Laporan', 'required|trim|in_list[01,02,03,04,05,06,07,08,09,10,11,12]');
+				$this->form_validation->set_rules('lap_tahun', 'Tahun Laporan', 'required|trim|numeric|min_length[4]|max_length[4]');
+			}
 
 			if ($this->form_validation->run() === FALSE) {
 				// Form validation failed
 				$data['error'] = validation_errors();
 			} else {
 				// Get form inputs
-				$lap_bulan = $this->input->post('lap_bulan', TRUE);
 				$lap_tahun = $this->input->post('lap_tahun', TRUE);
+
+				// If yearly report, set bulan to null
+				$lap_bulan = ($jenis_laporan === 'tahunan') ? null : $this->input->post('lap_bulan', TRUE);
 
 				// Get data from model
 				$data['datafilter'] = $this->M_Diska->diska($lap_bulan, $lap_tahun);
@@ -57,6 +66,7 @@ class Diska extends CI_Controller
 				// Set for form persistence
 				$data['selected_month'] = $lap_bulan;
 				$data['selected_year'] = $lap_tahun;
+				$data['jenis_laporan'] = $jenis_laporan;
 			}
 		}
 

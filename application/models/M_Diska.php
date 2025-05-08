@@ -3,20 +3,25 @@
 class M_Diska extends CI_Model
 {
 	/**
-	 * Get Dispensasi Kawin data by month and year
+	 * Get Dispensasi Kawin data by month and year or year only
 	 * 
-	 * @param string $lap_bulan Month in two digits (01-12)
+	 * @param string|null $lap_bulan Month in two digits (01-12) or null for all months
 	 * @param string $lap_tahun Year in four digits (e.g., 2023)
 	 * @return array Result object containing Dispensasi Kawin data
 	 */
 	function diska($lap_bulan, $lap_tahun)
 	{
 		// Validate inputs to prevent SQL injection
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Create date filter condition
-		$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun' AND MONTH(p.tanggal_pendaftaran) = '$lap_bulan'";
+		// Create date filter condition based on whether month is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun' AND MONTH(p.tanggal_pendaftaran) = '$lap_bulan'";
+		} else {
+			// If lap_bulan is null, we're filtering by year only
+			$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun'";
+		}
 
 		// Build the comprehensive query with all necessary data
 		$sql = "SELECT 
@@ -92,18 +97,23 @@ class M_Diska extends CI_Model
 	/**
 	 * Get statistics for Dispensasi Kawin cases
 	 * 
-	 * @param string $lap_bulan Month in two digits (01-12)
+	 * @param string|null $lap_bulan Month in two digits (01-12) or null for all months
 	 * @param string $lap_tahun Year in four digits (e.g., 2023)
 	 * @return object Statistics data
 	 */
 	function getStatistics($lap_bulan, $lap_tahun)
 	{
 		// Validate inputs
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Create date filter condition
-		$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun' AND MONTH(p.tanggal_pendaftaran) = '$lap_bulan'";
+		// Create date filter condition based on whether month is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun' AND MONTH(p.tanggal_pendaftaran) = '$lap_bulan'";
+		} else {
+			// If lap_bulan is null, we're filtering by year only
+			$date_filter = "YEAR(p.tanggal_pendaftaran) = '$lap_tahun'";
+		}
 
 		$sql = "SELECT 
 			COUNT(p.perkara_id) as total_perkara,

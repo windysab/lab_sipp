@@ -33,9 +33,22 @@
 						<div class="card-body">
 							<form action="<?php echo base_url() ?>index.php/Diska" method="POST" class="form-horizontal">
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Laporan Bulan:</label>
+									<label class="col-sm-2 col-form-label">Jenis Laporan:</label>
+									<div class="col-sm-10">
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_bulanan" name="jenis_laporan" value="bulanan" class="custom-control-input" <?= (!isset($_POST['jenis_laporan']) || (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'bulanan')) ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_bulanan">Laporan Bulanan</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_tahunan" name="jenis_laporan" value="tahunan" class="custom-control-input" <?= (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'tahunan') ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_tahunan">Laporan Tahunan</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row" id="bulan_container">
+									<label class="col-sm-2 col-form-label">Bulan:</label>
 									<div class="col-sm-4">
-										<select name="lap_bulan" class="form-control select2" required="">
+										<select name="lap_bulan" class="form-control select2" id="lap_bulan">
 											<?php
 											$months = [
 												'01' => 'Januari',
@@ -144,7 +157,12 @@
 							<div class="card-header bg-gradient-success">
 								<h3 class="card-title">
 									<i class="fas fa-list-alt mr-1"></i>
-									Data Dispensasi Kawin - <?= isset($months[$_POST['lap_bulan']]) ? $months[$_POST['lap_bulan']] : '' ?> <?= isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : '' ?>
+									Data Dispensasi Kawin -
+									<?php if (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'tahunan'): ?>
+										Tahun <?= isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : '' ?>
+									<?php else: ?>
+										<?= isset($months[$_POST['lap_bulan']]) ? $months[$_POST['lap_bulan']] : '' ?> <?= isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : '' ?>
+									<?php endif; ?>
 								</h3>
 								<div class="card-tools">
 									<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -433,5 +451,26 @@
 
 			// Enable tooltips
 			$('[data-toggle="tooltip"]').tooltip();
+
+			// Handle report type toggle
+			function toggleBulanField() {
+				if ($("#laporan_tahunan").is(":checked")) {
+					$("#bulan_container").hide();
+					$("#lap_bulan").prop("required", false);
+					$("#lap_bulan").prop("disabled", true);
+				} else {
+					$("#bulan_container").show();
+					$("#lap_bulan").prop("required", true);
+					$("#lap_bulan").prop("disabled", false);
+				}
+			}
+
+			// Initial state
+			toggleBulanField();
+
+			// Listen for changes
+			$("input[name='jenis_laporan']").change(function() {
+				toggleBulanField();
+			});
 		});
 	</script>
