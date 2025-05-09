@@ -8,35 +8,36 @@ class Penyerahan_ac extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model("M_Penyerahan_ac");
+		$this->load->library('form_validation');
 	}
 
 	public function index()
 	{
 		// Set default values
 		$data = [
-			'title' => 'Laporan Penyerahan Akta Cerai',
 			'datafilter' => [],
+			'statistics' => null,
 		];
 
 		// Current month and year as default
-		$data['current_month'] = date('m');
-		$data['current_year'] = date('Y');
+		$data['selected_bulan'] = date('m');
+		$data['selected_tahun'] = date('Y');
 
-		// Process form submission
-		if ($this->input->post('btn')) {
-			$jenis_laporan = $this->input->post('jenis_laporan', TRUE);
+		if ($this->input->method() === 'post') {
+			$lap_bulan = $this->input->post('lap_bulan', TRUE);
 			$lap_tahun = $this->input->post('lap_tahun', TRUE);
 
-			// If yearly report, set bulan to null
-			$lap_bulan = ($jenis_laporan === 'tahunan') ? null : $this->input->post('lap_bulan', TRUE);
+			$this->form_validation->set_rules('lap_bulan', 'Bulan', 'required|trim|in_list[01,02,03,04,05,06,07,08,09,10,11,12]');
+			$this->form_validation->set_rules('lap_tahun', 'Tahun', 'required|trim|numeric|min_length[4]|max_length[4]');
 
-			// Get data from model
-			$data['datafilter'] = $this->M_Penyerahan_ac->penyerahan_ac($lap_bulan, $lap_tahun);
-
-			// Set for form persistence
-			$data['selected_month'] = $lap_bulan;
-			$data['selected_year'] = $lap_tahun;
-			$data['jenis_laporan'] = $jenis_laporan;
+			if ($this->form_validation->run() === FALSE) {
+				$data['error'] = validation_errors();
+			} else {
+				$data['datafilter'] = $this->M_Penyerahan_ac->penyerahan_ac($lap_bulan, $lap_tahun);
+				$data['statistics'] = $this->M_Penyerahan_ac->getStatistics($lap_bulan, $lap_tahun);
+				$data['selected_bulan'] = $lap_bulan;
+				$data['selected_tahun'] = $lap_tahun;
+			}
 		}
 
 		$this->load->view('template/new_header');
