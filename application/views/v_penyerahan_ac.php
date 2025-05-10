@@ -1,320 +1,296 @@
-<body class="hold-transition sidebar-mini">
-	<div class="wrapper">
-		<div class="content-wrapper">
-			<section class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1 class="m-0 text-dark"><i class="fas fa-file-alt mr-2"></i> Penyerahan Akta Cerai</h1>
-						</div>
-						<div class="col-sm-6">
-							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="<?= site_url('Admin/Dashboard') ?>">Home</a></li>
-								<li class="breadcrumb-item active">Penyerahan Akta Cerai</li>
-							</ol>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section class="content">
-				<div class="container-fluid">
-					<!-- Filter Card -->
-					<div class="card card-primary card-outline">
-						<div class="card-header">
-							<h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filter Data</h3>
-							<div class="card-tools">
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>
-						<div class="card-body">
-							<form action="<?php echo base_url() ?>index.php/Penyerahan_ac" method="POST" class="form-horizontal">
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Bulan:</label>
-									<div class="col-sm-4">
-										<select name="lap_bulan" class="form-control select2" required="">
-											<?php
-											$months = [
-												'01' => 'Januari',
-												'02' => 'Februari',
-												'03' => 'Maret',
-												'04' => 'April',
-												'05' => 'Mei',
-												'06' => 'Juni',
-												'07' => 'Juli',
-												'08' => 'Agustus',
-												'09' => 'September',
-												'10' => 'Oktober',
-												'11' => 'November',
-												'12' => 'Desember'
-											];
-											$selected_bulan = isset($_POST['lap_bulan']) ? $_POST['lap_bulan'] : date('m');
-											foreach ($months as $value => $label) {
-												$selected = ($selected_bulan == $value) ? 'selected' : '';
-												echo "<option value=\"$value\" $selected>$label</option>";
-											}
-											?>
-										</select>
-									</div>
-									<label class="col-sm-2 col-form-label">Tahun:</label>
-									<div class="col-sm-4">
-										<select name="lap_tahun" class="form-control select2" required="">
-											<?php
-											$currentYear = date('Y');
-											$selected_tahun = isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : $currentYear;
-											for ($year = 2016; $year <= $currentYear + 1; $year++) {
-												$selected = ($selected_tahun == $year) ? 'selected' : '';
-												echo "<option value=\"$year\" $selected>$year</option>";
-											}
-											?>
-										</select>
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-4 offset-sm-8">
-										<button type="submit" name="btn" class="btn btn-primary btn-block">
-											<i class="fas fa-search mr-2"></i> Tampilkan Data
-										</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-					<?php if (isset($_POST['btn'])): ?>
-						<!-- Statistik Card -->
-						<?php if (isset($statistics) && !empty($datafilter)): ?>
-							<div class="row">
-								<div class="col-lg-4 col-6">
-									<div class="small-box bg-info">
-										<div class="inner">
-											<h3><?= count($datafilter) ?></h3>
-											<p>Total Penyerahan</p>
-										</div>
-										<div class="icon">
-											<i class="fas fa-file-alt"></i>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-4 col-6">
-									<div class="small-box bg-success">
-										<div class="inner">
-											<h3><?= !empty($statistics->total_suami) ? $statistics->total_suami : 0 ?></h3>
-											<p>Diserahkan ke Suami</p>
-										</div>
-										<div class="icon">
-											<i class="fas fa-male"></i>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-4 col-6">
-									<div class="small-box bg-danger">
-										<div class="inner">
-											<h3><?= !empty($statistics->total_istri) ? $statistics->total_istri : 0 ?></h3>
-											<p>Diserahkan ke Istri</p>
-										</div>
-										<div class="icon">
-											<i class="fas fa-female"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						<?php endif; ?>
-						<!-- Data Card -->
-						<div class="card">
-							<div class="card-header bg-gradient-success">
-								<h3 class="card-title">
-									<i class="fas fa-list-alt mr-1"></i>
-									Data Penyerahan Akta Cerai -
-									<?= isset($months[$selected_bulan]) ? $months[$selected_bulan] : '' ?> <?= $selected_tahun ?>
-								</h3>
-								<div class="card-tools">
-									<button type="button" class="btn btn-tool" data-card-widget="collapse">
-										<i class="fas fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-tool" data-card-widget="maximize">
-										<i class="fas fa-expand"></i>
-									</button>
-									<div class="btn-group ml-2">
-										<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
-											<i class="fas fa-download"></i> Export
-										</button>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item">
-												<i class="fas fa-file-excel mr-2"></i> Excel
-											</a>
-											<a href="#" class="dropdown-item">
-												<i class="fas fa-file-pdf mr-2"></i> PDF
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="card-body p-0">
-								<?php if (!empty($datafilter)): ?>
-									<div class="table-responsive">
-										<table id="example1" class="table table-bordered table-striped table-hover">
-											<thead class="bg-light">
-												<tr>
-													<th class="text-center" style="width:3%">No</th>
-													<th>Nomor Perkara</th>
-													<th>Nomor Akta Cerai</th>
-													<th>Tanggal Putus</th>
-													<th>Tanggal Ikrar Talak</th>
-													<th>BHT</th>
-													<th>Penyerahan ke Suami</th>
-													<th>Penyerahan ke Istri</th>
-													<th>Nama Suami</th>
-													<th>Nama Istri</th>
-												</tr>
-											</thead>
-											<tbody>
-												<?php $no = 1;
-												foreach ($datafilter as $row): ?>
-													<tr>
-														<td class="text-center"><?= $no++ ?></td>
-														<td><span class="badge badge-primary d-block"><?= $row->nomor_perkara ?></span></td>
-														<td><?= $row->nomor_akta_cerai ?></td>
-														<td><?= $row->tanggal_putusan ?></td>
-														<td><?= $row->tgl_ikrar_talak ?></td>
-														<td><?= $row->tanggal_bht ?></td>
-														<td>
-															<?php if ($row->jenis_perkara_nama == 'Cerai Talak') {
-																echo $row->tgl_AC_P;
-															}
-															if ($row->jenis_perkara_nama == 'Cerai Gugat') {
-																echo $row->tgl_AC_T;
-															} ?>
-														</td>
-														<td>
-															<?php if ($row->jenis_perkara_nama == 'Cerai Talak') {
-																echo $row->tgl_AC_T;
-															}
-															if ($row->jenis_perkara_nama == 'Cerai Gugat') {
-																echo $row->tgl_AC_P;
-															} ?>
-														</td>
-														<td>
-															<?php if ($row->jenis_perkara_nama == 'Cerai Talak') {
-																if ($row->tgl_AC_P != null) {
-																	echo $row->nama_p;
-																}
-															}
-															if ($row->jenis_perkara_nama == 'Cerai Gugat') {
-																if ($row->tgl_AC_P != null) {
-																	echo "";
-																}
-																if ($row->tgl_AC_T != null) {
-																	echo $row->nama_t;
-																}
-															} ?>
-														</td>
-														<td>
-															<?php if ($row->jenis_perkara_nama == 'Cerai Talak') {
-																if ($row->tgl_AC_T != null) {
-																	echo $row->nama_t;
-																}
-															}
-															if ($row->jenis_perkara_nama == 'Cerai Gugat') {
-																if ($row->tgl_AC_T != null) {
-																	echo "";
-																}
-																if ($row->tgl_AC_P != null) {
-																	echo $row->nama_p;
-																}
-															} ?>
-														</td>
-													</tr>
-												<?php endforeach; ?>
-											</tbody>
-										</table>
-									</div>
-								<?php else: ?>
-									<div class="alert alert-info m-3">
-										<h5><i class="icon fas fa-info"></i> Informasi</h5>
-										Tidak ada data Penyerahan Akta Cerai pada periode yang dipilih.
-									</div>
-								<?php endif; ?>
-							</div>
-						</div>
-					<?php endif; ?>
-				</div>
-			</section>
-		</div>
-	</div>
-	<!-- ./wrapper -->
-
-	<!-- jQuery -->
-	<script src="<?php echo base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
-	<!-- Bootstrap 4 -->
-	<script src="<?php echo base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<!-- DataTables  & Plugins -->
-	<script src="<?php echo base_url() ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/jszip/jszip.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/pdfmake/pdfmake.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/pdfmake/vfs_fonts.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-	<script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			// Cegah reinitialisasi DataTable
-			if (!$.fn.DataTable.isDataTable('#example1')) {
-				$("#example1").DataTable({
-					"responsive": true,
-					"lengthChange": true,
-					"autoWidth": false,
-					"dom": '<"top d-flex justify-content-between"Bf>rt<"bottom d-flex justify-content-between"lip>',
-					"buttons": [{
-							extend: "copy",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-copy"></i> Salin'
-						},
-						{
-							extend: "csv",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-file-csv"></i> CSV'
-						},
-						{
-							extend: "excel",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-file-excel"></i> Excel'
-						},
-						{
-							extend: "pdf",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-file-pdf"></i> PDF'
-						},
-						{
-							extend: "print",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-print"></i> Cetak'
-						},
-						{
-							extend: "colvis",
-							className: "btn-sm btn-secondary",
-							text: '<i class="fas fa-columns"></i> Kolom'
-						}
-					],
-					"language": {
-						"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-						"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
-						"infoFiltered": "(disaring dari _MAX_ total data)",
-						"search": "Cari:",
-						"lengthMenu": "Tampilkan _MENU_ data",
-						"zeroRecords": "Tidak ada data yang cocok",
-						"paginate": {
-							"first": "Pertama",
-							"last": "Terakhir",
-							"next": "Selanjutnya",
-							"previous": "Sebelumnya"
-						}
-					}
-				});
-			}
-		});
-	</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistem Penyerahan Akta Cerai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border: none;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+        .search-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .btn-search {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .table-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            border-top: none;
+        }
+        .badge-status {
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        .badge-delivered {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            border-color: #4b6cb7;
+        }
+        .pagination .page-link {
+            color: #4b6cb7;
+        }
+        .stats-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .stats-card-blue {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+        }
+        .stats-card-green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .stats-card-orange {
+            background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
+        }
+        .stats-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .stats-title {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Sistem Penyerahan Akta Cerai</h1>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stats-card stats-card-blue">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="stats-number"><?= $total_akta_cerai ?></div>
+                            <div class="stats-title">Total Akta Cerai</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card stats-card-green">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="stats-number"><?= $total_diserahkan ?></div>
+                            <div class="stats-title">Sudah Diserahkan</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card stats-card-orange">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="stats-number"><?= $total_belum_diserahkan ?></div>
+                            <div class="stats-title">Belum Diserahkan</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Section -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-search mr-2"></i> Pencarian Akta Cerai
+            </div>
+            <div class="card-body">
+                <form action="<?= base_url('penyerahan_ac/search') ?>" method="get" class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Nomor Perkara</label>
+                        <input type="text" name="nomor_perkara" class="form-control" placeholder="Cth: 123/Pdt.G/2023/PA.XX">
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Nomor Akta Cerai</label>
+                        <input type="text" name="nomor_akta_cerai" class="form-control" placeholder="Cth: AC/2023/PA.XX/XXX">
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Nama Pihak</label>
+                        <input type="text" name="nama_pihak" class="form-control" placeholder="Masukkan nama pihak">
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Status Penyerahan</label>
+                        <select name="status_penyerahan" class="form-control">
+                            <option value="">Semua Status</option>
+                            <option value="1">Sudah Diserahkan</option>
+                            <option value="0">Belum Diserahkan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Tanggal Akta Cerai (Dari)</label>
+                        <input type="date" name="tgl_akta_cerai_dari" class="form-control">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Tanggal Akta Cerai (Sampai)</label>
+                        <input type="date" name="tgl_akta_cerai_sampai" class="form-control">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-search btn-block">
+                            <i class="fas fa-search mr-2"></i> Cari Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Results Table -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-table mr-2"></i> Daftar Akta Cerai
+            </div>
+            <div class="card-body">
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fas fa-check-circle mr-2"></i> <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fas fa-exclamation-circle mr-2"></i> <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Nomor Perkara</th>
+                                <th>Nomor Akta Cerai</th>
+                                <th>Tanggal Akta Cerai</th>
+                                <th>Para Pihak</th>
+                                <th>Status Penyerahan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($akta_cerai)): ?>
+                                <?php $no = $this->uri->segment(3) ? $this->uri->segment(3) + 1 : 1; ?>
+                                <?php foreach ($akta_cerai as $ac): ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $ac->nomor_perkara ?></td>
+                                        <td><?= $ac->nomor_akta_cerai ?></td>
+                                        <td><?= date('d-m-Y', strtotime($ac->tgl_akta_cerai)) ?></td>
+                                        <td>
+                                            <strong>P:</strong> <?= isset($ac->nama_penggugat) ? $ac->nama_penggugat : 'Tidak tersedia' ?><br>
+                                            <strong>T:</strong> <?= isset($ac->nama_tergugat) ? $ac->nama_tergugat : 'Tidak tersedia' ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php if ($ac->tgl_penyerahan_akta_cerai): ?>
+                                                <span class="badge badge-status badge-delivered">
+                                                    <i class="fas fa-check-circle mr-1"></i> Diserahkan
+                                                </span>
+                                                <div class="small mt-1"><?= date('d-m-Y', strtotime($ac->tgl_penyerahan_akta_cerai)) ?></div>
+                                            <?php else: ?>
+                                                <span class="badge badge-status badge-pending">
+                                                    <i class="fas fa-clock mr-1"></i> Belum Diserahkan
+                                                </span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?= base_url('penyerahan_ac/detail/'.$ac->perkara_id) ?>" class="btn btn-info action-btn" title="Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <?php if (!$ac->tgl_penyerahan_akta_cerai): ?>
+                                                <a href="<?= base_url('penyerahan_ac/serahkan/'.$ac->perkara_id) ?>" class="btn btn-success action-btn" title="Serahkan Akta Cerai">
+                                                    <i class="fas fa-check"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                            <a href="<?= base_url('penyerahan_ac/cetak/'.$ac->perkara_id) ?>" class="btn btn-primary action-btn" title="Cetak Tanda Terima" target="_blank">
+                                                <i class="fas fa-print"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7" class="text-center">Tidak ada data yang ditemukan</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    <?= $pagination ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
