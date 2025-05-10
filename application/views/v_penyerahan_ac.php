@@ -31,9 +31,22 @@
 						<div class="card-body">
 							<form action="<?php echo base_url() ?>index.php/Penyerahan_ac" method="POST" class="form-horizontal">
 								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Jenis Laporan:</label>
+									<div class="col-sm-10">
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_bulanan" name="jenis_laporan" value="bulanan" class="custom-control-input" <?= (!isset($_POST['jenis_laporan']) || (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'bulanan')) ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_bulanan">Laporan Bulanan</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_tahunan" name="jenis_laporan" value="tahunan" class="custom-control-input" <?= (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'tahunan') ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_tahunan">Laporan Tahunan</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row" id="bulan_container">
 									<label class="col-sm-2 col-form-label">Bulan:</label>
 									<div class="col-sm-4">
-										<select name="lap_bulan" class="form-control select2" required="">
+										<select name="lap_bulan" class="form-control select2" id="lap_bulan">
 											<?php
 											$months = [
 												'01' => 'Januari',
@@ -49,9 +62,8 @@
 												'11' => 'November',
 												'12' => 'Desember'
 											];
-											$selected_bulan = isset($_POST['lap_bulan']) ? $_POST['lap_bulan'] : date('m');
 											foreach ($months as $value => $label) {
-												$selected = ($selected_bulan == $value) ? 'selected' : '';
+												$selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : ((!isset($_POST['lap_bulan']) && isset($selected_bulan) && $selected_bulan == $value) ? 'selected' : '');
 												echo "<option value=\"$value\" $selected>$label</option>";
 											}
 											?>
@@ -62,9 +74,8 @@
 										<select name="lap_tahun" class="form-control select2" required="">
 											<?php
 											$currentYear = date('Y');
-											$selected_tahun = isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : $currentYear;
 											for ($year = 2016; $year <= $currentYear + 1; $year++) {
-												$selected = ($selected_tahun == $year) ? 'selected' : '';
+												$selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year) ? 'selected' : ((!isset($_POST['lap_tahun']) && isset($selected_tahun) && $selected_tahun == $year) ? 'selected' : '');
 												echo "<option value=\"$year\" $selected>$year</option>";
 											}
 											?>
