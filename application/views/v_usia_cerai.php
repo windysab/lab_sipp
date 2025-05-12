@@ -33,9 +33,22 @@
 						<div class="card-body">
 							<form action="<?php echo base_url() ?>index.php/Usia_cerai" method="POST" class="form-horizontal">
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Laporan Bulan:</label>
+									<label class="col-sm-2 col-form-label">Jenis Laporan:</label>
+									<div class="col-sm-10">
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_bulanan" name="jenis_laporan" value="bulanan" class="custom-control-input" <?= (!isset($_POST['jenis_laporan']) || (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'bulanan')) ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_bulanan">Laporan Bulanan</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_tahunan" name="jenis_laporan" value="tahunan" class="custom-control-input" <?= (isset($_POST['jenis_laporan']) && $_POST['jenis_laporan'] === 'tahunan') ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_tahunan">Laporan Tahunan</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row" id="bulan_container">
+									<label class="col-sm-2 col-form-label">Bulan:</label>
 									<div class="col-sm-4">
-										<select name="lap_bulan" class="form-control select2" required>
+										<select name="lap_bulan" class="form-control select2" id="lap_bulan">
 											<?php
 											$months = [
 												'01' => 'Januari',
@@ -52,7 +65,7 @@
 												'12' => 'Desember'
 											];
 											foreach ($months as $value => $label) {
-												$selected = (isset($lap_bulan) && $lap_bulan === $value) ? 'selected' : '';
+												$selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : ((!isset($_POST['lap_bulan']) && isset($lap_bulan) && $lap_bulan == $value) ? 'selected' : '');
 												echo "<option value=\"$value\" $selected>$label</option>";
 											}
 											?>
@@ -64,7 +77,7 @@
 											<?php
 											$currentYear = date('Y');
 											for ($year = 2016; $year <= $currentYear + 1; $year++) {
-												$selected = (isset($lap_tahun) && $lap_tahun == $year) ? 'selected' : '';
+												$selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year) ? 'selected' : ((!isset($_POST['lap_tahun']) && isset($lap_tahun) && $lap_tahun == $year) ? 'selected' : '');
 												echo "<option value=\"$year\" $selected>$year</option>";
 											}
 											?>
@@ -513,6 +526,40 @@
 	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
 	<script>
 		$(document).ready(function() {
+			// Handle report type toggle
+			function toggleBulanField() {
+				if ($("#laporan_tahunan").is(":checked")) {
+					$("#bulan_container").hide();
+					$("#lap_bulan").prop("required", false);
+					$("#lap_bulan").prop("disabled", true);
+					// Force select2 to update its state
+					if ($.fn.select2) {
+						$("#lap_bulan").select2("enable", false);
+					}
+				} else {
+					$("#bulan_container").show();
+					$("#lap_bulan").prop("required", true);
+					$("#lap_bulan").prop("disabled", false);
+					// Force select2 to update its state
+					if ($.fn.select2) {
+						$("#lap_bulan").select2("enable", true);
+					}
+				}
+			}
+
+			// Initial state - make sure this runs immediately
+			toggleBulanField();
+
+			// Listen for changes
+			$("input[name='jenis_laporan']").change(function() {
+				toggleBulanField();
+			});
+
+			// Ensure the function is called after page load
+			setTimeout(function() {
+				toggleBulanField();
+			}, 100);
+
 			// Initialize DataTables
 			$("#dataTable").DataTable({
 				"responsive": true,

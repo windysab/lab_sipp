@@ -18,12 +18,20 @@ class Usia_cerai extends CI_Controller
 		if (!$this->input->post('btn')) {
 			$data['lap_bulan'] = date('m');
 			$data['lap_tahun'] = date('Y');
+			$data['jenis_laporan'] = 'bulanan';
 		} else {
-			$data['lap_bulan'] = $this->input->post('lap_bulan');
-			$data['lap_tahun'] = $this->input->post('lap_tahun');
+			$data['jenis_laporan'] = $this->input->post('jenis_laporan', TRUE);
+			$data['lap_tahun'] = $this->input->post('lap_tahun', TRUE);
+
+			// If annual report is selected, set month to null or use all months
+			if ($data['jenis_laporan'] === 'tahunan') {
+				$data['lap_bulan'] = null;
+			} else {
+				$data['lap_bulan'] = $this->input->post('lap_bulan', TRUE);
+			}
 		}
 
-		// Get data based on selected month and year
+		// Get data based on selected month/year or just year
 		$data['datafilter'] = $this->M_Usia_cerai->usia_cerai($data['lap_bulan'], $data['lap_tahun']);
 		$data['stats'] = $this->M_Usia_cerai->get_statistics($data['lap_bulan'], $data['lap_tahun']);
 		$data['usia_ranges'] = $this->M_Usia_cerai->get_usia_ranges($data['lap_bulan'], $data['lap_tahun']);

@@ -5,8 +5,15 @@ class M_Usia_cerai extends CI_Model
 	function usia_cerai($lap_bulan, $lap_tahun)
 	{
 		// Sanitize input parameters
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Build the month condition based on whether lap_bulan is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+		} else {
+			$month_condition = ""; // No month filter for annual reports
+		}
 
 		$query = $this->db->query("SELECT 
             p.perkara_id,
@@ -47,7 +54,7 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
         WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun' 
-        AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'  
+        $month_condition  
         ORDER BY pac.nomor_urut_akta_cerai");
 
 		return $query->result();
@@ -56,8 +63,15 @@ class M_Usia_cerai extends CI_Model
 	function get_statistics($lap_bulan, $lap_tahun)
 	{
 		// Sanitize input parameters
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Build the month condition based on whether lap_bulan is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+		} else {
+			$month_condition = ""; // No month filter for annual reports
+		}
 
 		$query = $this->db->query("SELECT
             COUNT(*) as total_perceraian,
@@ -98,7 +112,7 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
         WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'");
+        $month_condition");
 
 		$result = $query->row();
 
@@ -114,8 +128,15 @@ class M_Usia_cerai extends CI_Model
 	function get_faktor_perceraian($lap_bulan, $lap_tahun)
 	{
 		// Sanitize input parameters
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Build the month condition based on whether lap_bulan is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+		} else {
+			$month_condition = ""; // No month filter for annual reports
+		}
 
 		$query = $this->db->query("SELECT 
             fp.nama, 
@@ -124,7 +145,7 @@ class M_Usia_cerai extends CI_Model
         INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
         LEFT JOIN faktor_perceraian fp ON pac.faktor_perceraian_id = fp.id
         WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'
+        $month_condition
         AND fp.nama IS NOT NULL
         GROUP BY fp.nama
         ORDER BY jumlah DESC
@@ -147,8 +168,15 @@ class M_Usia_cerai extends CI_Model
 	function get_usia_ranges($lap_bulan, $lap_tahun)
 	{
 		// Sanitize input parameters
-		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Build the month condition based on whether lap_bulan is provided
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+		} else {
+			$month_condition = ""; // No month filter for annual reports
+		}
 
 		$query = $this->db->query("SELECT
             -- Range usia penggugat/pemohon
@@ -191,7 +219,7 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
         WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'");
+        $month_condition");
 
 		return $query->row();
 	}
