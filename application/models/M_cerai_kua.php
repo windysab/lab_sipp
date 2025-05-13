@@ -42,9 +42,47 @@ class M_cerai_kua extends CI_Model
 		$lap_bulan = $this->db->escape_str($lap_bulan);
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Query untuk statistik
+		// Query untuk statistik dasar
 		$sql = "SELECT 
-                COUNT(DISTINCT pdp.kua_tempat_nikah) AS total_kua
+                COUNT(DISTINCT pdp.kua_tempat_nikah) AS total_kua,
+                COUNT(CASE WHEN pdp.kua_tempat_nikah IS NULL OR pdp.kua_tempat_nikah = '' THEN 1 END) AS blank_kua,
+                AVG(CASE 
+                    WHEN pdp.tgl_nikah IS NOT NULL THEN TIMESTAMPDIFF(YEAR, pdp.tgl_nikah, p.tanggal_pendaftaran)
+                    ELSE NULL
+                END) AS avg_usia_pernikahan,
+                -- Statistik ketepatan waktu pelaporan (dalam 30 hari)
+                ROUND(
+                    (COUNT(CASE WHEN DATEDIFF(pac.tgl_akta_cerai, pp.tanggal_putusan) <= 30 THEN 1 END) / 
+                    COUNT(*)) * 100, 
+                1) AS on_time_percentage
+            FROM 
+                perkara p
+                INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
+                LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
+                LEFT JOIN perkara_putusan pp ON p.perkara_id = pp.perkara_id
+            WHERE 
+                YEAR(pac.tgl_akta_cerai) = ? 
+                AND MONTH(pac.tgl_akta_cerai) = ?";
+
+		$query = $this->db->query($sql, array($lap_tahun, $lap_bulan));
+		$result = $query->row();
+
+		// Tambahkan distribusi KUA
+		$result->kua_distribution = $this->get_kua_distribution($lap_bulan, $lap_tahun);
+
+		return $result;
+	}
+
+	function get_kua_distribution($lap_bulan, $lap_tahun)
+	{
+		// Sanitasi input
+		$lap_bulan = $this->db->escape_str($lap_bulan);
+		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Query untuk mendapatkan jumlah kasus per KUA
+		$sql = "SELECT 
+                COALESCE(pdp.kua_tempat_nikah, 'Tidak Tercatat') as kua_tempat_nikah,
+                COUNT(*) as total
             FROM 
                 perkara p
                 INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
@@ -52,9 +90,12 @@ class M_cerai_kua extends CI_Model
             WHERE 
                 YEAR(pac.tgl_akta_cerai) = ? 
                 AND MONTH(pac.tgl_akta_cerai) = ?
-                AND pdp.kua_tempat_nikah IS NOT NULL";
+            GROUP BY 
+                kua_tempat_nikah
+            ORDER BY 
+                total DESC";
 
 		$query = $this->db->query($sql, array($lap_tahun, $lap_bulan));
-		return $query->row();
+		return $query->result_array();
 	}
 }

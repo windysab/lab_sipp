@@ -44,6 +44,15 @@ class Cerai_kua extends CI_Controller
 				// Ambil data dari model
 				$data['datafilter'] = $this->M_cerai_kua->cerai_kua($lap_bulan, $lap_tahun);
 				$data['stats'] = $this->M_cerai_kua->get_statistics($lap_bulan, $lap_tahun);
+
+				// Dapatkan data KUA untuk grafik dan tabel
+				$kua_stats = $this->M_cerai_kua->get_kua_distribution($lap_bulan, $lap_tahun);
+				$data['kua_counts'] = array_map(function ($item) {
+					return (object) [
+						'kua_tempat_nikah' => $item['kua_tempat_nikah'] ?: 'Tidak Tercatat',
+						'total' => $item['total']
+					];
+				}, $kua_stats);
 			} else {
 				// Jika parameter tidak valid, kosongkan data
 				$data['datafilter'] = [];
