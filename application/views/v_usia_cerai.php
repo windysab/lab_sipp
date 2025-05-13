@@ -48,7 +48,8 @@
 								<div class="form-group row" id="bulan_container">
 									<label class="col-sm-2 col-form-label">Bulan:</label>
 									<div class="col-sm-4">
-										<select name="lap_bulan" class="form-control select2" id="lap_bulan">
+										<select name="lap_bulan" class="form-control select2" id="lap_bulan" required>
+											<option value="">-- Pilih Bulan --</option>
 											<?php
 											$months = [
 												'01' => 'Januari',
@@ -64,8 +65,13 @@
 												'11' => 'November',
 												'12' => 'Desember'
 											];
+
+											// Debugging untuk melihat nilai lap_bulan yang dikirim ke view
+											echo "<!-- Debug lap_bulan: " . (isset($lap_bulan) ? $lap_bulan : 'tidak ada') . " -->";
+
 											foreach ($months as $value => $label) {
-												$selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : ((!isset($_POST['lap_bulan']) && isset($lap_bulan) && $lap_bulan == $value) ? 'selected' : '');
+												// Pilih hanya jika ada nilai dan cocok dengan bulan tersebut
+												$selected = (isset($lap_bulan) && $lap_bulan == $value) ? 'selected="selected"' : '';
 												echo "<option value=\"$value\" $selected>$label</option>";
 											}
 											?>
@@ -74,10 +80,11 @@
 									<label class="col-sm-2 col-form-label">Tahun:</label>
 									<div class="col-sm-4">
 										<select name="lap_tahun" class="form-control select2" required>
+											<option value="">-- Pilih Tahun --</option>
 											<?php
 											$currentYear = date('Y');
-											for ($year = 2016; $year <= $currentYear + 1; $year++) {
-												$selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year) ? 'selected' : ((!isset($_POST['lap_tahun']) && isset($lap_tahun) && $lap_tahun == $year) ? 'selected' : '');
+											for ($year = 2016; $year <= $currentYear + 5; $year++) {
+												$selected = (isset($lap_tahun) && $lap_tahun == $year) ? 'selected="selected"' : '';
 												echo "<option value=\"$year\" $selected>$year</option>";
 											}
 											?>
@@ -86,14 +93,72 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-4 offset-sm-8">
-										<button type="submit" name="btn" class="btn btn-primary btn-block">
+										<button type="submit" name="btn" value="search" class="btn btn-primary btn-block">
 											<i class="fas fa-search mr-2"></i> Tampilkan Data
 										</button>
 									</div>
 								</div>
 							</form>
+							<script>
+								// Simpan pilihan dropdown ke local storage agar bisa dicek setelah submit
+								document.getElementById('lap_bulan').addEventListener('change', function() {
+									localStorage.setItem('debug_selected_month', this.value);
+									console.log('Bulan dipilih:', this.value, this.options[this.selectedIndex].text);
+								});
+							</script>
 						</div>
 					</div>
+
+					<?php if (isset($debug_info)): ?>
+						<div class="card card-outline card-warning mb-3">
+							<div class="card-header">
+								<h3 class="card-title">Informasi Debug</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<h5>Raw POST Data:</h5>
+								<pre><?php print_r($debug_info['raw_post']); ?></pre>
+
+								<h5>Informasi Pemrosesan:</h5>
+								<ul>
+									<li>Sumber data: <?php echo $debug_info['source']; ?></li>
+									<li>Jenis laporan: <?php echo isset($debug_info['jenis']) ? $debug_info['jenis'] : '-'; ?></li>
+									<li>Nilai bulan mentah: <?php echo isset($debug_info['lap_bulan_raw']) ? $debug_info['lap_bulan_raw'] : '-'; ?></li>
+									<li>Nilai akhir bulan: <?php echo $debug_info['final_lap_bulan']; ?></li>
+									<li>Nilai akhir tahun: <?php echo $debug_info['final_lap_tahun']; ?></li>
+								</ul>
+
+								<p class="text-muted">Debugging ini akan membantu melihat nilai yang sebenarnya dikirimkan dan diproses.</p>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($lap_bulan) || isset($lap_tahun)): ?>
+						<div class="alert alert-info">
+							<i class="fas fa-info-circle mr-2"></i>
+							<strong>Info Pencarian:</strong>
+							Menampilkan data perceraian untuk
+							<?php if (isset($lap_bulan)): ?>
+								bulan <strong><?= $nama_bulan[$lap_bulan] ?></strong>
+							<?php endif; ?>
+							tahun <strong><?= $lap_tahun ?></strong>.
+							<?php if (empty($datafilter)): ?>
+								<div class="mt-2">
+									<i class="fas fa-exclamation-triangle text-warning"></i>
+									<strong>Tidak ada data</strong> yang ditemukan untuk periode tersebut.
+									Kemungkinan penyebabnya:
+									<ul>
+										<li>Belum ada data perceraian untuk periode tersebut (terutama untuk tanggal di masa depan)</li>
+										<li>Data ada tetapi tanggal akta cerai tidak cocok dengan filter yang dipilih</li>
+									</ul>
+								</div>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
 
 					<?php if (!empty($datafilter)): ?>
 						<!-- Statistics Cards -->

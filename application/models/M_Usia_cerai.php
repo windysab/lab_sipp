@@ -7,15 +7,15 @@ class M_Usia_cerai extends CI_Model
 		// Sanitize input parameters
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Build the month condition based on whether lap_bulan is provided
+		// Build query conditions based on report type
 		if (!empty($lap_bulan)) {
 			$lap_bulan = $this->db->escape_str($lap_bulan);
-			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun' AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
 		} else {
-			$month_condition = ""; // No month filter for annual reports
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun'";
 		}
 
-		$query = $this->db->query("SELECT 
+		$sql = "SELECT 
             p.perkara_id,
             p.nomor_perkara, 
             p.tanggal_pendaftaran,
@@ -43,7 +43,8 @@ class M_Usia_cerai extends CI_Model
             END AS lama_nikah,
             pac.jenis_cerai,
             pac.faktor_perceraian_id,
-            pac.perceraian_ke
+            pac.perceraian_ke,
+            pac.tgl_akta_cerai
         FROM perkara p
         INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
         INNER JOIN perkara_putusan pp ON p.perkara_id = pp.perkara_id
@@ -53,10 +54,13 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak c ON a.pihak_id = c.id
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
-        WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun' 
-        $month_condition  
-        ORDER BY pac.nomor_urut_akta_cerai");
+        WHERE $date_condition  
+        ORDER BY pac.nomor_urut_akta_cerai";
 
+		// Log the query for debugging
+		log_message('debug', 'QUERY USIA CERAI: ' . $sql);
+
+		$query = $this->db->query($sql);
 		return $query->result();
 	}
 
@@ -65,15 +69,15 @@ class M_Usia_cerai extends CI_Model
 		// Sanitize input parameters
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Build the month condition based on whether lap_bulan is provided
+		// Build query conditions based on report type
 		if (!empty($lap_bulan)) {
 			$lap_bulan = $this->db->escape_str($lap_bulan);
-			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun' AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
 		} else {
-			$month_condition = ""; // No month filter for annual reports
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun'";
 		}
 
-		$query = $this->db->query("SELECT
+		$sql = "SELECT
             COUNT(*) as total_perceraian,
             
             -- Statistik usia saat pengajuan perceraian
@@ -111,9 +115,12 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak c ON a.pihak_id = c.id
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
-        WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        $month_condition");
+        WHERE $date_condition";
 
+		// Log the query for debugging
+		log_message('debug', 'QUERY GET STATISTICS: ' . $sql);
+
+		$query = $this->db->query($sql);
 		$result = $query->row();
 
 		// Add faktor_perceraian property to the result
@@ -130,27 +137,30 @@ class M_Usia_cerai extends CI_Model
 		// Sanitize input parameters
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Build the month condition based on whether lap_bulan is provided
+		// Build query conditions based on report type
 		if (!empty($lap_bulan)) {
 			$lap_bulan = $this->db->escape_str($lap_bulan);
-			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun' AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
 		} else {
-			$month_condition = ""; // No month filter for annual reports
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun'";
 		}
 
-		$query = $this->db->query("SELECT 
+		$sql = "SELECT 
             fp.nama, 
             COUNT(*) as jumlah
         FROM perkara p
         INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
         LEFT JOIN faktor_perceraian fp ON pac.faktor_perceraian_id = fp.id
-        WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        $month_condition
+        WHERE $date_condition
         AND fp.nama IS NOT NULL
         GROUP BY fp.nama
         ORDER BY jumlah DESC
-        LIMIT 10");
+        LIMIT 10";
 
+		// Log the query for debugging
+		log_message('debug', 'QUERY GET FAKTOR PERCERAIAN: ' . $sql);
+
+		$query = $this->db->query($sql);
 		$factors = $query->result();
 
 		// Convert to string format for backward compatibility
@@ -170,15 +180,15 @@ class M_Usia_cerai extends CI_Model
 		// Sanitize input parameters
 		$lap_tahun = $this->db->escape_str($lap_tahun);
 
-		// Build the month condition based on whether lap_bulan is provided
+		// Build query conditions based on report type
 		if (!empty($lap_bulan)) {
 			$lap_bulan = $this->db->escape_str($lap_bulan);
-			$month_condition = "AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun' AND MONTH(pac.tgl_akta_cerai) = '$lap_bulan'";
 		} else {
-			$month_condition = ""; // No month filter for annual reports
+			$date_condition = "YEAR(pac.tgl_akta_cerai) = '$lap_tahun'";
 		}
 
-		$query = $this->db->query("SELECT
+		$sql = "SELECT
             -- Range usia penggugat/pemohon
             SUM(CASE WHEN TIMESTAMPDIFF(YEAR, c.tanggal_lahir, p.tanggal_pendaftaran) < 20 THEN 1 ELSE 0 END) AS p_usia_dibawah_20,
             SUM(CASE WHEN TIMESTAMPDIFF(YEAR, c.tanggal_lahir, p.tanggal_pendaftaran) BETWEEN 20 AND 30 THEN 1 ELSE 0 END) AS p_usia_20_30,
@@ -218,9 +228,12 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak c ON a.pihak_id = c.id
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
-        WHERE YEAR(pac.tgl_akta_cerai) = '$lap_tahun'
-        $month_condition");
+        WHERE $date_condition";
 
+		// Log the query for debugging
+		log_message('debug', 'QUERY GET USIA RANGES: ' . $sql);
+
+		$query = $this->db->query($sql);
 		return $query->row();
 	}
 }
