@@ -1,20 +1,60 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_cerai_kua extends CI_Model
 {
 	function cerai_kua($lap_bulan, $lap_tahun)
 	{
-		$query = $this->db->query("SELECT nomor_perkara, tgl_akta_cerai, nomor_akta_cerai, a.nama as nama_p, c.alamat as alamat_p, b.nama as nama_t, d.alamat as alamat_t, kua_tempat_nikah
-			FROM perkara, perkara_akta_cerai, perkara_pihak1 a, perkara_pihak2 b, pihak c, pihak d, perkara_data_pernikahan
-			WHERE perkara.`perkara_id`=perkara_akta_cerai.`perkara_id`
-			AND perkara.`perkara_id`=a.`perkara_id`
-			AND perkara.`perkara_id`=b.`perkara_id`
-			AND a.`pihak_id`=c.`id`
-			AND b.`pihak_id`=d.`id`
-			AND perkara.`perkara_id`=perkara_data_pernikahan.`perkara_id`
-			AND YEAR(tgl_akta_cerai)='$lap_tahun' AND MONTH(tgl_akta_cerai)='$lap_bulan'
-			ORDER BY nomor_urut_akta_cerai");
-		return $query->result();
+		// Sanitasi input untuk mencegah SQL injection
+		$lap_bulan = $this->db->escape_str($lap_bulan);
+		$lap_tahun = $this->db->escape_str($lap_tahun);
 
+		// Query lebih efisien menggunakan JOIN yang selektif
+		$sql = "SELECT 
+                p.nomor_perkara,
+                pac.tgl_akta_cerai,
+                pac.nomor_akta_cerai,
+                pp1.nama AS nama_p,
+                ph1.alamat AS alamat_p,
+                pp2.nama AS nama_t,
+                ph2.alamat AS alamat_t,
+                pdp.kua_tempat_nikah
+            FROM 
+                perkara p
+                INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
+                LEFT JOIN perkara_pihak1 pp1 ON p.perkara_id = pp1.perkara_id
+                LEFT JOIN perkara_pihak2 pp2 ON p.perkara_id = pp2.perkara_id
+                LEFT JOIN pihak ph1 ON pp1.pihak_id = ph1.id
+                LEFT JOIN pihak ph2 ON pp2.pihak_id = ph2.id
+                LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
+            WHERE 
+                YEAR(pac.tgl_akta_cerai) = ? 
+                AND MONTH(pac.tgl_akta_cerai) = ?
+            ORDER BY 
+                pac.nomor_urut_akta_cerai";
+
+		$query = $this->db->query($sql, array($lap_tahun, $lap_bulan));
+		return $query->result();
+	}
+
+	function get_statistics($lap_bulan, $lap_tahun)
+	{
+		// Sanitasi input
+		$lap_bulan = $this->db->escape_str($lap_bulan);
+		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Query untuk statistik
+		$sql = "SELECT 
+                COUNT(DISTINCT pdp.kua_tempat_nikah) AS total_kua
+            FROM 
+                perkara p
+                INNER JOIN perkara_akta_cerai pac ON p.perkara_id = pac.perkara_id
+                LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
+            WHERE 
+                YEAR(pac.tgl_akta_cerai) = ? 
+                AND MONTH(pac.tgl_akta_cerai) = ?
+                AND pdp.kua_tempat_nikah IS NOT NULL";
+
+		$query = $this->db->query($sql, array($lap_tahun, $lap_bulan));
+		return $query->row();
 	}
 }
