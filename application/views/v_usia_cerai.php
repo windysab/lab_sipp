@@ -66,11 +66,7 @@
 												'12' => 'Desember'
 											];
 
-											// Debugging untuk melihat nilai lap_bulan yang dikirim ke view
-											echo "<!-- Debug lap_bulan: " . (isset($lap_bulan) ? $lap_bulan : 'tidak ada') . " -->";
-
 											foreach ($months as $value => $label) {
-												// Pilih hanya jika ada nilai dan cocok dengan bulan tersebut
 												$selected = (isset($lap_bulan) && $lap_bulan == $value) ? 'selected="selected"' : '';
 												echo "<option value=\"$value\" $selected>$label</option>";
 											}
@@ -99,43 +95,8 @@
 									</div>
 								</div>
 							</form>
-							<script>
-								// Simpan pilihan dropdown ke local storage agar bisa dicek setelah submit
-								document.getElementById('lap_bulan').addEventListener('change', function() {
-									localStorage.setItem('debug_selected_month', this.value);
-									console.log('Bulan dipilih:', this.value, this.options[this.selectedIndex].text);
-								});
-							</script>
 						</div>
 					</div>
-
-					<?php if (isset($debug_info)): ?>
-						<div class="card card-outline card-warning mb-3">
-							<div class="card-header">
-								<h3 class="card-title">Informasi Debug</h3>
-								<div class="card-tools">
-									<button type="button" class="btn btn-tool" data-card-widget="collapse">
-										<i class="fas fa-minus"></i>
-									</button>
-								</div>
-							</div>
-							<div class="card-body">
-								<h5>Raw POST Data:</h5>
-								<pre><?php print_r($debug_info['raw_post']); ?></pre>
-
-								<h5>Informasi Pemrosesan:</h5>
-								<ul>
-									<li>Sumber data: <?php echo $debug_info['source']; ?></li>
-									<li>Jenis laporan: <?php echo isset($debug_info['jenis']) ? $debug_info['jenis'] : '-'; ?></li>
-									<li>Nilai bulan mentah: <?php echo isset($debug_info['lap_bulan_raw']) ? $debug_info['lap_bulan_raw'] : '-'; ?></li>
-									<li>Nilai akhir bulan: <?php echo $debug_info['final_lap_bulan']; ?></li>
-									<li>Nilai akhir tahun: <?php echo $debug_info['final_lap_tahun']; ?></li>
-								</ul>
-
-								<p class="text-muted">Debugging ini akan membantu melihat nilai yang sebenarnya dikirimkan dan diproses.</p>
-							</div>
-						</div>
-					<?php endif; ?>
 
 					<?php if (isset($lap_bulan) || isset($lap_tahun)): ?>
 						<div class="alert alert-info">

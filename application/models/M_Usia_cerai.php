@@ -57,9 +57,6 @@ class M_Usia_cerai extends CI_Model
         WHERE $date_condition  
         ORDER BY pac.nomor_urut_akta_cerai";
 
-		// Log the query for debugging
-		log_message('debug', 'QUERY USIA CERAI: ' . $sql);
-
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
@@ -117,9 +114,6 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
         WHERE $date_condition";
 
-		// Log the query for debugging
-		log_message('debug', 'QUERY GET STATISTICS: ' . $sql);
-
 		$query = $this->db->query($sql);
 		$result = $query->row();
 
@@ -156,9 +150,6 @@ class M_Usia_cerai extends CI_Model
         GROUP BY fp.nama
         ORDER BY jumlah DESC
         LIMIT 10";
-
-		// Log the query for debugging
-		log_message('debug', 'QUERY GET FAKTOR PERCERAIAN: ' . $sql);
 
 		$query = $this->db->query($sql);
 		$factors = $query->result();
@@ -229,9 +220,6 @@ class M_Usia_cerai extends CI_Model
         LEFT JOIN pihak d ON b.pihak_id = d.id
         LEFT JOIN perkara_data_pernikahan pdp ON p.perkara_id = pdp.perkara_id
         WHERE $date_condition";
-
-		// Log the query for debugging
-		log_message('debug', 'QUERY GET USIA RANGES: ' . $sql);
 
 		$query = $this->db->query($sql);
 		return $query->row();
