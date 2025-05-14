@@ -347,27 +347,21 @@
 														<span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
 													</td>
 													<td>
+														<?php if (isset($row->perkara_id)): ?>
+															<a href="<?= site_url('Odp/detail/' . $row->perkara_id) ?>" class="btn btn-xs btn-success" target="_blank" data-toggle="tooltip" title="Lihat Detail Lengkap">
+																<i class="fas fa-eye"></i>
+															</a>
+														<?php endif; ?>
+
 														<?php if (!empty($row->link_dirput)): ?>
 															<a href="<?= $row->link_dirput ?>" class="btn btn-xs btn-info" target="_blank" data-toggle="tooltip" title="Lihat Putusan">
-																<i class="fas fa-eye"></i>
+																<i class="fas fa-file-pdf"></i>
 															</a>
 														<?php else: ?>
 															<a href="https://putusan3.mahkamahagung.go.id/search.html?q=<?= $row->nomor_perkara ?>" class="btn btn-xs btn-secondary" target="_blank" data-toggle="tooltip" title="Cari di Direktori Putusan">
 																<i class="fas fa-search"></i>
 															</a>
 														<?php endif; ?>
-
-														<button class="btn btn-xs btn-primary view-detail" data-toggle="tooltip" title="Lihat Detail"
-															data-nomor="<?= $row->nomor_perkara ?>"
-															data-jenis="<?= $row->jenis_perkara_nama ?>"
-															data-putus="<?= date('d-m-Y', strtotime($row->tanggal_putusan)) ?>"
-															data-minutasi="<?= !empty($row->tanggal_minutasi) ? date('d-m-Y', strtotime($row->tanggal_minutasi)) : '-' ?>"
-															data-publish="<?= date('d-m-Y', strtotime($row->tanggal_publish)) ?>"
-															data-selisih="<?= $row->selisih_hari ?>"
-															data-status="<?= $row->is_odp ?>"
-															data-filename="<?= $row->filename ?>">
-															<i class="fas fa-info-circle"></i>
-														</button>
 													</td>
 												</tr>
 											<?php endforeach; ?>

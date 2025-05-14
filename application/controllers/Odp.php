@@ -69,4 +69,32 @@ class Odp extends CI_Controller
 		$this->load->view('v_odp', $data);
 		$this->load->view('template/new_footer');
 	}
+
+	public function detail($perkara_id = NULL)
+	{
+		if (!$perkara_id) {
+			show_404();
+			return;
+		}
+
+		// Load model to get detailed data
+		$data['perkara'] = $this->M_odp->get_detail($perkara_id);
+
+		if (!$data['perkara']) {
+			show_404();
+			return;
+		}
+
+		// Get related documents if available
+		$data['dokumen'] = $this->M_odp->get_documents($perkara_id);
+
+		// Get hearing schedule if available
+		$data['jadwal_sidang'] = $this->M_odp->get_hearings($perkara_id);
+
+		// Load views
+		$this->load->view('template/new_header');
+		$this->load->view('template/new_sidebar');
+		$this->load->view('v_lihat_detail', $data);
+		$this->load->view('template/new_footer');
+	}
 }
