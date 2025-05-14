@@ -458,7 +458,7 @@
 
 	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
 	<script>
-		$(document).ready(function() {
+		$(function() {
 			// Initialize Select2
 			$('.select2').select2({
 				theme: 'bootstrap4'
@@ -553,143 +553,152 @@
 			$('[data-toggle="tooltip"]').tooltip();
 
 			<?php if (!empty($datafilter)): ?>
-				<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
-					// Monthly Performance Chart
-					var monthlyCtx = document.getElementById('monthlyPerformanceChart').getContext('2d');
-					var monthlyData = {
-						labels: [
-							'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-							'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
-						],
-						datasets: [{
-								label: 'Total Perkara',
-								backgroundColor: 'rgba(60, 141, 188, 0.3)',
-								borderColor: 'rgba(60, 141, 188, 1)',
-								pointRadius: 3,
-								pointBackgroundColor: 'rgba(60, 141, 188, 1)',
-								pointBorderColor: '#fff',
-								pointHoverRadius: 5,
-								pointHoverBackgroundColor: '#fff',
-								pointHoverBorderColor: 'rgba(60, 141, 188, 1)',
-								data: [
-									<?php
-									$monthData = array_fill(1, 12, 0);
-									foreach ($monthly_performance as $item) {
-										$monthData[(int)$item->month_num] = $item->total_putus;
+				// Initialize charts using ChartHelper
+				setTimeout(function() {
+					// Debug canvas elements
+					ChartHelper.debugCanvas('perkaraDistributionChart');
+					ChartHelper.debugCanvas('odpStatusChart');
+					ChartHelper.debugCanvas('monthlyPerformanceChart');
+
+					<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
+						// Monthly Performance Chart
+						if (document.getElementById('monthlyPerformanceChart')) {
+							var monthlyData = {
+								labels: [
+									'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+									'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+								],
+								datasets: [{
+										label: 'Total Perkara',
+										backgroundColor: 'rgba(60, 141, 188, 0.3)',
+										borderColor: 'rgba(60, 141, 188, 1)',
+										pointRadius: 3,
+										pointBackgroundColor: 'rgba(60, 141, 188, 1)',
+										pointBorderColor: '#fff',
+										pointHoverRadius: 5,
+										pointHoverBackgroundColor: '#fff',
+										pointHoverBorderColor: 'rgba(60, 141, 188, 1)',
+										data: [
+											<?php
+											$monthData = array_fill(1, 12, 0);
+											if (!empty($monthly_performance)) {
+												foreach ($monthly_performance as $item) {
+													$monthData[(int)$item->month_num] = $item->total_putus;
+												}
+											}
+											echo implode(', ', $monthData);
+											?>
+										],
+										type: 'line',
+										fill: false
+									},
+									{
+										label: 'One Day Publish',
+										backgroundColor: 'rgba(40, 167, 69, 0.7)',
+										borderColor: 'rgba(40, 167, 69, 1)',
+										borderWidth: 1,
+										data: [
+											<?php
+											$monthData = array_fill(1, 12, 0);
+											if (!empty($monthly_performance)) {
+												foreach ($monthly_performance as $item) {
+													$monthData[(int)$item->month_num] = $item->total_odp_same_day;
+												}
+											}
+											echo implode(', ', $monthData);
+											?>
+										]
 									}
-									echo implode(', ', $monthData);
+								]
+							};
+
+							var options = {
+								responsive: true,
+								maintainAspectRatio: false,
+								scales: {
+									yAxes: [{
+										ticks: {
+											beginAtZero: true
+										}
+									}]
+								}
+							};
+
+							ChartHelper.initChart('monthlyPerformanceChart', 'bar', monthlyData, options);
+						}
+					<?php endif; ?>
+
+					<?php if (!empty($perkara_distribution)): ?>
+						// Case Type Distribution Chart
+						if (document.getElementById('perkaraDistributionChart')) {
+							var perkaraData = {
+								labels: [
+									<?php
+									$types = [];
+									foreach ($perkara_distribution as $item) {
+										$types[] = '"' . $item->jenis_perkara_nama . '"';
+									}
+									echo implode(', ', $types);
 									?>
 								],
-								type: 'line',
-								fill: false
-							},
-							{
-								label: 'One Day Publish',
-								backgroundColor: 'rgba(40, 167, 69, 0.7)',
-								borderColor: 'rgba(40, 167, 69, 1)',
-								borderWidth: 1,
-								data: [
-									<?php
-									$monthData = array_fill(1, 12, 0);
-									foreach ($monthly_performance as $item) {
-										$monthData[(int)$item->month_num] = $item->total_odp_same_day;
-									}
-									echo implode(', ', $monthData);
-									?>
-								]
-							}
-						]
-					};
-
-					new Chart(monthlyCtx, {
-						type: 'bar',
-						data: monthlyData,
-						options: {
-							responsive: true,
-							maintainAspectRatio: false,
-							scales: {
-								yAxes: [{
-									ticks: {
-										beginAtZero: true
-									}
+								datasets: [{
+									data: [
+										<?php
+										$counts = [];
+										foreach ($perkara_distribution as $item) {
+											$counts[] = $item->total_cases;
+										}
+										echo implode(', ', $counts);
+										?>
+									],
+									backgroundColor: [
+										'#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',
+										'#e83e8c', '#6610f2', '#6f42c1', '#fd7e14', '#20c997', '#17a2b8'
+									]
 								}]
-							}
-						}
-					});
-				<?php endif; ?>
+							};
 
-				<?php if (!empty($perkara_distribution)): ?>
-					// Case Type Distribution Chart
-					var perkaraCtx = document.getElementById('perkaraDistributionChart').getContext('2d');
-					var perkaraData = {
-						labels: [
-							<?php
-							$types = [];
-							foreach ($perkara_distribution as $item) {
-								$types[] = '"' . $item->jenis_perkara_nama . '"';
-							}
-							echo implode(', ', $types);
-							?>
-						],
-						datasets: [{
-							data: [
-								<?php
-								$counts = [];
-								foreach ($perkara_distribution as $item) {
-									$counts[] = $item->total_cases;
+							var options = {
+								responsive: true,
+								maintainAspectRatio: false,
+								legend: {
+									position: '<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? "right" : "bottom" ?>'
 								}
-								echo implode(', ', $counts);
-								?>
-							],
-							backgroundColor: [
-								'#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',
-								'#e83e8c', '#6610f2', '#6f42c1', '#fd7e14', '#20c997', '#17a2b8'
-							]
-						}]
-					};
+							};
 
-					new Chart(perkaraCtx, {
-						type: 'doughnut',
-						data: perkaraData,
-						options: {
-							responsive: true,
-							maintainAspectRatio: false,
-							legend: {
-								position: '<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? "right" : "bottom" ?>'
-							}
+							ChartHelper.initChart('perkaraDistributionChart', 'doughnut', perkaraData, options);
 						}
-					});
-				<?php endif; ?>
+					<?php endif; ?>
 
-				<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
-					// ODP Status Chart
-					var odpCtx = document.getElementById('odpStatusChart').getContext('2d');
-					var odpData = {
-						labels: ['ODP (Hari Sama)', 'ODP (1 Hari)', 'Tidak ODP'],
-						datasets: [{
-							data: [
-								<?= isset($stats->total_odp_same_day) ? $stats->total_odp_same_day : 0 ?>,
-								<?= isset($stats->total_odp_one_day) && isset($stats->total_odp_same_day) ?
-									$stats->total_odp_one_day - $stats->total_odp_same_day : 0 ?>,
-								<?= isset($stats->total_putus) && isset($stats->total_odp_one_day) ?
-									$stats->total_putus - $stats->total_odp_one_day : 0 ?>
-							],
-							backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
-						}]
-					};
+					<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
+						// ODP Status Chart
+						if (document.getElementById('odpStatusChart')) {
+							var odpData = {
+								labels: ['ODP (Hari Sama)', 'ODP (1 Hari)', 'Tidak ODP'],
+								datasets: [{
+									data: [
+										<?= isset($stats->total_odp_same_day) ? $stats->total_odp_same_day : 0 ?>,
+										<?= isset($stats->total_odp_one_day) && isset($stats->total_odp_same_day) ?
+											$stats->total_odp_one_day - $stats->total_odp_same_day : 0 ?>,
+										<?= isset($stats->total_putus) && isset($stats->total_odp_one_day) ?
+											$stats->total_putus - $stats->total_odp_one_day : 0 ?>
+									],
+									backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
+								}]
+							};
 
-					new Chart(odpCtx, {
-						type: 'pie',
-						data: odpData,
-						options: {
-							responsive: true,
-							maintainAspectRatio: false,
-							legend: {
-								position: 'bottom'
-							}
+							var options = {
+								responsive: true,
+								maintainAspectRatio: false,
+								legend: {
+									position: 'bottom'
+								}
+							};
+
+							ChartHelper.initChart('odpStatusChart', 'pie', odpData, options);
 						}
-					});
-				<?php endif; ?>
+					<?php endif; ?>
+				}, 800); // Larger delay to ensure DOM is fully ready
 			<?php endif; ?>
 		});
 	</script>

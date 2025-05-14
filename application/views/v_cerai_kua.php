@@ -517,31 +517,22 @@
 
 			<?php if (isset($stats->kua_distribution) && !empty($stats->kua_distribution)): ?>
 				// KUA Distribution Chart
-				if (document.getElementById('kuaDistributionChart')) {
-					var kuaCtx = document.getElementById('kuaDistributionChart').getContext('2d');
-					var kuaData = {
-						labels: <?= json_encode(array_column($kua_counts, 'kua_tempat_nikah')) ?>,
-						datasets: [{
-							data: <?= json_encode(array_column($kua_counts, 'total')) ?>,
-							backgroundColor: [
-								'#36a2eb',
-								'#ff6384',
-								'#ffcd56',
-								'#4bc0c0',
-								'#9966ff',
-								'#ff9f40',
-								'#c9cbcf',
-								'#7cb342',
-								'#e91e63',
-								'#3f51b5'
-							]
-						}]
-					};
+				setTimeout(function() {
+					ChartHelper.debugCanvas('kuaDistributionChart');
 
-					new Chart(kuaCtx, {
-						type: 'doughnut',
-						data: kuaData,
-						options: {
+					if (document.getElementById('kuaDistributionChart')) {
+						var kuaData = {
+							labels: <?= json_encode(array_column($kua_counts, 'kua_tempat_nikah')) ?>,
+							datasets: [{
+								data: <?= json_encode(array_column($kua_counts, 'total')) ?>,
+								backgroundColor: [
+									'#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0', '#9966ff',
+									'#ff9f40', '#c9cbcf', '#7cb342', '#e91e63', '#3f51b5'
+								]
+							}]
+						};
+
+						var options = {
 							responsive: true,
 							maintainAspectRatio: false,
 							legend: {
@@ -563,9 +554,11 @@
 									}
 								}
 							}
-						}
-					});
-				}
+						};
+
+						ChartHelper.initChart('kuaDistributionChart', 'doughnut', kuaData, options);
+					}
+				}, 800);
 			<?php endif; ?>
 		});
 	</script>

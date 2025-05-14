@@ -642,40 +642,42 @@
 			});
 
 			<?php if (!empty($datafilter)): ?>
-				// Age Distribution Chart
-				if (document.getElementById('ageDistributionChart')) {
-					var ageCtx = document.getElementById('ageDistributionChart').getContext('2d');
-					var ageData = {
-						labels: ['<20 tahun', '20-30 tahun', '31-40 tahun', '41-50 tahun', '>50 tahun'],
-						datasets: [{
-								label: 'Penggugat/Pemohon',
-								backgroundColor: 'rgba(60, 141, 188, 0.8)',
-								data: [
-									<?= isset($usia_ranges->p_usia_dibawah_20) ? $usia_ranges->p_usia_dibawah_20 : 0 ?>,
-									<?= isset($usia_ranges->p_usia_20_30) ? $usia_ranges->p_usia_20_30 : 0 ?>,
-									<?= isset($usia_ranges->p_usia_31_40) ? $usia_ranges->p_usia_31_40 : 0 ?>,
-									<?= isset($usia_ranges->p_usia_41_50) ? $usia_ranges->p_usia_41_50 : 0 ?>,
-									<?= isset($usia_ranges->p_usia_diatas_50) ? $usia_ranges->p_usia_diatas_50 : 0 ?>
-								]
-							},
-							{
-								label: 'Tergugat/Termohon',
-								backgroundColor: 'rgba(255, 193, 7, 0.8)',
-								data: [
-									<?= isset($usia_ranges->t_usia_dibawah_20) ? $usia_ranges->t_usia_dibawah_20 : 0 ?>,
-									<?= isset($usia_ranges->t_usia_20_30) ? $usia_ranges->t_usia_20_30 : 0 ?>,
-									<?= isset($usia_ranges->t_usia_31_40) ? $usia_ranges->t_usia_31_40 : 0 ?>,
-									<?= isset($usia_ranges->t_usia_41_50) ? $usia_ranges->t_usia_41_50 : 0 ?>,
-									<?= isset($usia_ranges->t_usia_diatas_50) ? $usia_ranges->t_usia_diatas_50 : 0 ?>
-								]
-							}
-						]
-					};
+				// Initialize charts with delay to ensure DOM is fully ready
+				setTimeout(function() {
+					ChartHelper.debugCanvas('ageDistributionChart');
+					ChartHelper.debugCanvas('marriageDurationChart');
+					ChartHelper.debugCanvas('divorceTypeChart');
 
-					new Chart(ageCtx, {
-						type: 'bar',
-						data: ageData,
-						options: {
+					// Age Distribution Chart
+					if (document.getElementById('ageDistributionChart')) {
+						var ageData = {
+							labels: ['<20 tahun', '20-30 tahun', '31-40 tahun', '41-50 tahun', '>50 tahun'],
+							datasets: [{
+									label: 'Penggugat/Pemohon',
+									backgroundColor: 'rgba(60, 141, 188, 0.8)',
+									data: [
+										<?= isset($usia_ranges->p_usia_dibawah_20) ? $usia_ranges->p_usia_dibawah_20 : 0 ?>,
+										<?= isset($usia_ranges->p_usia_20_30) ? $usia_ranges->p_usia_20_30 : 0 ?>,
+										<?= isset($usia_ranges->p_usia_31_40) ? $usia_ranges->p_usia_31_40 : 0 ?>,
+										<?= isset($usia_ranges->p_usia_41_50) ? $usia_ranges->p_usia_41_50 : 0 ?>,
+										<?= isset($usia_ranges->p_usia_diatas_50) ? $usia_ranges->p_usia_diatas_50 : 0 ?>
+									]
+								},
+								{
+									label: 'Tergugat/Termohon',
+									backgroundColor: 'rgba(255, 193, 7, 0.8)',
+									data: [
+										<?= isset($usia_ranges->t_usia_dibawah_20) ? $usia_ranges->t_usia_dibawah_20 : 0 ?>,
+										<?= isset($usia_ranges->t_usia_20_30) ? $usia_ranges->t_usia_20_30 : 0 ?>,
+										<?= isset($usia_ranges->t_usia_31_40) ? $usia_ranges->t_usia_31_40 : 0 ?>,
+										<?= isset($usia_ranges->t_usia_41_50) ? $usia_ranges->t_usia_41_50 : 0 ?>,
+										<?= isset($usia_ranges->t_usia_diatas_50) ? $usia_ranges->t_usia_diatas_50 : 0 ?>
+									]
+								}
+							]
+						};
+
+						var options = {
 							responsive: true,
 							maintainAspectRatio: false,
 							legend: {
@@ -689,67 +691,63 @@
 									}
 								}]
 							}
-						}
-					});
-				}
+						};
 
-				// Marriage Duration Chart
-				if (document.getElementById('marriageDurationChart')) {
-					var marriageCtx = document.getElementById('marriageDurationChart').getContext('2d');
-					var marriageData = {
-						labels: ['<1 tahun', '1-5 tahun', '6-10 tahun', '>10 tahun'],
-						datasets: [{
-							data: [
-								<?= isset($usia_ranges->nikah_kurang_1_tahun) ? $usia_ranges->nikah_kurang_1_tahun : 0 ?>,
-								<?= isset($usia_ranges->nikah_1_5_tahun) ? $usia_ranges->nikah_1_5_tahun : 0 ?>,
-								<?= isset($usia_ranges->nikah_6_10_tahun) ? $usia_ranges->nikah_6_10_tahun : 0 ?>,
-								<?= isset($usia_ranges->nikah_lebih_10_tahun) ? $usia_ranges->nikah_lebih_10_tahun : 0 ?>
-							],
-							backgroundColor: [
-								'#f56954', // red
-								'#00a65a', // green
-								'#f39c12', // yellow
-								'#00c0ef' // blue
-							]
-						}]
-					};
+						ChartHelper.initChart('ageDistributionChart', 'bar', ageData, options);
+					}
 
-					new Chart(marriageCtx, {
-						type: 'doughnut',
-						data: marriageData,
-						options: {
+					// Marriage Duration Chart
+					if (document.getElementById('marriageDurationChart')) {
+						var marriageData = {
+							labels: ['<1 tahun', '1-5 tahun', '6-10 tahun', '>10 tahun'],
+							datasets: [{
+								data: [
+									<?= isset($usia_ranges->nikah_kurang_1_tahun) ? $usia_ranges->nikah_kurang_1_tahun : 0 ?>,
+									<?= isset($usia_ranges->nikah_1_5_tahun) ? $usia_ranges->nikah_1_5_tahun : 0 ?>,
+									<?= isset($usia_ranges->nikah_6_10_tahun) ? $usia_ranges->nikah_6_10_tahun : 0 ?>,
+									<?= isset($usia_ranges->nikah_lebih_10_tahun) ? $usia_ranges->nikah_lebih_10_tahun : 0 ?>
+								],
+								backgroundColor: [
+									'#f56954', // red
+									'#00a65a', // green
+									'#f39c12', // yellow
+									'#00c0ef' // blue
+								]
+							}]
+						};
+
+						var options = {
 							responsive: true,
 							maintainAspectRatio: false,
 							legend: {
 								position: 'right'
 							}
-						}
-					});
-				}
+						};
 
-				// Divorce Type Chart
-				if (document.getElementById('divorceTypeChart')) {
-					var divorceTypeCtx = document.getElementById('divorceTypeChart').getContext('2d');
-					var divorceTypeData = {
-						labels: ['Cerai Talak', 'Cerai Gugat'],
-						datasets: [{
-							data: [
-								<?= isset($stats->total_cerai_talak) ? $stats->total_cerai_talak : 0 ?>,
-								<?= isset($stats->total_cerai_gugat) ? $stats->total_cerai_gugat : 0 ?>
-							],
-							backgroundColor: ['#3c8dbc', '#00c0ef']
-						}]
-					};
+						ChartHelper.initChart('marriageDurationChart', 'doughnut', marriageData, options);
+					}
 
-					new Chart(divorceTypeCtx, {
-						type: 'pie',
-						data: divorceTypeData,
-						options: {
+					// Divorce Type Chart
+					if (document.getElementById('divorceTypeChart')) {
+						var divorceTypeData = {
+							labels: ['Cerai Talak', 'Cerai Gugat'],
+							datasets: [{
+								data: [
+									<?= isset($stats->total_cerai_talak) ? $stats->total_cerai_talak : 0 ?>,
+									<?= isset($stats->total_cerai_gugat) ? $stats->total_cerai_gugat : 0 ?>
+								],
+								backgroundColor: ['#3c8dbc', '#00c0ef']
+							}]
+						};
+
+						var options = {
 							responsive: true,
 							maintainAspectRatio: false
-						}
-					});
-				}
+						};
+
+						ChartHelper.initChart('divorceTypeChart', 'pie', divorceTypeData, options);
+					}
+				}, 800); // Longer delay for more reliability
 			<?php endif; ?>
 		});
 	</script>

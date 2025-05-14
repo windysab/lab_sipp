@@ -194,6 +194,30 @@
 	</style>
 
 	<link rel="icon" type="image/png" href="<?php echo base_url() ?>assets/dist/img/Logo PA Amuntai - Trans.png" />
+
+	<!-- Make sure Chart.js is properly loaded -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Check if Chart.js is loaded
+			if (typeof Chart === 'undefined') {
+				console.error('Chart.js is not loaded! Loading it now...');
+				// Create and append script tag
+				var script = document.createElement('script');
+				script.src = '<?= base_url() ?>assets/plugins/chart.js/Chart.min.js';
+				script.async = true;
+				document.head.appendChild(script);
+			}
+		});
+	</script>
+
+	<!-- Chart.js -->
+	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
+	<!-- Chart Helper -->
+	<script>
+		// Set base URL for use in scripts
+		var baseURL = '<?= base_url() ?>';
+	</script>
+	<script src="<?= base_url() ?>assets/js/chart-helper.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
