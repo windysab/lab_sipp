@@ -1,128 +1,698 @@
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h5>One Day Publish</h5>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">#</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>  
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <form action="<?php echo base_url()?>index.php/Odp" method="POST" >
-                Laporan Bulan :
-                <!-- <select name="lap_bulan" required="">
-                    <option value="01" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '01') ? 'selected' : ''; ?>>Januari</option>
-                    <option value="02" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '02') ? 'selected' : ''; ?>>Februari</option>
-                    <option value="03" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '03') ? 'selected' : ''; ?>>Maret</option>
-                    <option value="04" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '04') ? 'selected' : ''; ?>>April</option>
-                    <option value="05" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '05') ? 'selected' : ''; ?>>Mei</option>
-                    <option value="06" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '06') ? 'selected' : ''; ?>>Juni</option>
-                    <option value="07" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '07') ? 'selected' : ''; ?>>Juli</option>
-                    <option value="08" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '08') ? 'selected' : ''; ?>>Agustus</option>
-                    <option value="09" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '09') ? 'selected' : ''; ?>>September</option>
-                    <option value="10" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '10') ? 'selected' : ''; ?>>Oktober</option>
-                    <option value="11" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '11') ? 'selected' : ''; ?>>Nopember</option>
-                    <option value="12" <?php echo (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === '12') ? 'selected' : ''; ?>>Desember</option>
-                </select> -->
-                Tahun :
-                <select name="lap_tahun" required="">
-                    <option value="2016" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2016') ? 'selected' : ''; ?>>2016</option>
-                    <option value="2017" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2017') ? 'selected' : ''; ?>>2017</option>
-                    <option value="2018" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2018') ? 'selected' : ''; ?>>2018</option>
-                    <option value="2019" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2019') ? 'selected' : ''; ?>>2019</option>
-                    <option value="2020" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2020') ? 'selected' : ''; ?>>2020</option>
-                    <option value="2021" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2021') ? 'selected' : ''; ?>>2021</option>
-                    <option value="2022" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2022') ? 'selected' : ''; ?>>2022</option>
-                    <option value="2023" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2023') ? 'selected' : ''; ?>>2023</option>
-                    <option value="2024" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2024') ? 'selected' : ''; ?>>2024</option>
-                    <option value="2025" <?php echo (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] === '2025') ? 'selected' : ''; ?>>2025</option>
-                </select>
-                <input class="btn btn-primary" type="submit" name="btn" value="Tampilkan" />
-              
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table class="table table-bordered table-striped" id="example1">
-                  <thead>
-                  <tr>
-                    <th>Nomor</th>
-                    <th>Nomor Perkara</th>
-                    <th>Jenis Perkara</th>
-                    <th>Tanggal Putus</th>
-                    <th>Tanggal Publish</th>
-                    <th>Keterangan</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php 
-                    $no = 1;
-                    foreach ($datafilter as $row ) : ?>
-                  <tr>
-                    <td><?php echo $no++?></td>
-                    <td><?php echo $row->nomor_perkara?></td>
-                    <td><?php echo $row->jenis_perkara_nama?></td>
-                    <td><?php echo $row->tanggal_putusan?></td>
-                    <td><?php echo $row->tanggal_publish?></td>
-                    <td><?php echo ''?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </form>
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-</div>
-<!-- ./wrapper -->
+	<div class="wrapper">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0 text-dark"><i class="fas fa-business-time mr-2"></i>One Day Publish</h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="<?= site_url('Admin/Dashboard') ?>">Home</a></li>
+								<li class="breadcrumb-item">One Day Service</li>
+								<li class="breadcrumb-item active">One Day Publish</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
 
+			<section class="content">
+				<div class="container-fluid">
+					<!-- Filter Card -->
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filter Data</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<form action="<?= base_url() ?>index.php/Odp" method="POST" class="form-horizontal">
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Jenis Laporan:</label>
+									<div class="col-sm-10">
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_bulanan" name="jenis_filter" value="bulanan" class="custom-control-input" <?= (!isset($jenis_filter) || (isset($jenis_filter) && $jenis_filter === 'bulanan')) ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_bulanan">Laporan Bulanan</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="laporan_tahunan" name="jenis_filter" value="tahunan" class="custom-control-input" <?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? 'checked' : '' ?>>
+											<label class="custom-control-label" for="laporan_tahunan">Laporan Tahunan</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row" id="bulan_container">
+									<label class="col-sm-2 col-form-label">Bulan:</label>
+									<div class="col-sm-4">
+										<select name="lap_bulan" class="form-control select2" id="lap_bulan">
+											<option value="">-- Pilih Bulan --</option>
+											<?php
+											foreach ($nama_bulan as $value => $label) {
+												$selected = (isset($lap_bulan) && $lap_bulan == $value) ? 'selected="selected"' : '';
+												echo "<option value=\"$value\" $selected>$label</option>";
+											}
+											?>
+										</select>
+									</div>
+									<label class="col-sm-2 col-form-label">Tahun:</label>
+									<div class="col-sm-4">
+										<select name="lap_tahun" class="form-control select2" required>
+											<option value="">-- Pilih Tahun --</option>
+											<?php
+											$currentYear = date('Y');
+											for ($year = 2016; $year <= $currentYear + 1; $year++) {
+												$selected = (isset($lap_tahun) && $lap_tahun == $year) ? 'selected="selected"' : '';
+												echo "<option value=\"$year\" $selected>$year</option>";
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-4 offset-sm-8">
+										<button type="submit" name="btn" value="Tampilkan" class="btn btn-primary btn-block">
+											<i class="fas fa-search mr-2"></i> Tampilkan Data
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 
+					<?php if (!empty($datafilter)): ?>
+						<!-- Statistics Cards -->
+						<div class="row">
+							<div class="col-lg-3 col-6">
+								<div class="small-box bg-info">
+									<div class="inner">
+										<h3><?= isset($stats->total_putus) ? $stats->total_putus : 0 ?></h3>
+										<p>Total Perkara Putus</p>
+									</div>
+									<div class="icon">
+										<i class="fas fa-gavel"></i>
+									</div>
+									<a href="#" class="small-box-footer">
+										<?php if (!empty($lap_bulan)): ?>
+											Periode: <?= $nama_bulan[$lap_bulan] ?> <?= $lap_tahun ?>
+										<?php else: ?>
+											Periode: Tahun <?= $lap_tahun ?>
+										<?php endif; ?>
+										<i class="fas fa-calendar-alt mx-1"></i>
+									</a>
+								</div>
+							</div>
 
+							<div class="col-lg-3 col-6">
+								<div class="small-box bg-success">
+									<div class="inner">
+										<h3><?= isset($stats->total_publish) ? $stats->total_publish : 0 ?></h3>
+										<p>Total Terpublikasi</p>
+									</div>
+									<div class="icon">
+										<i class="fas fa-cloud-upload-alt"></i>
+									</div>
+									<a href="#" class="small-box-footer">
+										<?= isset($stats->total_publish) && isset($stats->total_putus) ?
+											round(($stats->total_publish / $stats->total_putus) * 100, 1) . '%' :
+											'0%' ?> dari total perkara
+										<i class="fas fa-info-circle mx-1"></i>
+									</a>
+								</div>
+							</div>
 
-<!-- Page specific script -->
-<!-- <script>
-  $(function () {
-    $("#DataTable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#DataTable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script> 
- --></body>
+							<div class="col-lg-3 col-6">
+								<div class="small-box bg-warning">
+									<div class="inner">
+										<h3><?= isset($stats->total_odp_same_day) ? $stats->total_odp_same_day : 0 ?></h3>
+										<p>One Day Publish</p>
+									</div>
+									<div class="icon">
+										<i class="fas fa-bolt"></i>
+									</div>
+									<a href="#" class="small-box-footer">
+										<?= isset($stats->pct_odp_same_day) ? $stats->pct_odp_same_day . '%' : '0%' ?> dari total perkara
+										<i class="fas fa-info-circle mx-1"></i>
+									</a>
+								</div>
+							</div>
+
+							<div class="col-lg-3 col-6">
+								<div class="small-box bg-danger">
+									<div class="inner">
+										<h3><?= isset($stats->avg_publish_days) ? round($stats->avg_publish_days, 1) : '-' ?></h3>
+										<p>Rata-rata Hari Publikasi</p>
+									</div>
+									<div class="icon">
+										<i class="fas fa-clock"></i>
+									</div>
+									<a href="#" class="small-box-footer">
+										Hari sejak putusan
+										<i class="fas fa-info-circle mx-1"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- Chart Row -->
+						<div class="row">
+							<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
+								<!-- Monthly Performance -->
+								<div class="col-md-8">
+									<div class="card card-primary">
+										<div class="card-header">
+											<h3 class="card-title">
+												<i class="fas fa-chart-line mr-1"></i>
+												Performa ODP Bulanan Tahun <?= $lap_tahun ?>
+											</h3>
+											<div class="card-tools">
+												<button type="button" class="btn btn-tool" data-card-widget="collapse">
+													<i class="fas fa-minus"></i>
+												</button>
+											</div>
+										</div>
+										<div class="card-body">
+											<div id="monthlyPerformanceChart" style="height: 300px;"></div>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+
+							<!-- Case Type Distribution -->
+							<div class="<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? 'col-md-4' : 'col-md-6' ?>">
+								<div class="card card-success">
+									<div class="card-header">
+										<h3 class="card-title">
+											<i class="fas fa-chart-pie mr-1"></i>
+											Distribusi Jenis Perkara
+										</h3>
+										<div class="card-tools">
+											<button type="button" class="btn btn-tool" data-card-widget="collapse">
+												<i class="fas fa-minus"></i>
+											</button>
+										</div>
+									</div>
+									<div class="card-body">
+										<?php if (!empty($perkara_distribution)): ?>
+											<div id="perkaraDistributionChart" style="height: 300px;"></div>
+										<?php else: ?>
+											<div class="alert alert-warning">
+												<i class="fas fa-info-circle"></i> Tidak ada data untuk ditampilkan.
+											</div>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+
+							<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
+								<!-- ODP Status -->
+								<div class="col-md-6">
+									<div class="card card-info">
+										<div class="card-header">
+											<h3 class="card-title">
+												<i class="fas fa-chart-bar mr-1"></i>
+												Status One Day Publish
+											</h3>
+											<div class="card-tools">
+												<button type="button" class="btn btn-tool" data-card-widget="collapse">
+													<i class="fas fa-minus"></i>
+												</button>
+											</div>
+										</div>
+										<div class="card-body">
+											<div id="odpStatusChart" style="height: 300px;"></div>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
+
+						<!-- Additional Info Card -->
+						<div class="card bg-gradient-info">
+							<div class="card-header">
+								<h3 class="card-title">
+									<i class="fas fa-info-circle mr-1"></i>
+									Informasi One Day Publish
+								</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<p>One Day Publish (ODP) adalah layanan percepatan publikasi putusan/penetapan perkara pada hari yang sama dengan hari diputuskannya perkara. Layanan ini bertujuan untuk:</p>
+								<ul>
+									<li>Meningkatkan kecepatan layanan informasi kepada para pencari keadilan</li>
+									<li>Mempercepat publikasi putusan untuk kepentingan transparansi peradilan</li>
+									<li>Memastikan putusan pengadilan dapat diakses oleh publik secara cepat melalui Direktori Putusan</li>
+								</ul>
+								<div class="alert alert-light">
+									<i class="fas fa-exclamation-circle mr-2"></i> Perkara yang tidak dipublikasi pada hari yang sama dengan hari putusan, tidak dianggap sebagai ODP dan memerlukan tindak lanjut lebih cepat.
+								</div>
+							</div>
+						</div>
+
+						<!-- Main Data Card -->
+						<div class="card card-outline card-primary">
+							<div class="card-header bg-light">
+								<h3 class="card-title">
+									<i class="fas fa-table mr-1"></i>
+									Data One Day Publish
+									<?php if (!empty($lap_bulan)): ?>
+										- <?= $nama_bulan[$lap_bulan] ?> <?= $lap_tahun ?>
+									<?php else: ?>
+										- Tahun <?= $lap_tahun ?>
+									<?php endif; ?>
+								</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-tool" data-card-widget="maximize">
+										<i class="fas fa-expand"></i>
+									</button>
+									<div class="btn-group ml-2">
+										<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+											<i class="fas fa-download"></i> Export
+										</button>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" class="dropdown-item export-excel">
+												<i class="fas fa-file-excel mr-2"></i> Excel
+											</a>
+											<a href="#" class="dropdown-item export-pdf">
+												<i class="fas fa-file-pdf mr-2"></i> PDF
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-body p-0">
+								<div class="table-responsive">
+									<table id="dataTable" class="table table-bordered table-striped table-hover">
+										<thead>
+											<tr>
+												<th class="text-center" width="5%">No</th>
+												<th width="15%">Nomor Perkara</th>
+												<th width="15%">Jenis Perkara</th>
+												<th width="12%">Tanggal Putus</th>
+												<th width="12%">Tanggal Minutasi</th>
+												<th width="12%">Tanggal Publish</th>
+												<th width="8%">Selisih Hari</th>
+												<th width="8%">Status ODP</th>
+												<th width="13%">Aksi</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php
+											$no = 1;
+											foreach ($datafilter as $row):
+												// Determine row class based on ODP status
+												$rowClass = '';
+												$badgeClass = 'badge-secondary';
+												$badgeText = 'Tidak';
+
+												if ($row->is_odp === 'Ya') {
+													$rowClass = 'table-success';
+													$badgeClass = 'badge-success';
+													$badgeText = 'ODP';
+												} elseif ($row->is_odp === 'Ya (1 Hari)') {
+													$rowClass = 'table-info';
+													$badgeClass = 'badge-info';
+													$badgeText = 'ODP (1 Hari)';
+												}
+											?>
+												<tr class="<?= $rowClass ?>">
+													<td class="text-center"><?= $no++ ?></td>
+													<td><?= $row->nomor_perkara ?></td>
+													<td><?= $row->jenis_perkara_nama ?></td>
+													<td><?= date('d-m-Y', strtotime($row->tanggal_putusan)) ?></td>
+													<td><?= !empty($row->tanggal_minutasi) ? date('d-m-Y', strtotime($row->tanggal_minutasi)) : '<span class="text-danger">-</span>' ?></td>
+													<td><?= date('d-m-Y', strtotime($row->tanggal_publish)) ?></td>
+													<td class="text-center">
+														<?php if ($row->selisih_hari <= 0): ?>
+															<span class="badge badge-success">0</span>
+														<?php elseif ($row->selisih_hari <= 1): ?>
+															<span class="badge badge-info">1</span>
+														<?php elseif ($row->selisih_hari <= 3): ?>
+															<span class="badge badge-warning"><?= $row->selisih_hari ?></span>
+														<?php else: ?>
+															<span class="badge badge-danger"><?= $row->selisih_hari ?></span>
+														<?php endif; ?>
+													</td>
+													<td class="text-center">
+														<span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
+													</td>
+													<td>
+														<?php if (!empty($row->link_dirput)): ?>
+															<a href="<?= $row->link_dirput ?>" class="btn btn-xs btn-info" target="_blank" data-toggle="tooltip" title="Lihat Putusan">
+																<i class="fas fa-eye"></i>
+															</a>
+														<?php else: ?>
+															<a href="https://putusan3.mahkamahagung.go.id/search.html?q=<?= $row->nomor_perkara ?>" class="btn btn-xs btn-secondary" target="_blank" data-toggle="tooltip" title="Cari di Direktori Putusan">
+																<i class="fas fa-search"></i>
+															</a>
+														<?php endif; ?>
+
+														<button class="btn btn-xs btn-primary view-detail" data-toggle="tooltip" title="Lihat Detail"
+															data-nomor="<?= $row->nomor_perkara ?>"
+															data-jenis="<?= $row->jenis_perkara_nama ?>"
+															data-putus="<?= date('d-m-Y', strtotime($row->tanggal_putusan)) ?>"
+															data-minutasi="<?= !empty($row->tanggal_minutasi) ? date('d-m-Y', strtotime($row->tanggal_minutasi)) : '-' ?>"
+															data-publish="<?= date('d-m-Y', strtotime($row->tanggal_publish)) ?>"
+															data-selisih="<?= $row->selisih_hari ?>"
+															data-status="<?= $row->is_odp ?>"
+															data-filename="<?= $row->filename ?>">
+															<i class="fas fa-info-circle"></i>
+														</button>
+													</td>
+												</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="card-footer bg-light">
+								<div class="row">
+									<div class="col-md-6">
+										<span class="text-muted"><i class="fas fa-info-circle mr-1"></i> Keterangan:</span>
+										<ul class="list-inline ml-4 mb-0">
+											<li class="list-inline-item"><span class="badge badge-success">ODP</span> = Dipublikasi hari yang sama dengan putusan</li>
+											<li class="list-inline-item"><span class="badge badge-info">ODP (1 Hari)</span> = Dipublikasi 1 hari setelah putusan</li>
+										</ul>
+									</div>
+									<div class="col-md-6 text-right">
+										<small class="text-muted">Total data: <?= count($datafilter) ?> | Diperbarui: <?= date('d-m-Y H:i:s') ?></small>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php else: ?>
+						<!-- No Data Message -->
+						<div class="alert alert-warning alert-dismissible">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+							<h5><i class="icon fas fa-exclamation-triangle"></i> Tidak Ada Data</h5>
+							<p>Tidak ditemukan data ODP pada periode yang dipilih. Silahkan pilih periode lainnya.</p>
+						</div>
+					<?php endif; ?>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<!-- Detail Modal -->
+	<div class="modal fade" id="detailModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h4 class="modal-title">Detail Publikasi Putusan</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th style="width: 40%">Nomor Perkara</th>
+							<td id="detail-nomor"></td>
+						</tr>
+						<tr>
+							<th>Jenis Perkara</th>
+							<td id="detail-jenis"></td>
+						</tr>
+						<tr>
+							<th>Tanggal Putusan</th>
+							<td id="detail-putus"></td>
+						</tr>
+						<tr>
+							<th>Tanggal Minutasi</th>
+							<td id="detail-minutasi"></td>
+						</tr>
+						<tr>
+							<th>Tanggal Publikasi</th>
+							<td id="detail-publish"></td>
+						</tr>
+						<tr>
+							<th>Selisih Hari</th>
+							<td id="detail-selisih"></td>
+						</tr>
+						<tr>
+							<th>Status ODP</th>
+							<td id="detail-status"></td>
+						</tr>
+						<tr>
+							<th>Nama File</th>
+							<td id="detail-filename"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Initialize Select2
+			$('.select2').select2({
+				theme: 'bootstrap4'
+			});
+
+			// Handle report type toggle
+			function toggleBulanField() {
+				if ($("#laporan_tahunan").is(":checked")) {
+					$("#bulan_container").hide();
+					$("#lap_bulan").prop("required", false);
+					$("#lap_bulan").prop("disabled", true);
+				} else {
+					$("#bulan_container").show();
+					$("#lap_bulan").prop("required", true);
+					$("#lap_bulan").prop("disabled", false);
+				}
+			}
+
+			// Initialize state and listen for changes
+			toggleBulanField();
+			$("input[name='jenis_filter']").change(function() {
+				toggleBulanField();
+			});
+
+			// Initialize DataTables
+			$("#dataTable").DataTable({
+				"responsive": true,
+				"lengthChange": true,
+				"autoWidth": false,
+				"pageLength": 10,
+				"language": {
+					"lengthMenu": "Tampilkan _MENU_ data per halaman",
+					"zeroRecords": "Data tidak ditemukan",
+					"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+					"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+					"infoFiltered": "(difilter dari _MAX_ total data)",
+					"search": "Cari:",
+					"paginate": {
+						"first": "Pertama",
+						"last": "Terakhir",
+						"next": "Selanjutnya",
+						"previous": "Sebelumnya"
+					}
+				},
+				"buttons": [{
+						extend: 'excel',
+						text: 'Excel',
+						title: 'Data One Day Publish <?= !empty($lap_bulan) ? $nama_bulan[$lap_bulan] . " " . $lap_tahun : "Tahun " . $lap_tahun ?>',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5, 6, 7]
+						},
+						className: 'btn-success'
+					},
+					{
+						extend: 'pdf',
+						text: 'PDF',
+						title: 'Data One Day Publish <?= !empty($lap_bulan) ? $nama_bulan[$lap_bulan] . " " . $lap_tahun : "Tahun " . $lap_tahun ?>',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5, 6, 7]
+						},
+						className: 'btn-danger',
+						orientation: 'landscape'
+					}
+				]
+			}).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
+
+			// Export buttons binding
+			$('.export-excel').click(function(e) {
+				e.preventDefault();
+				$('.buttons-excel').click();
+			});
+
+			$('.export-pdf').click(function(e) {
+				e.preventDefault();
+				$('.buttons-pdf').click();
+			});
+
+			// View detail handler
+			$('.view-detail').click(function() {
+				$('#detail-nomor').text($(this).data('nomor'));
+				$('#detail-jenis').text($(this).data('jenis'));
+				$('#detail-putus').text($(this).data('putus'));
+				$('#detail-minutasi').text($(this).data('minutasi'));
+				$('#detail-publish').text($(this).data('publish'));
+				$('#detail-selisih').text($(this).data('selisih') + ' hari');
+				$('#detail-status').text($(this).data('status'));
+				$('#detail-filename').text($(this).data('filename'));
+				$('#detailModal').modal('show');
+			});
+
+			// Initialize tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+
+			<?php if (!empty($datafilter)): ?>
+				<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
+					// Monthly Performance Chart
+					var monthlyCtx = document.getElementById('monthlyPerformanceChart').getContext('2d');
+					var monthlyData = {
+						labels: [
+							'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+							'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+						],
+						datasets: [{
+								label: 'Total Perkara',
+								backgroundColor: 'rgba(60, 141, 188, 0.3)',
+								borderColor: 'rgba(60, 141, 188, 1)',
+								pointRadius: 3,
+								pointBackgroundColor: 'rgba(60, 141, 188, 1)',
+								pointBorderColor: '#fff',
+								pointHoverRadius: 5,
+								pointHoverBackgroundColor: '#fff',
+								pointHoverBorderColor: 'rgba(60, 141, 188, 1)',
+								data: [
+									<?php
+									$monthData = array_fill(1, 12, 0);
+									foreach ($monthly_performance as $item) {
+										$monthData[(int)$item->month_num] = $item->total_putus;
+									}
+									echo implode(', ', $monthData);
+									?>
+								],
+								type: 'line',
+								fill: false
+							},
+							{
+								label: 'One Day Publish',
+								backgroundColor: 'rgba(40, 167, 69, 0.7)',
+								borderColor: 'rgba(40, 167, 69, 1)',
+								borderWidth: 1,
+								data: [
+									<?php
+									$monthData = array_fill(1, 12, 0);
+									foreach ($monthly_performance as $item) {
+										$monthData[(int)$item->month_num] = $item->total_odp_same_day;
+									}
+									echo implode(', ', $monthData);
+									?>
+								]
+							}
+						]
+					};
+
+					new Chart(monthlyCtx, {
+						type: 'bar',
+						data: monthlyData,
+						options: {
+							responsive: true,
+							maintainAspectRatio: false,
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
+				<?php endif; ?>
+
+				<?php if (!empty($perkara_distribution)): ?>
+					// Case Type Distribution Chart
+					var perkaraCtx = document.getElementById('perkaraDistributionChart').getContext('2d');
+					var perkaraData = {
+						labels: [
+							<?php
+							$types = [];
+							foreach ($perkara_distribution as $item) {
+								$types[] = '"' . $item->jenis_perkara_nama . '"';
+							}
+							echo implode(', ', $types);
+							?>
+						],
+						datasets: [{
+							data: [
+								<?php
+								$counts = [];
+								foreach ($perkara_distribution as $item) {
+									$counts[] = $item->total_cases;
+								}
+								echo implode(', ', $counts);
+								?>
+							],
+							backgroundColor: [
+								'#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',
+								'#e83e8c', '#6610f2', '#6f42c1', '#fd7e14', '#20c997', '#17a2b8'
+							]
+						}]
+					};
+
+					new Chart(perkaraCtx, {
+						type: 'doughnut',
+						data: perkaraData,
+						options: {
+							responsive: true,
+							maintainAspectRatio: false,
+							legend: {
+								position: '<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? "right" : "bottom" ?>'
+							}
+						}
+					});
+				<?php endif; ?>
+
+				<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
+					// ODP Status Chart
+					var odpCtx = document.getElementById('odpStatusChart').getContext('2d');
+					var odpData = {
+						labels: ['ODP (Hari Sama)', 'ODP (1 Hari)', 'Tidak ODP'],
+						datasets: [{
+							data: [
+								<?= isset($stats->total_odp_same_day) ? $stats->total_odp_same_day : 0 ?>,
+								<?= isset($stats->total_odp_one_day) && isset($stats->total_odp_same_day) ?
+									$stats->total_odp_one_day - $stats->total_odp_same_day : 0 ?>,
+								<?= isset($stats->total_putus) && isset($stats->total_odp_one_day) ?
+									$stats->total_putus - $stats->total_odp_one_day : 0 ?>
+							],
+							backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
+						}]
+					};
+
+					new Chart(odpCtx, {
+						type: 'pie',
+						data: odpData,
+						options: {
+							responsive: true,
+							maintainAspectRatio: false,
+							legend: {
+								position: 'bottom'
+							}
+						}
+					});
+				<?php endif; ?>
+			<?php endif; ?>
+		});
+	</script>
+</body>
+
 </html>
- 
