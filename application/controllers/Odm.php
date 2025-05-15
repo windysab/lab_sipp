@@ -38,4 +38,41 @@ class Odm extends CI_Controller
 		$this->load->view('v_odm', $data);
 		$this->load->view('template/new_footer');
 	}
+
+	/**
+	 * Export ODM data to Excel
+	 *
+	 * @param string $lap_bulan Month (optional)
+	 * @param string $lap_tahun Year (optional)
+	 * @return void
+	 */
+	public function export_excel($lap_bulan = null, $lap_tahun = null)
+	{
+		// If parameters not provided via URL, try to get from session or POST
+		if (empty($lap_bulan)) {
+			$lap_bulan = $this->input->post('lap_bulan');
+			if (empty($lap_bulan) && $this->session->userdata('lap_bulan')) {
+				$lap_bulan = $this->session->userdata('lap_bulan');
+			}
+		}
+
+		if (empty($lap_tahun)) {
+			$lap_tahun = $this->input->post('lap_tahun');
+			if (empty($lap_tahun) && $this->session->userdata('lap_tahun')) {
+				$lap_tahun = $this->session->userdata('lap_tahun');
+			}
+		}
+
+		// Default to current month/year if still empty
+		if (empty($lap_bulan)) {
+			$lap_bulan = date('m');
+		}
+
+		if (empty($lap_tahun)) {
+			$lap_tahun = date('Y');
+		}
+
+		// Call model's export method
+		$this->M_odm->export_excel($lap_bulan, $lap_tahun);
+	}
 }

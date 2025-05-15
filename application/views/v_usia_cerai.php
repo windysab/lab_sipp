@@ -122,6 +122,26 @@
 					<?php endif; ?>
 
 					<?php if (!empty($datafilter)): ?>
+						<!-- New Prominent Export Buttons -->
+						<div class="row mb-4">
+							<div class="col-md-12">
+								<div class="bg-light p-3" style="border-radius: 5px; border: 1px solid #ddd;">
+									<h5><i class="fas fa-file-export mr-2"></i> Export Data Perceraian</h5>
+									<div class="mt-3">
+										<a href="<?= site_url('Usia_cerai/export_excel/' . (isset($lap_bulan) ? $lap_bulan : 'all') . '/' . (isset($lap_tahun) ? $lap_tahun : date('Y'))) ?>" class="btn btn-success btn-lg">
+											<i class="fas fa-file-excel mr-2"></i> Export ke Excel
+										</a>
+										<a href="#" class="btn btn-danger btn-lg ml-2 export-pdf">
+											<i class="fas fa-file-pdf mr-2"></i> Export ke PDF
+										</a>
+										<span class="text-muted ml-3">
+											<i class="fas fa-info-circle mr-1"></i> Klik tombol untuk mengunduh data dalam format yang diinginkan
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<!-- Statistics Cards -->
 						<div class="row">
 							<div class="col-lg-3 col-6">
@@ -431,7 +451,7 @@
 											<i class="fas fa-download"></i> Export
 										</button>
 										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item export-excel">
+											<a href="<?= site_url('Usia_cerai/export_excel/' . (isset($lap_bulan) ? $lap_bulan : 'all') . '/' . (isset($lap_tahun) ? $lap_tahun : date('Y'))) ?>" class="dropdown-item export-excel">
 												<i class="fas fa-file-excel mr-2"></i> Excel
 											</a>
 											<a href="#" class="dropdown-item export-pdf">
