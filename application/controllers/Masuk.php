@@ -45,6 +45,8 @@ class Masuk extends CI_Controller
 
 	/**
 	 * Show detailed cases for specific panel
+	 * 
+	 * @param string $majelis_id Panel ID (should use dash instead of commas for multiple IDs)
 	 */
 	public function detail($majelis_id = null)
 	{
@@ -53,6 +55,9 @@ class Masuk extends CI_Controller
 			return;
 		}
 
+		// Convert dashes to commas if needed (safer than having commas in URL)
+		$majelis_id = str_replace('-', ',', $majelis_id);
+
 		// Get filter parameters
 		$jenis_perkara = $this->input->get('jenis_perkara');
 		$lap_bulan = $this->input->get('lap_bulan');
@@ -60,6 +65,7 @@ class Masuk extends CI_Controller
 
 		// Get detailed cases
 		$data['cases'] = $this->M_Masuk->get_detail_cases($majelis_id, $jenis_perkara, $lap_bulan, $lap_tahun);
+		$data['majelis_id'] = $majelis_id; // Store for export links
 
 		// Get panel info (first case is enough to get the panel name)
 		if (!empty($data['cases'])) {

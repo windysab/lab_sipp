@@ -316,10 +316,23 @@
 														<div class="progress-bar bg-primary" style="width: <?= $percentage ?>%"></div>
 													</div>
 												</td>
-												<td class="text-center">
-													<a href="<?= site_url('Masuk/detail/' . $row->majelis_hakim_id) ?>" class="btn btn-xs btn-info">
+												<td>
+													<a href="<?= site_url('Masuk/detail/' . str_replace(',', '-', $row->majelis_hakim_id)) ?>" class="btn btn-sm btn-info" data-toggle="tooltip" title="Lihat Detail Perkara">
 														<i class="fas fa-eye"></i> Detail
 													</a>
+													<div class="btn-group">
+														<button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown">
+															<i class="fas fa-cog"></i>
+														</button>
+														<div class="dropdown-menu">
+															<a class="dropdown-item" href="<?= site_url('Masuk/export_detail/' . str_replace(',', '-', $row->majelis_hakim_id)) ?>">
+																<i class="fas fa-file-excel mr-2 text-success"></i> Export Excel
+															</a>
+															<a class="dropdown-item print-preview" href="#" data-id="<?= str_replace(',', '-', $row->majelis_hakim_id) ?>">
+																<i class="fas fa-print mr-2 text-primary"></i> Print Preview
+															</a>
+														</div>
+													</div>
 												</td>
 											</tr>
 										<?php endforeach; ?>
