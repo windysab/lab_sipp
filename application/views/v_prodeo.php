@@ -98,6 +98,166 @@
 					<?php endif; ?>
 
 					<?php if (!empty($datafilter)): ?>
+						<!-- New: Fee Analysis Card -->
+						<div class="card card-outline card-danger mb-4">
+							<div class="card-header">
+								<h3 class="card-title">
+									<i class="fas fa-money-bill-wave mr-1"></i>
+									Analisis Biaya Perkara Prodeo
+								</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<!-- Left Column: Fee Summary -->
+									<div class="col-md-6">
+										<div class="info-box bg-gradient-danger">
+											<span class="info-box-icon"><i class="fas fa-hand-holding-usd"></i></span>
+											<div class="info-box-content">
+												<span class="info-box-text">Total Biaya yang Dihemat</span>
+												<span class="info-box-number">
+													Rp. <?= number_format(isset($biaya_perkara->projected_savings) ? $biaya_perkara->projected_savings : count($datafilter) * 850000, 0, ',', '.') ?>
+												</span>
+												<div class="progress">
+													<div class="progress-bar" style="width: 100%"></div>
+												</div>
+												<span class="progress-description">
+													Untuk <?= count($datafilter) ?> perkara prodeo pada periode ini
+												</span>
+											</div>
+										</div>
+
+										<div class="table-responsive">
+											<table class="table table-bordered">
+												<tr class="bg-light">
+													<th colspan="2">Analisis Biaya Perkara</th>
+												</tr>
+												<tr>
+													<td>Biaya rata-rata per perkara</td>
+													<td>
+														Rp. <?= number_format(isset($biaya_perkara->standard_fees->avg_biaya) ? $biaya_perkara->standard_fees->avg_biaya : 850000, 0, ',', '.') ?>
+													</td>
+												</tr>
+												<tr>
+													<td>Biaya terendah per perkara</td>
+													<td>
+														Rp. <?= number_format(isset($biaya_perkara->standard_fees->min_biaya) ? $biaya_perkara->standard_fees->min_biaya : 600000, 0, ',', '.') ?>
+													</td>
+												</tr>
+												<tr>
+													<td>Biaya tertinggi per perkara</td>
+													<td>
+														Rp. <?= number_format(isset($biaya_perkara->standard_fees->max_biaya) ? $biaya_perkara->standard_fees->max_biaya : 1400000, 0, ',', '.') ?>
+													</td>
+												</tr>
+												<tr class="bg-light">
+													<th>Estimasi penghematan minimal</th>
+													<td>
+														<strong>
+															Rp. <?= number_format(isset($biaya_perkara->min_projected_savings) ? $biaya_perkara->min_projected_savings : count($datafilter) * 600000, 0, ',', '.') ?>
+														</strong>
+													</td>
+												</tr>
+												<tr class="bg-light">
+													<th>Estimasi penghematan maksimal</th>
+													<td>
+														<strong>
+															Rp. <?= number_format(isset($biaya_perkara->max_projected_savings) ? $biaya_perkara->max_projected_savings : count($datafilter) * 1400000, 0, ',', '.') ?>
+														</strong>
+													</td>
+												</tr>
+											</table>
+										</div>
+
+										<div class="mt-3">
+											<a href="<?= site_url('Prodeo/export_biaya?jenis_perkara=' . $jenis_perkara . '&lap_bulan=' . $lap_bulan . '&lap_tahun=' . $lap_tahun) ?>" class="btn btn-danger">
+												<i class="fas fa-file-excel mr-2"></i> Export Analisis Biaya
+											</a>
+										</div>
+									</div>
+
+									<!-- Right Column: Fee Components -->
+									<div class="col-md-6">
+										<h5>Rincian Komponen Biaya Perkara</h5>
+										<?php if (!empty($biaya_perkara->components)): ?>
+											<div style="height: 300px">
+												<canvas id="feeComponentsChart"></canvas>
+											</div>
+											<div class="table-responsive mt-3">
+												<table class="table table-sm table-striped">
+													<thead>
+														<tr>
+															<th>Jenis Biaya</th>
+															<th class="text-right">Rata-rata</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php foreach ($biaya_perkara->components as $comp): ?>
+															<tr>
+																<td><?= $comp->jenis_biaya ?></td>
+																<td class="text-right">Rp. <?= number_format($comp->avg_jumlah, 0, ',', '.') ?></td>
+															</tr>
+														<?php endforeach; ?>
+													</tbody>
+												</table>
+											</div>
+										<?php else: ?>
+											<div class="alert alert-info">
+												<i class="fas fa-info-circle mr-2"></i> Tidak ada data detail komponen biaya perkara untuk periode ini. Menampilkan estimasi berdasarkan standar umum.
+											</div>
+
+											<table class="table table-sm table-striped">
+												<thead>
+													<tr>
+														<th>Jenis Biaya</th>
+														<th class="text-right">Estimasi</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Biaya Pendaftaran</td>
+														<td class="text-right">Rp. 30.000</td>
+													</tr>
+													<tr>
+														<td>Biaya Proses</td>
+														<td class="text-right">Rp. 75.000</td>
+													</tr>
+													<tr>
+														<td>Panggilan Penggugat</td>
+														<td class="text-right">Rp. 150.000</td>
+													</tr>
+													<tr>
+														<td>Panggilan Tergugat</td>
+														<td class="text-right">Rp. 450.000</td>
+													</tr>
+													<tr>
+														<td>Pemberitahuan Putusan</td>
+														<td class="text-right">Rp. 100.000</td>
+													</tr>
+													<tr>
+														<td>PNBP Panggilan</td>
+														<td class="text-right">Rp. 20.000</td>
+													</tr>
+													<tr>
+														<td>Redaksi</td>
+														<td class="text-right">Rp. 10.000</td>
+													</tr>
+													<tr>
+														<td>Materai</td>
+														<td class="text-right">Rp. 10.000</td>
+													</tr>
+												</tbody>
+											</table>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<!-- Statistics Cards -->
 						<div class="row">
 							<div class="col-lg-3 col-6">
@@ -329,12 +489,32 @@
 											<tr class="<?= $rowClass ?>">
 												<td class="text-center"><?= $no++ ?></td>
 												<td>
-													<span class="badge badge-secondary"><?= $row->jenis_perkara_nama ?></span><br>
+													<?php if (isset($row->jenis_perkara_nama)): ?>
+														<span class="badge badge-secondary"><?= $row->jenis_perkara_nama ?></span><br>
+													<?php endif; ?>
 													<strong><?= $row->nomor_perkara ?></strong>
 												</td>
 												<td>
-													<strong>P:</strong> <?= $row->nama_penggugat ?><br>
-													<strong>T:</strong> <?= $row->nama_tergugat ?>
+													<?php
+													// Safe access to nama_penggugat or nama_p properties
+													if (isset($row->nama_penggugat)) {
+														echo "<strong>P:</strong> " . $row->nama_penggugat;
+													} elseif (isset($row->nama_p)) {
+														echo "<strong>P:</strong> " . $row->nama_p;
+													} else {
+														echo "<strong>P:</strong> <em>Tidak ada data</em>";
+													}
+													echo "<br>";
+
+													// Safe access to nama_tergugat or nama_t properties
+													if (isset($row->nama_tergugat)) {
+														echo "<strong>T:</strong> " . $row->nama_tergugat;
+													} elseif (isset($row->nama_t)) {
+														echo "<strong>T:</strong> " . $row->nama_t;
+													} else {
+														echo "<strong>T:</strong> <em>Tidak ada data</em>";
+													}
+													?>
 												</td>
 												<td><?= date('d-m-Y', strtotime($row->tanggal_pendaftaran)) ?></td>
 												<td><?= !empty($row->penetapan_majelis_hakim) ? date('d-m-Y', strtotime($row->penetapan_majelis_hakim)) : '-' ?></td>

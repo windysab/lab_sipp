@@ -12,7 +12,9 @@ class Prodeo extends CI_Controller
 
 	public function index()
 	{
-		$data = [];
+		$jenis_perkara = $this->input->post('jenis_perkara');
+		$lap_bulan = $this->input->post('lap_bulan');
+		$lap_tahun = $this->input->post('lap_tahun');
 
 		// Define month names for display
 		$data['months'] = [
@@ -30,26 +32,16 @@ class Prodeo extends CI_Controller
 			'12' => 'Desember'
 		];
 
-		// Check if form was submitted
+		// Only get data if form was submitted
 		if ($this->input->post('btn')) {
-			$jenis_perkara = $this->input->post('jenis_perkara', TRUE);
-			$lap_bulan = $this->input->post('lap_bulan', TRUE);
-			$lap_tahun = $this->input->post('lap_tahun', TRUE);
-
-			// Store parameters in data array
 			$data['jenis_perkara'] = $jenis_perkara;
 			$data['lap_bulan'] = $lap_bulan;
 			$data['lap_tahun'] = $lap_tahun;
 
-			// Get data from model
 			$data['datafilter'] = $this->M_Prodeo->prodeo($jenis_perkara, $lap_bulan, $lap_tahun);
-			$data['stats'] = $this->M_Prodeo->get_statistics($jenis_perkara, $lap_bulan, $lap_tahun);
-		} else {
-			// Default values if not submitted (current month/year)
-			$data['jenis_perkara'] = 'Pdt.G';
-			$data['lap_bulan'] = date('m');
-			$data['lap_tahun'] = date('Y');
-			$data['datafilter'] = [];
+
+			// Get fee information
+			$data['biaya_perkara'] = $this->M_Prodeo->get_biaya_perkara($jenis_perkara, $lap_bulan, $lap_tahun);
 		}
 
 		$this->load->view('template/new_header');
@@ -238,6 +230,161 @@ class Prodeo extends CI_Controller
                 <li>Berdasarkan pasal 237 HIR/273 RBg dan SEMA Nomor 10 Tahun 2010</li>
                 <li>Durasi perkara dihitung dari tanggal pendaftaran sampai dengan tanggal putusan atau tanggal hari ini untuk perkara yang masih berjalan</li>
             </ul>
+        </body>
+        </html>";
+		exit;
+	}
+
+	/**
+	 * Export case fee data to Excel
+	 * 
+	 * @return void
+	 */
+	public function export_biaya()
+	{
+		$jenis_perkara = $this->input->get('jenis_perkara');
+		if (empty($jenis_perkara)) {
+			$jenis_perkara = $this->input->post('jenis_perkara');
+		}
+
+		$lap_bulan = $this->input->get('lap_bulan');
+		if (empty($lap_bulan)) {
+			$lap_bulan = $this->input->post('lap_bulan');
+		}
+
+		$lap_tahun = $this->input->get('lap_tahun');
+		if (empty($lap_tahun)) {
+			$lap_tahun = $this->input->post('lap_tahun');
+		}
+
+		// Define month names for display
+		$months = [
+			'01' => 'Januari',
+			'02' => 'Februari',
+			'03' => 'Maret',
+			'04' => 'April',
+			'05' => 'Mei',
+			'06' => 'Juni',
+			'07' => 'Juli',
+			'08' => 'Agustus',
+			'09' => 'September',
+			'10' => 'Oktober',
+			'11' => 'November',
+			'12' => 'Desember'
+		];
+
+		// Get data
+		$biaya_perkara = $this->M_Prodeo->get_biaya_perkara($jenis_perkara, $lap_bulan, $lap_tahun);
+		$datafilter = $this->M_Prodeo->prodeo($jenis_perkara, $lap_bulan, $lap_tahun);
+
+		// Set filename
+		$filename = "Analisis_Biaya_Prodeo_{$jenis_perkara}_{$months[$lap_bulan]}_{$lap_tahun}_" . date('Ymd_His') . ".xls";
+
+		// Set header for Excel download
+		header("Content-Type: application/vnd.ms-excel");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Cache-Control: max-age=0");
+
+		echo "
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+              xmlns:x='urn:schemas-microsoft-com:office:excel' 
+              xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+            <style>
+                table { border-collapse: collapse; }
+                th, td { border: 1px solid #000; padding: 5px; }
+                th { background-color: #f0f0f0; }
+                .header { font-weight: bold; background-color: #d9d9d9; }
+                .total { font-weight: bold; }
+                h3 { text-align: center; }
+            </style>
+        </head>
+        <body>
+            <h3>Analisis Biaya Perkara Prodeo - {$jenis_perkara} {$months[$lap_bulan]} {$lap_tahun}</h3>
+            
+            <table>
+                <tr class='header'>
+                    <th colspan='2'>Informasi Umum</th>
+                </tr>
+                <tr>
+                    <td>Jumlah Perkara Prodeo</td>
+                    <td>" . count($datafilter) . "</td>
+                </tr>
+                <tr>
+                    <td>Biaya Rata-rata per Perkara</td>
+                    <td>Rp. " . number_format(isset($biaya_perkara->standard_fees->avg_biaya) ? $biaya_perkara->standard_fees->avg_biaya : 850000, 0, ',', '.') . "</td>
+                </tr>
+                <tr>
+                    <td>Biaya Terendah</td>
+                    <td>Rp. " . number_format(isset($biaya_perkara->standard_fees->min_biaya) ? $biaya_perkara->standard_fees->min_biaya : 600000, 0, ',', '.') . "</td>
+                </tr>
+                <tr>
+                    <td>Biaya Tertinggi</td>
+                    <td>Rp. " . number_format(isset($biaya_perkara->standard_fees->max_biaya) ? $biaya_perkara->standard_fees->max_biaya : 1400000, 0, ',', '.') . "</td>
+                </tr>
+                <tr class='total'>
+                    <td>Total Biaya yang Dihemat</td>
+                    <td>Rp. " . number_format(isset($biaya_perkara->projected_savings) ? $biaya_perkara->projected_savings : 0, 0, ',', '.') . "</td>
+                </tr>
+            </table>
+            
+            <br/>
+            
+            <table>
+                <tr class='header'>
+                    <th colspan='3'>Rincian Komponen Biaya</th>
+                </tr>
+                <tr>
+                    <th>Jenis Biaya</th>
+                    <th>Rata-rata (Rp)</th>
+                    <th>Jumlah Kasus</th>
+                </tr>";
+
+		if (!empty($biaya_perkara->components)) {
+			foreach ($biaya_perkara->components as $comp) {
+				echo "<tr>
+                        <td>{$comp->jenis_biaya}</td>
+                        <td align='right'>" . number_format($comp->avg_jumlah, 0, ',', '.') . "</td>
+                        <td align='center'>{$comp->count}</td>
+                    </tr>";
+			}
+		} else {
+			echo "<tr><td colspan='3' align='center'>Tidak ada data komponen biaya</td></tr>";
+		}
+
+		echo "
+            </table>
+            
+            <br/>
+            
+            <table>
+                <tr class='header'>
+                    <th colspan='2'>Perkara Prodeo Per Bulan Tahun {$lap_tahun}</th>
+                </tr>
+                <tr>
+                    <th>Bulan</th>
+                    <th>Jumlah Perkara</th>
+                </tr>";
+
+		if (!empty($biaya_perkara->ytd_stats)) {
+			foreach ($biaya_perkara->ytd_stats as $stat) {
+				$bulan = $months[str_pad($stat->bulan, 2, '0', STR_PAD_LEFT)];
+				echo "<tr>
+                        <td>{$bulan}</td>
+                        <td align='center'>{$stat->ytd_prodeo_count}</td>
+                    </tr>";
+			}
+		} else {
+			echo "<tr><td colspan='2' align='center'>Tidak ada data</td></tr>";
+		}
+
+		echo "
+            </table>
+            
+            <p><i>Analisis ini menunjukkan perkiraan biaya yang dihemat oleh para pencari keadilan melalui program prodeo.</i></p>
+            <p><i>Laporan dibuat tanggal: " . date('d-m-Y H:i:s') . "</i></p>
+            
         </body>
         </html>";
 		exit;
