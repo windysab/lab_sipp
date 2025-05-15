@@ -315,4 +315,49 @@ class M_odp extends CI_Model
 			return $query->result();
 		}
 	}
+
+	/**
+	 * Get ODP data for export
+	 * 
+	 * @param string $lap_bulan Month (01-12) or null for all months
+	 * @param string $lap_tahun Year
+	 * @return array Array of ODP data
+	 */
+	public function get_odp_data($lap_bulan, $lap_tahun)
+	{
+		// Sanitize input
+		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// Build date condition
+		if (!empty($lap_bulan)) {
+			$lap_bulan = $this->db->escape_str($lap_bulan);
+			$date_condition = "YEAR(pp.tanggal_putusan) = '$lap_tahun' AND MONTH(pp.tanggal_putusan) = '$lap_bulan'";
+		} else {
+			$date_condition = "YEAR(pp.tanggal_putusan) = '$lap_tahun'";
+		}
+
+		// Query for ODP data
+		$sql = "SELECT 
+				p.perkara_id,
+				p.nomor_perkara,
+				p.jenis_perkara_nama,
+				pp.tanggal_putusan,
+				pp.tanggal_minutasi,
+				dd.created_date AS tanggal_publish,
+				DATEDIFF(dd.created_date, pp.tanggal_putusan) AS selisih_hari,
+				CASE 
+					WHEN DATE(dd.created_date) = DATE(pp.tanggal_putusan) THEN 'Ya' 
+					WHEN DATEDIFF(dd.created_date, pp.tanggal_putusan) <= 1 THEN 'Ya (1 Hari)'
+					ELSE 'Tidak' 
+				END AS is_odp,
+				dd.filename
+			FROM perkara p
+			INNER JOIN perkara_putusan pp ON p.perkara_id = pp.perkara_id
+			INNER JOIN dirput_dokumen dd ON p.perkara_id = dd.perkara_id
+			WHERE $date_condition
+			ORDER BY pp.tanggal_putusan DESC";
+
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
 }

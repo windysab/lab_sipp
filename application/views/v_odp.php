@@ -84,6 +84,19 @@
 					</div>
 
 					<?php if (!empty($datafilter)): ?>
+						<!-- Export Buttons Row - Add directly below the filter card -->
+						<div class="row mb-3">
+							<div class="col-md-12">
+								<a href="<?= site_url('Odp/export_excel/' . (isset($lap_bulan) ? $lap_bulan : 'all') . '/' . $lap_tahun) ?>" class="btn btn-success">
+									<i class="fas fa-file-excel mr-2"></i> Export ke Excel
+								</a>
+								<span class="text-muted ml-2">
+									<i class="fas fa-info-circle"></i>
+									Klik tombol untuk mengunduh data dalam format Excel
+								</span>
+							</div>
+						</div>
+
 						<!-- Statistics Cards -->
 						<div class="row">
 							<div class="col-lg-3 col-6">
@@ -451,6 +464,7 @@
 	</div>
 
 	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 	<script>
 		$(function() {
 			// Initialize Select2
@@ -693,6 +707,150 @@
 						}
 					<?php endif; ?>
 				}, 800); // Larger delay to ensure DOM is fully ready
+
+				// Export to Excel
+				$('#exportExcel').click(function() {
+					exportTimelineToExcel();
+				});
+
+				// Function to export timeline to Excel
+				function exportTimelineToExcel() {
+					// Create workbook and worksheet
+					const wb = XLSX.utils.book_new();
+					wb.Props = {
+						Title: "Timeline Perkara <?= isset($perkara->nomor_perkara) ? $perkara->nomor_perkara : '' ?>",
+						Subject: "Timeline",
+						Author: "SIPP",
+						CreatedDate: new Date()
+					};
+
+					// Create worksheet
+					const ws = XLSX.utils.aoa_to_sheet([]);
+
+					// Add perkara information
+					XLSX.utils.sheet_add_aoa(ws, [
+						["TIMELINE PERKARA"],
+						[""],
+						["Informasi Perkara:"],
+						["Nomor Perkara:", "<?= isset($perkara->nomor_perkara) ? $perkara->nomor_perkara : '-' ?>"],
+						["Jenis Perkara:", "<?= isset($perkara->jenis_perkara_nama) ? $perkara->jenis_perkara_nama : '-' ?>"],
+						["Tanggal Daftar:", "<?= isset($perkara->tanggal_pendaftaran) ? date('d-m-Y', strtotime($perkara->tanggal_pendaftaran)) : '-' ?>"],
+						["Status Perkara:", "<?= isset($perkara->status_perkara) ? $perkara->status_perkara : 'Tidak diketahui' ?>"],
+						["Penggugat/Pemohon:", "<?= isset($perkara->nama_p) ? $perkara->nama_p : '-' ?>"],
+						["Tergugat/Termohon:", "<?= isset($perkara->nama_t) ? $perkara->nama_t : '-' ?>"],
+						[""]
+					], {
+						origin: 0
+					});
+
+					// Add timeline headers
+					XLSX.utils.sheet_add_aoa(ws, [
+						["TIMELINE EVENTS"],
+						[""],
+						["Tanggal", "Waktu", "Jenis Event", "Judul", "Deskripsi", "Keterangan"]
+					], {
+						origin: {
+							r: 11,
+							c: 0
+						}
+					});
+
+					// Extract timeline data
+					const timelineData = [];
+					<?php if (!empty($timeline)): ?>
+						<?php foreach ($timeline as $index => $item): ?>
+							timelineData.push([
+								"<?= date('d-m-Y', strtotime($item->tanggal)) ?>",
+								"<?= date('H:i', strtotime($item->tanggal)) ?>",
+								"<?= $item->jenis_event ?>",
+								"<?= addslashes($item->judul) ?>",
+								"<?= addslashes($item->deskripsi) ?>",
+								"<?= isset($item->keterangan) ? addslashes($item->keterangan) : '' ?>"
+							]);
+						<?php endforeach; ?>
+					<?php endif; ?>
+
+					// Add timeline data to worksheet
+					if (timelineData.length > 0) {
+						XLSX.utils.sheet_add_aoa(ws, timelineData, {
+							origin: {
+								r: 14,
+								c: 0
+							}
+						});
+					} else {
+						XLSX.utils.sheet_add_aoa(ws, [
+							["Tidak ada data timeline untuk perkara ini."]
+						], {
+							origin: {
+								r: 14,
+								c: 0
+							}
+						});
+					}
+
+					// Set column widths
+					const cols = [{
+							wch: 15
+						}, // Tanggal
+						{
+							wch: 10
+						}, // Waktu
+						{
+							wch: 15
+						}, // Jenis Event
+						{
+							wch: 30
+						}, // Judul
+						{
+							wch: 50
+						}, // Deskripsi
+						{
+							wch: 30
+						} // Keterangan
+					];
+					ws['!cols'] = cols;
+
+					// Add worksheet to workbook
+					XLSX.utils.book_append_sheet(wb, ws, "Timeline");
+
+					// Generate Excel file and trigger download
+					const wbout = XLSX.write(wb, {
+						bookType: 'xlsx',
+						type: 'binary'
+					});
+
+					function s2ab(s) {
+						const buf = new ArrayBuffer(s.length);
+						const view = new Uint8Array(buf);
+						for (let i = 0; i < s.length; i++) {
+							view[i] = s.charCodeAt(i) & 0xFF;
+						}
+						return buf;
+					}
+
+					// Create download link
+					const filename = 'Timeline_<?= isset($perkara->nomor_perkara) ? str_replace("/", "_", $perkara->nomor_perkara) : "Perkara" ?>_<?= date("Ymd") ?>.xlsx';
+					const blob = new Blob([s2ab(wbout)], {
+						type: 'application/octet-stream'
+					});
+
+					// IE/Edge support
+					if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+						window.navigator.msSaveOrOpenBlob(blob, filename);
+					} else {
+						const url = URL.createObjectURL(blob);
+						const a = document.createElement('a');
+						a.href = url;
+						a.download = filename;
+						document.body.appendChild(a);
+						a.click();
+						setTimeout(function() {
+							document.body.removeChild(a);
+							window.URL.revokeObjectURL(url);
+						}, 0);
+					}
+				}
 			<?php endif; ?>
 		});
 	</script>
