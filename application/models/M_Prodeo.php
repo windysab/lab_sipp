@@ -199,4 +199,105 @@ class M_Prodeo extends CI_Model
 		// Get the same data as the prodeo function but with additional fields for export
 		return $this->prodeo($jenis_perkara, $lap_bulan, $lap_tahun);
 	}
+
+	/**
+	 * Get detailed fee analysis for prodeo cases
+	 * Shows what fees would have been if the cases weren't free
+	 * 
+	 * @param string $jenis_perkara Case type
+	 * @param string $lap_bulan Month 
+	 * @param string $lap_tahun Year
+	 * @return array Fee data
+	 */
+	function get_biaya_detail($jenis_perkara, $lap_bulan, $lap_tahun)
+	{
+		// Sanitize inputs
+		$jenis_perkara = $this->db->escape_str($jenis_perkara);
+		$lap_bulan = $this->db->escape_str($lap_bulan);
+		$lap_tahun = $this->db->escape_str($lap_tahun);
+
+		// 1. Get average fees from regular cases with the same case type
+		$sql_regular_cases = "SELECT 
+			AVG(total_biaya) as avg_biaya,
+			MIN(total_biaya) as min_biaya,
+			MAX(total_biaya) as max_biaya,
+			COUNT(DISTINCT perkara_id) as total_cases
+		FROM (
+			SELECT 
+				p.perkara_id,
+				SUM(pb.jumlah) as total_biaya
+			FROM 
+				perkara p
+				INNER JOIN perkara_biaya pb ON p.perkara_id = pb.perkara_id
+			WHERE 
+				p.prodeo = 0
+				AND p.nomor_perkara LIKE '%$jenis_perkara%'
+				AND ((YEAR(p.tanggal_pendaftaran)='$lap_tahun' 
+					AND MONTH(p.tanggal_pendaftaran)='$lap_bulan')
+					OR YEAR(p.tanggal_pendaftaran)='$lap_tahun')
+			GROUP BY 
+				p.perkara_id
+		) as fee_totals";
+
+		$query_regular = $this->db->query($sql_regular_cases);
+		$regular_fees = $query_regular->row();
+
+		// 2. Get breakdown of fee components
+		$sql_components = "SELECT 
+			jb.id as komponen_id,
+			jb.nama as nama_komponen,
+			AVG(pb.jumlah) as rata_rata,
+			MIN(pb.jumlah) as minimal,
+			MAX(pb.jumlah) as maksimal,
+			COUNT(pb.id) as jumlah_kasus
+		FROM 
+			perkara p
+			INNER JOIN perkara_biaya pb ON p.perkara_id = pb.perkara_id
+			INNER JOIN jenis_biaya jb ON pb.jenis_biaya_id = jb.id
+		WHERE 
+			p.prodeo = 0
+			AND p.nomor_perkara LIKE '%$jenis_perkara%'
+			AND ((YEAR(p.tanggal_pendaftaran)='$lap_tahun' 
+				AND MONTH(p.tanggal_pendaftaran)='$lap_bulan')
+				OR YEAR(p.tanggal_pendaftaran)='$lap_tahun')
+		GROUP BY 
+			jb.id, jb.nama
+		ORDER BY 
+			rata_rata DESC";
+
+		$query_components = $this->db->query($sql_components);
+
+		// 3. Count how many prodeo cases in the period
+		$sql_prodeo_count = "SELECT 
+			COUNT(*) as jumlah_prodeo 
+		FROM 
+			perkara p
+		WHERE 
+			p.prodeo = 1
+			AND p.nomor_perkara LIKE '%$jenis_perkara%'
+			AND YEAR(p.tanggal_pendaftaran)='$lap_tahun' 
+			AND MONTH(p.tanggal_pendaftaran)='$lap_bulan'";
+
+		$query_prodeo = $this->db->query($sql_prodeo_count);
+		$prodeo_count = $query_prodeo->row()->jumlah_prodeo;
+
+		// Compile result
+		$result = array(
+			'regular_fees' => $regular_fees,
+			'components' => $query_components->result(),
+			'prodeo_count' => $prodeo_count
+		);
+
+		// Calculate total savings
+		if ($regular_fees && $regular_fees->avg_biaya) {
+			$result['total_savings'] = $regular_fees->avg_biaya * $prodeo_count;
+		} else {
+			// If no data available, use default estimate
+			$estimated_avg_fee = 850000; // Rp. 850,000 estimate
+			$result['total_savings'] = $estimated_avg_fee * $prodeo_count;
+			$result['is_estimated'] = true;
+		}
+
+		return $result;
+	}
 }
