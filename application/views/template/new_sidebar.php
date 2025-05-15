@@ -321,6 +321,12 @@
 						<p>Data Uji Coba</p>
 					</a>
 				</li>
+				<li class="nav-item">
+					<a href="<?= site_url('Biaya_perdata') ?>" class="nav-link">
+						<i class="nav-icon fas fa-money-bill-wave"></i>
+						<p>Analisis Biaya Perdata</p>
+					</a>
+				</li>
 			</ul>
 		</nav>
 		<!-- /.sidebar-menu -->
