@@ -32,7 +32,7 @@ class Persidangan_New extends CI_Controller
             $filters['tanggal_sidang'] = date('Y-m-d'); // Default to today
         }
 
-        // Jurusita filter
+        // Jurusita filter - update to use jurusita_id
         if ($this->input->get('jurusita')) {
             $filters['jurusita'] = $this->input->get('jurusita');
         }

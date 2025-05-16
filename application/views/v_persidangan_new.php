@@ -108,15 +108,18 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Jurusita:</label>
-                                            <select class="form-control select2" name="jurusita">
+                                            <select class="form-control select2" name="jurusita" data-placeholder="Pilih Jurusita">
                                                 <option value="">-- Semua Jurusita --</option>
                                                 <?php foreach ($jurusita_list as $js): ?>
-                                                    <option value="<?= $js->nama ?>"
-                                                        <?= (isset($filters['jurusita']) && $filters['jurusita'] == $js->nama) ? 'selected' : '' ?>>
+                                                    <option value="<?= $js->jurusita_id ?>" 
+                                                        <?= (isset($filters['jurusita']) && $filters['jurusita'] == $js->jurusita_id) ? 'selected' : '' ?>>
                                                         <?= $js->nama ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
+                                            <small class="form-text text-muted">
+                                                <i class="fas fa-info-circle"></i> Data diambil langsung dari tabel perkara_jurusita
+                                            </small>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -432,9 +435,11 @@
 
     <script>
         $(document).ready(function() {
-            // Initialize select2 elements
+            // Initialize select2 elements with enhanced configuration
             $('.select2').select2({
-                theme: 'bootstrap4'
+                theme: 'bootstrap4',
+                width: '100%',
+                allowClear: true
             });
 
             // Toggle date filter type

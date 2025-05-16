@@ -67,9 +67,9 @@ class M_Persidangan_New extends CI_Model
                 $this->db->where('pjs.tanggal_sidang', $filters['tanggal_sidang']);
             }
 
-            // Jurusita filter
+            // Jurusita filter - updated to use jurusita_id
             if (!empty($filters['jurusita'])) {
-                $this->db->where('j.jurusita_nama', $filters['jurusita']);
+                $this->db->where('j.jurusita_id', $filters['jurusita']);
             }
 
             // Ruangan filter
@@ -291,15 +291,16 @@ class M_Persidangan_New extends CI_Model
     }
 
     /**
-     * Get all available jurusita (process servers)
+     * Get all available jurusita (process servers) with detailed info
      * 
      * @return array List of jurusita
      */
     public function get_jurusita()
     {
-        $this->db->select('DISTINCT(jurusita_nama) as nama');
+        $this->db->select('jurusita_id, jurusita_nama as nama, aktif');
         $this->db->from('perkara_jurusita');
         $this->db->where('aktif', 'Y');
+        $this->db->group_by('jurusita_id, jurusita_nama');  // Group by to avoid duplicates
         $this->db->order_by('jurusita_nama', 'ASC');
         $query = $this->db->get();
         return $query->result();
