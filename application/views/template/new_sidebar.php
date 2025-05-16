@@ -297,30 +297,7 @@
 				</li>
 
 				<li class="nav-header">DATA &amp; PENGEMBANGAN</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link">
-						<i class="nav-icon fas fa-flask"></i>
-						<p class="text">Penelitian</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?php echo site_url('Grafik') ?>" class="nav-link">
-						<i class="nav-icon fas fa-chart-line"></i>
-						<p>Grafik Uji Coba</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?php echo site_url('Uji_Chart') ?>" class="nav-link">
-						<i class="nav-icon fas fa-chart-pie"></i>
-						<p>Chart Uji Coba</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?php echo site_url('Data') ?>" class="nav-link">
-						<i class="nav-icon fas fa-database"></i>
-						<p>Data Uji Coba</p>
-					</a>
-				</li>
+				
 				<li class="nav-item">
 					<a href="<?= site_url('Biaya_perdata') ?>" class="nav-link">
 						<i class="nav-icon fas fa-money-bill-wave"></i>
