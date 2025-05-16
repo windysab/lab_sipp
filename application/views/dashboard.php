@@ -1,413 +1,335 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-	<!-- Content Header (Page header) -->
-	<div class="content-header">
-		<div class="container-fluid">
-			<div class="row mb-2">
-				<div class="col-sm-6">
-					<h1 class="m-0">Dashboard</h1>
-				</div><!-- /.col -->
-				<div class="col-sm-6">
-					<ol class="breadcrumb float-sm-right">
-						<li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-						<li class="breadcrumb-item active">Dashboard</li>
-					</ol>
-				</div><!-- /.col -->
-			</div><!-- /.row -->
-		</div><!-- /.container-fluid -->
-	</div>
-	<!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
-	<!-- Main content -->
-	<section class="content">
-		<div class="container-fluid">
-			<!-- Year Filter -->
-			<div class="card card-outline card-primary mb-3">
-				<div class="card-header">
-					<h3 class="card-title">
-						<i class="fas fa-filter mr-1"></i> Filter Tahun
-					</h3>
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
-							<i class="fas fa-minus"></i>
-						</button>
-					</div>
-				</div>
-				<div class="card-body">
-					<form action="<?= site_url('dashboard') ?>" method="get" class="form-inline">
-						<div class="form-group mr-2">
-							<label class="mr-2">Pilih Tahun:</label>
-							<select name="year" class="form-control">
-								<?php foreach ($available_years as $yr): ?>
-									<option value="<?= $yr ?>" <?= ($year == $yr) ? 'selected' : '' ?>><?= $yr ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-						<button type="submit" class="btn btn-primary">
-							<i class="fas fa-sync-alt mr-1"></i> Tampilkan
-						</button>
-					</form>
-				</div>
-			</div>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?= $perkara_diterima ?></h3>
+                <p>Perkara Diterima</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="<?= site_url('masuk') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3><?= $perkara_putus ?></h3>
+                <p>Perkara Putus</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="<?= site_url('putus') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3><?= $perkara_minutasi ?></h3>
+                <p>Perkara Minutasi</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3><?= $perkara_sisa ?></h3>
+                <p>Perkara Sisa</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="<?= site_url('sisa_bulan_ini') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
 
-			<!-- Small boxes (Stat box) -->
-			<div class="row">
-				<div class="col-lg-3 col-6">
-					<!-- small box -->
-					<div class="small-box bg-info">
-						<div class="inner">
-							<h3><?= $perkara_diterima ?></h3>
-							<p>Perkara Diterima</p>
-						</div>
-						<div class="icon">
-							<i class="ion ion-bag"></i>
-						</div>
-						<a href="<?= site_url('masuk') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
-					</div>
-				</div>
-				<!-- ./col -->
-				<div class="col-lg-3 col-6">
-					<!-- small box -->
-					<div class="small-box bg-success">
-						<div class="inner">
-							<h3><?= $perkara_putus ?></h3>
-							<p>Perkara Putus</p>
-						</div>
-						<div class="icon">
-							<i class="ion ion-stats-bars"></i>
-						</div>
-						<a href="<?= site_url('putus') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
-					</div>
-				</div>
-				<!-- ./col -->
-				<div class="col-lg-3 col-6">
-					<!-- small box -->
-					<div class="small-box bg-warning">
-						<div class="inner">
-							<h3><?= $perkara_minutasi ?></h3>
-							<p>Perkara Minutasi</p>
-						</div>
-						<div class="icon">
-							<i class="ion ion-person-add"></i>
-						</div>
-						<a href="#" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
-					</div>
-				</div>
-				<!-- ./col -->
-				<div class="col-lg-3 col-6">
-					<!-- small box -->
-					<div class="small-box bg-danger">
-						<div class="inner">
-							<h3><?= $perkara_sisa ?></h3>
-							<p>Perkara Sisa</p>
-						</div>
-						<div class="icon">
-							<i class="ion ion-pie-graph"></i>
-						</div>
-						<a href="<?= site_url('sisa_bulan_ini') ?>" class="small-box-footer">Info lengkap <i class="fas fa-arrow-circle-right"></i></a>
-					</div>
-				</div>
-				<!-- ./col -->
-			</div>
-			<!-- /.row -->
-			<!-- Main row -->
-			<div class="row">
-				<!-- Left col -->
-				<section class="col-lg-7 connectedSortable">
-					<!-- Custom tabs (Charts with tabs)-->
-					<div class="card">
-						<div class="card-header">
-							<h3 class="card-title">
-								<i class="fas fa-chart-line mr-1"></i>
-								Statistik Perkara Tahun <?= $year ?>
-							</h3>
-							<div class="card-tools">
-								<ul class="nav nav-pills ml-auto">
-									<li class="nav-item">
-										<a class="nav-link active" href="#line-chart-tab" data-toggle="tab">Line</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="#pie-chart-tab" data-toggle="tab">Pie</a>
-									</li>
-								</ul>
-							</div>
-						</div><!-- /.card-header -->
-						<div class="card-body">
-							<div class="tab-content p-0">
-								<!-- Line chart -->
-								<div class="chart tab-pane active" id="line-chart-tab"
-									style="position: relative; height: 300px;">
-									<canvas id="line-chart-canvas" height="300" style="height: 300px;"></canvas>
-								</div>
-								<!-- Pie chart -->
-								<div class="chart tab-pane" id="pie-chart-tab" style="position: relative; height: 300px;">
-									<canvas id="pie-chart-canvas" height="300" style="height: 300px;"></canvas>
-								</div>
-							</div>
-						</div><!-- /.card-body -->
-					</div>
-					<!-- /.card -->
+        <!-- Chart Row -->
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Chart Card -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-line mr-1"></i>
+                  Statistik Perkara Tahun <?= $year ?>
+                </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <!-- Chart container with fixed height -->
+                <div style="height: 300px; position: relative;">
+                  <canvas id="mainChart" style="height: 300px;"></canvas>
+                  <!-- Fallback message if chart fails to load -->
+                  <div id="chartError" class="text-center" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+                    <i class="fas fa-exclamation-circle text-warning fa-3x"></i>
+                    <h5 class="mt-2">Gagal memuat grafik</h5>
+                    <p>Silakan refresh halaman atau periksa konsol untuk detail.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-					<!-- Case Type Distribution -->
-					<div class="card">
-						<div class="card-header border-0">
-							<h3 class="card-title">
-								<i class="fas fa-balance-scale mr-1"></i>
-								Distribusi Jenis Perkara
-							</h3>
-							<div class="card-tools">
-								<button type="button" class="btn btn-sm btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-								<p class="text-success text-xl">
-									<i class="ion ion-ios-list-outline"></i>
-								</p>
-								<p class="d-flex flex-column text-right">
-									<span class="font-weight-bold">
-										<i class="ion ion-android-arrow-up text-success"></i> <?= $perkara_diterima ?>
-									</span>
-									<span class="text-muted">TOTAL PERKARA DITERIMA</span>
-								</p>
-							</div>
-							<!-- /.d-flex -->
+        <!-- Summary Row -->
+        <div class="row">
+          <!-- Left col -->
+          <section class="col-lg-7 connectedSortable">
+            <!-- Case Type Card -->
+            <div class="card direct-chat direct-chat-primary">
+              <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-balance-scale mr-1"></i> Distribusi Jenis Perkara</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div style="height: 250px;">
+                      <canvas id="pieChart" style="height: 250px;"></canvas>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="chart-legend">
+                      <?php foreach ($case_types as $index => $type): 
+                        $colors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+                        $color = isset($colors[$index]) ? $colors[$index] : '#' . substr(md5($type->jenis_perkara_nama), 0, 6);
+                      ?>
+                      <div class="mt-2">
+                        <i class="fas fa-square" style="color: <?= $color ?>"></i> 
+                        <?= $type->jenis_perkara_nama ?>: <?= $type->count ?>
+                      </div>
+                      <?php endforeach; ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Right col -->
+          <section class="col-lg-5 connectedSortable">
+            <!-- Yearly Summary -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-bar mr-1"></i> Ringkasan Tahunan</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <tr>
+                    <th>Bulan</th>
+                    <th class="text-center">Diterima</th>
+                    <th class="text-center">Putus</th>
+                    <th class="text-center">Minutasi</th>
+                  </tr>
+                  <?php 
+                  $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                  for ($i = 0; $i < 12; $i++):
+                  ?>
+                  <tr>
+                    <td><?= $months[$i] ?></td>
+                    <td class="text-center"><?= isset($monthly_stats['received'][$i]) ? $monthly_stats['received'][$i] : 0 ?></td>
+                    <td class="text-center"><?= isset($monthly_stats['decided'][$i]) ? $monthly_stats['decided'][$i] : 0 ?></td>
+                    <td class="text-center"><?= isset($monthly_stats['minutasi'][$i]) ? $monthly_stats['minutasi'][$i] : 0 ?></td>
+                  </tr>
+                  <?php endfor; ?>
+                  <tr class="bg-light font-weight-bold">
+                    <td>Total</td>
+                    <td class="text-center"><?= array_sum($monthly_stats['received']) ?></td>
+                    <td class="text-center"><?= array_sum($monthly_stats['decided']) ?></td>
+                    <td class="text-center"><?= array_sum($monthly_stats['minutasi']) ?></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- /.row -->
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Jenis Perkara</th>
-											<th class="text-center">Jumlah</th>
-											<th class="text-center">Persentase</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach ($case_types as $case): ?>
-											<tr>
-												<td><?= $case->jenis_perkara_nama ?></td>
-												<td class="text-center"><?= $case->count ?></td>
-												<td class="text-center">
-													<?= round(($case->count / $perkara_diterima * 100), 1) ?>%
-													<div class="progress progress-xs">
-														<div class="progress-bar bg-primary" style="width: <?= ($case->count / $perkara_diterima * 100) ?>%"></div>
-													</div>
-												</td>
-											</tr>
-										<?php endforeach; ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<!-- /.card -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Directly try to initialize the chart without dependencies
+    try {
+      // Check if Chart object exists
+      if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded!');
+        document.getElementById('chartError').style.display = 'block';
+        return;
+      }
+      
+      console.log('Initializing charts with Chart.js version:', Chart.version);
+      
+      // LINE CHART - Monthly statistics
+      var ctx = document.getElementById('mainChart').getContext('2d');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              {
+                label: 'Diterima',
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                data: <?= json_encode($monthly_stats['received']) ?>,
+                borderWidth: 2,
+                fill: true,
+                pointRadius: 3
+              },
+              {
+                label: 'Putus',
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)', 
+                data: <?= json_encode($monthly_stats['decided']) ?>,
+                borderWidth: 2,
+                fill: true,
+                pointRadius: 3
+              },
+              {
+                label: 'Minutasi',
+                borderColor: '#ffc107',
+                backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                data: <?= json_encode($monthly_stats['minutasi']) ?>,
+                borderWidth: 2,
+                fill: true,
+                pointRadius: 3
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: true,
+              position: 'top'
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  precision: 0
+                },
+                gridLines: {
+                  color: 'rgba(0,0,0,0.05)'
+                }
+              }],
+              xAxes: [{
+                gridLines: {
+                  color: 'rgba(0,0,0,0.05)'
+                }
+              }]
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false
+            },
+            animation: {
+              duration: 1000
+            }
+          }
+        });
+        console.log('Main chart initialized');
+      } else {
+        console.error('Main chart canvas not found');
+      }
 
-				</section>
-				<!-- /.Left col -->
-
-				<!-- right col (We are only adding the ID to make the widgets sortable)-->
-				<section class="col-lg-5 connectedSortable">
-
-					<!-- Performance Overview -->
-					<div class="card">
-						<div class="card-header border-0">
-							<h3 class="card-title">
-								<i class="fas fa-tachometer-alt mr-1"></i>
-								Performa Putusan vs Penerimaan
-							</h3>
-							<div class="card-tools">
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="d-flex justify-content-between align-items-center mb-0">
-								<p class="text-info text-xl">
-									<i class="ion ion-ios-people"></i>
-								</p>
-								<p class="d-flex flex-column text-right">
-									<?php
-									$percentage = ($perkara_diterima > 0)
-										? round(($perkara_putus / $perkara_diterima) * 100, 1)
-										: 0;
-									$icon = ($percentage >= 100)
-										? '<i class="ion ion-android-arrow-up text-success"></i>'
-										: '<i class="ion ion-android-arrow-down text-danger"></i>';
-									?>
-									<span class="font-weight-bold">
-										<?= $icon ?> <?= $percentage ?>%
-									</span>
-									<span class="text-muted">RASIO PUTUS / TERIMA</span>
-								</p>
-							</div>
-
-							<div class="progress-group mt-4">
-								<span class="progress-text">Perkara Putus / Perkara Terima</span>
-								<span class="float-right"><?= $perkara_putus ?> / <?= $perkara_diterima ?></span>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-primary" style="width: <?= min($percentage, 100) ?>%"></div>
-								</div>
-							</div>
-
-							<div class="progress-group mt-4">
-								<span class="progress-text">Perkara Minutasi / Perkara Putus</span>
-								<?php
-								$minutasi_percentage = ($perkara_putus > 0)
-									? round(($perkara_minutasi / $perkara_putus) * 100, 1)
-									: 0;
-								?>
-								<span class="float-right"><?= $perkara_minutasi ?> / <?= $perkara_putus ?></span>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-success" style="width: <?= min($minutasi_percentage, 100) ?>%"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /.card -->
-
-					<!-- Reminder Card -->
-					<div class="card">
-						<div class="card-header">
-							<h3 class="card-title">
-								<i class="far fa-calendar-alt mr-1"></i>
-								Pengingat
-							</h3>
-							<div class="card-tools">
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>
-						<div class="card-body p-0">
-							<div id="calendar" style="width: 100%;"></div>
-						</div>
-					</div>
-					<!-- /.card -->
-
-				</section>
-				<!-- right col -->
-			</div>
-			<!-- /.row (main row) -->
-		</div><!-- /.container-fluid -->
-	</section>
-	<!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-
-<!-- Page specific script -->
-<script>
-	$(function() {
-		// Monthly statistics chart
-		var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-		// Line chart
-		var lineChartCanvas = $('#line-chart-canvas').get(0).getContext('2d');
-		var lineChartData = {
-			labels: months,
-			datasets: [{
-					label: 'Perkara Diterima',
-					backgroundColor: 'rgba(60,141,188,0.9)',
-					borderColor: 'rgba(60,141,188,0.8)',
-					pointRadius: 3,
-					pointColor: '#3b8bba',
-					pointStrokeColor: 'rgba(60,141,188,1)',
-					pointHighlightFill: '#fff',
-					pointHighlightStroke: 'rgba(60,141,188,1)',
-					data: <?= json_encode($monthly_stats['received']) ?>
-				},
-				{
-					label: 'Perkara Putus',
-					backgroundColor: 'rgba(40,167,69,0.9)',
-					borderColor: 'rgba(40,167,69,0.8)',
-					pointRadius: 3,
-					pointColor: '#28a745',
-					pointStrokeColor: 'rgba(40,167,69,1)',
-					pointHighlightFill: '#fff',
-					pointHighlightStroke: 'rgba(40,167,69,1)',
-					data: <?= json_encode($monthly_stats['decided']) ?>
-				},
-				{
-					label: 'Perkara Minutasi',
-					backgroundColor: 'rgba(255,193,7,0.9)',
-					borderColor: 'rgba(255,193,7,0.8)',
-					pointRadius: 3,
-					pointColor: '#ffc107',
-					pointStrokeColor: 'rgba(255,193,7,1)',
-					pointHighlightFill: '#fff',
-					pointHighlightStroke: 'rgba(255,193,7,1)',
-					data: <?= json_encode($monthly_stats['minutasi']) ?>
-				}
-			]
-		};
-
-		var lineChartOptions = {
-			maintainAspectRatio: false,
-			responsive: true,
-			legend: {
-				display: true
-			},
-			scales: {
-				xAxes: [{
-					gridLines: {
-						display: false,
-					}
-				}],
-				yAxes: [{
-					gridLines: {
-						display: false,
-					},
-					ticks: {
-						beginAtZero: true,
-						precision: 0
-					}
-				}]
-			}
-		};
-
-		// Create the line chart
-		new Chart(lineChartCanvas, {
-			type: 'line',
-			data: lineChartData,
-			options: lineChartOptions
-		});
-
-		// Pie chart
-		var pieChartCanvas = $('#pie-chart-canvas').get(0).getContext('2d');
-		var pieData = {
-			labels: ['Perkara Diterima', 'Perkara Putus', 'Perkara Minutasi', 'Perkara Sisa'],
-			datasets: [{
-				data: [
-					<?= $perkara_diterima ?>,
-					<?= $perkara_putus ?>,
-					<?= $perkara_minutasi ?>,
-					<?= $perkara_sisa ?>
-				],
-				backgroundColor: ['#17a2b8', '#28a745', '#ffc107', '#dc3545']
-			}]
-		};
-
-		var pieOptions = {
-			maintainAspectRatio: false,
-			responsive: true
-		};
-
-		// Create the pie chart
-		new Chart(pieChartCanvas, {
-			type: 'pie',
-			data: pieData,
-			options: pieOptions
-		});
-
-		// Calendar initialization
-		$('#calendar').datetimepicker({
-			format: 'L',
-			inline: true
-		});
-	});
-</script>
+      // PIE CHART - Case types
+      var ctxPie = document.getElementById('pieChart').getContext('2d');
+      if (ctxPie) {
+        // Prepare data from case_types
+        var pieLabels = [];
+        var pieData = [];
+        var pieColors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+        
+        <?php foreach ($case_types as $index => $type): ?>
+          pieLabels.push('<?= $type->jenis_perkara_nama ?>');
+          pieData.push(<?= $type->count ?>);
+        <?php endforeach; ?>
+        
+        new Chart(ctxPie, {
+          type: 'pie',
+          data: {
+            labels: pieLabels,
+            datasets: [{
+              data: pieData,
+              backgroundColor: pieColors.slice(0, pieData.length)
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: false
+            }
+          }
+        });
+        console.log('Pie chart initialized');
+      } else {
+        console.error('Pie chart canvas not found');
+      }
+      
+    } catch (error) {
+      console.error('Error initializing charts:', error);
+      document.getElementById('chartError').style.display = 'block';
+    }
+  });
+  </script>
 </body>
 
 </html>

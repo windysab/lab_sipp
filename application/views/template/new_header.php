@@ -211,8 +211,10 @@
 	</script>
 
 	<!-- Chart.js -->
+	<script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
+	<script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
-	<!-- Chart Helper -->
+	<script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 	<script>
 		// Set base URL for use in scripts
 		var baseURL = '<?= base_url() ?>';

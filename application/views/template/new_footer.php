@@ -117,3 +117,10 @@
 		});
 	});
 </script>
+
+<!-- Chart Helper for consistent chart initialization -->
+<script src="<?= base_url() ?>assets/js/chart-helper.js"></script>
+
+</body>
+
+</html>
