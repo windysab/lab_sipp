@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-green elevation-4">
 	<!-- Brand Logo -->
-	<a href="<?php echo site_url('Admin/Dashboard') ?>" class="brand-link navbar-green">
+	<a href="<?php echo site_url('home') ?>" class="brand-link navbar-green">
 		<img src="<?php echo base_url() ?>assets/dist/img/logo-mahkamah-agung.png" alt="Logo PA Amuntai" class="brand-image img-circle elevation-2" style="opacity: .8">
 		<span class="brand-text font-weight-light">SIPP PA Amuntai</span>
 	</a>
@@ -24,7 +24,7 @@
 			<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
 				<!-- Dashboard -->
 				<li class="nav-item">
-					<a href="<?php echo site_url('Admin/Dashboard') ?>" class="nav-link active">
+					<a href="<?= site_url('home') ?>" class="nav-link <?= $this->uri->segment(1) == '' || $this->uri->segment(1) == 'home' ? 'active' : '' ?>">
 						<i class="nav-icon fas fa-tachometer-alt"></i>
 						<p>Dashboard</p>
 					</a>

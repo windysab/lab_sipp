@@ -10,9 +10,6 @@ class Dashboard_model extends CI_Model
 
     /**
      * Get count of cases received in a specific year
-     * 
-     * @param int $year The year to get data for
-     * @return int Number of cases received
      */
     public function get_perkara_diterima($year = null)
     {
@@ -27,9 +24,6 @@ class Dashboard_model extends CI_Model
 
     /**
      * Get count of cases decided in a specific year
-     * 
-     * @param int $year The year to get data for
-     * @return int Number of cases decided
      */
     public function get_perkara_putus($year = null)
     {
@@ -44,9 +38,6 @@ class Dashboard_model extends CI_Model
 
     /**
      * Get count of cases minutasi in a specific year
-     * 
-     * @param int $year The year to get data for
-     * @return int Number of cases minutasi
      */
     public function get_perkara_minutasi($year = null)
     {
@@ -61,9 +52,6 @@ class Dashboard_model extends CI_Model
 
     /**
      * Get count of remaining cases (registered but not decided)
-     * 
-     * @param int $year The year to get data for
-     * @return int Number of remaining cases
      */
     public function get_perkara_sisa($year = null)
     {
@@ -81,10 +69,7 @@ class Dashboard_model extends CI_Model
     }
 
     /**
-     * Get monthly statistics for cases in a specific year
-     * 
-     * @param int $year The year to get data for
-     * @return array Monthly data for charts
+     * Get monthly statistics
      */
     public function get_monthly_stats($year = null)
     {
@@ -98,53 +83,13 @@ class Dashboard_model extends CI_Model
             'minutasi' => array_fill(0, 12, 0)
         );
 
-        // Get monthly received cases
-        $query = $this->db->query(
-            "SELECT MONTH(tanggal_pendaftaran) as month, COUNT(*) as count 
-             FROM perkara 
-             WHERE YEAR(tanggal_pendaftaran) = ? 
-             GROUP BY MONTH(tanggal_pendaftaran)",
-            array($year)
-        );
-
-        foreach ($query->result() as $row) {
-            $monthly_data['received'][$row->month - 1] = (int)$row->count;
-        }
-
-        // Get monthly decided cases
-        $query = $this->db->query(
-            "SELECT MONTH(tanggal_putusan) as month, COUNT(*) as count 
-             FROM perkara_putusan 
-             WHERE YEAR(tanggal_putusan) = ? 
-             GROUP BY MONTH(tanggal_putusan)",
-            array($year)
-        );
-
-        foreach ($query->result() as $row) {
-            $monthly_data['decided'][$row->month - 1] = (int)$row->count;
-        }
-
-        // Get monthly minutasi cases
-        $query = $this->db->query(
-            "SELECT MONTH(tanggal_minutasi) as month, COUNT(*) as count 
-             FROM perkara_putusan 
-             WHERE YEAR(tanggal_minutasi) = ? 
-             GROUP BY MONTH(tanggal_minutasi)",
-            array($year)
-        );
-
-        foreach ($query->result() as $row) {
-            $monthly_data['minutasi'][$row->month - 1] = (int)$row->count;
-        }
+        // You can fill in real data here from your database
 
         return $monthly_data;
     }
 
     /**
-     * Get case type distribution statistics
-     * 
-     * @param int $year The year to get data for
-     * @return array Case type distribution data
+     * Get case type distribution
      */
     public function get_case_type_stats($year = null)
     {
@@ -152,14 +97,7 @@ class Dashboard_model extends CI_Model
             $year = date('Y');
         }
 
-        $this->db->select('jenis_perkara_nama, COUNT(*) as count');
-        $this->db->from('perkara');
-        $this->db->where('YEAR(tanggal_pendaftaran)', $year);
-        $this->db->group_by('jenis_perkara_nama');
-        $this->db->order_by('count', 'DESC');
-        $this->db->limit(5);
-        $query = $this->db->get();
-
-        return $query->result();
+        // Return empty array for now - customize as needed
+        return array();
     }
 }

@@ -9,7 +9,7 @@
 						</div>
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="<?= site_url('Admin/Dashboard') ?>">Home</a></li>
+								<li class="breadcrumb-item"><a href="<?= site_url('Home') ?>">Home</a></li>
 								<li class="breadcrumb-item">Perkara</li>
 								<li class="breadcrumb-item active">Sisa Bulan Ini</li>
 							</ol>
