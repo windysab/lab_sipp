@@ -128,7 +128,7 @@
 								<div class="bg-light p-3" style="border-radius: 5px; border: 1px solid #ddd;">
 									<h5><i class="fas fa-file-export mr-2"></i> Export Data Perceraian</h5>
 									<div class="mt-3">
-										<a href="<?= site_url('Usia_cerai/export_excel/' . (isset($lap_bulan) ? $lap_bulan : 'all') . '/' . (isset($lap_tahun) ? $lap_tahun : date('Y'))) ?>" class="btn btn-success btn-lg">
+										<a href="<?= site_url('Usia_cerai/export_excel/' . (isset($lap_bulan) ? urlencode($lap_bulan) : 'all') . '/' . (isset($lap_tahun) ? urlencode($lap_tahun) : date('Y'))) ?>" class="btn btn-success btn-lg">
 											<i class="fas fa-file-excel mr-2"></i> Export ke Excel
 										</a>
 										<a href="#" class="btn btn-danger btn-lg ml-2 export-pdf">

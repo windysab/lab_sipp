@@ -71,6 +71,10 @@ class Usia_cerai extends CI_Controller
 	 */
 	public function export_excel($lap_bulan = null, $lap_tahun = null)
 	{
+		// Sanitize URL parameters
+		$lap_bulan = urldecode(trim($lap_bulan));
+		$lap_tahun = urldecode(trim($lap_tahun));
+
 		// If parameters not provided via URL, try to get from session or POST
 		if (empty($lap_bulan)) {
 			$lap_bulan = $this->input->post('lap_bulan');
