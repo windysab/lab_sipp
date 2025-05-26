@@ -271,22 +271,50 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link" data-toggle="dropdown" href="#">
 						<i class="far fa-bell"></i>
-						<span class="badge badge-warning navbar-badge">5</span>
+						<?php $notif_count = isset($jumlah_notifikasi) ? $jumlah_notifikasi : 0; ?>
+						<?php if ($notif_count > 0): ?>
+							<span class="badge badge-warning navbar-badge"><?= $notif_count ?></span>
+						<?php endif; ?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<span class="dropdown-item dropdown-header">5 Notifikasi</span>
+						<span class="dropdown-item dropdown-header">
+							<?= $notif_count ?> Notifikasi
+						</span>
 						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-file-alt mr-2"></i> 3 laporan baru
-							<span class="float-right text-muted text-sm">hari ini</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-calendar-check mr-2"></i> 2 sidang tertunda
-							<span class="float-right text-muted text-sm">2 hari</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item dropdown-footer">Lihat Semua Notifikasi</a>
+
+						<?php if (isset($notifikasi_perkara) && !empty($notifikasi_perkara)): ?>
+							<a href="#" class="dropdown-item dropdown-header bg-success text-white py-2">
+								<i class="fas fa-gavel mr-2"></i> Perkara Putus Hari Ini
+							</a>
+
+							<?php foreach ($notifikasi_perkara as $perkara): ?>
+								<a href="<?= site_url('perkara/detail/' . $perkara->perkara_id) ?>" class="dropdown-item">
+									<div class="media">
+										<div class="mr-3">
+											<span class="badge badge-info">PUTUS</span>
+										</div>
+										<div class="media-body">
+											<h3 class="dropdown-item-title font-weight-bold">
+												<?= $perkara->nomor_perkara ?>
+											</h3>
+											<p class="text-sm"><?= $perkara->jenis_perkara_nama ?></p>
+											<p class="text-sm text-muted">
+												<i class="fas fa-check-circle mr-1"></i>
+												<?= isset($perkara->status_putusan_nama) ? $perkara->status_putusan_nama : 'Putus' ?>
+											</p>
+										</div>
+									</div>
+								</a>
+								<div class="dropdown-divider"></div>
+							<?php endforeach; ?>
+						<?php else: ?>
+							<a href="#" class="dropdown-item">
+								<i class="fas fa-info-circle mr-2"></i> Tidak ada perkara putus hari ini
+							</a>
+							<div class="dropdown-divider"></div>
+						<?php endif; ?>
+
+						<a href="<?= site_url('notifikasi') ?>" class="dropdown-item dropdown-footer">Lihat Semua Notifikasi</a>
 					</div>
 				</li>
 
