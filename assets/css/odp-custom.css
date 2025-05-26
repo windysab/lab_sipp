@@ -1,0 +1,297 @@
+/* Custom CSS for ODP (One Day Publish) page */
+
+/* Styling untuk chart */
+.highcharts-root {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.highcharts-title,
+.highcharts-subtitle {
+    font-weight: 600 !important;
+}
+
+.highcharts-axis-labels {
+    font-size: 12px !important;
+}
+
+.highcharts-data-label text {
+    font-weight: 600 !important;
+}
+
+.highcharts-legend-item text {
+    font-weight: 600 !important;
+}
+
+/* Card styling */
+.card {
+    border-radius: 6px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 0;
+}
+
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+}
+
+.card-header.bg-success {
+    background: linear-gradient(135deg, #28a745, #218838) !important;
+}
+
+.card-header.bg-purple {
+    background: linear-gradient(135deg, #8e44ad, #6b2c8d) !important;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Stats cards */
+.small-box {
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.small-box .inner {
+    padding: 20px 15px 10px;
+}
+
+.small-box .inner h3 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.small-box .icon {
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+.small-box:hover .icon {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.small-box .small-box-footer {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+    font-weight: 500;
+}
+
+/* Background gradients for cards */
+.bg-primary {
+    background: linear-gradient(135deg, #0072ff, #00c6ff) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #21d4a9, #2aaf74) !important;
+}
+
+.bg-purple {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #2193b0, #6dd5ed) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #f9d423, #f83600) !important;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #eb3349, #f45c43) !important;
+}
+
+/* Table styling */
+.table thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    border-top: none;
+    border-bottom: 2px solid #dee2e6;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Badges */
+.badge {
+    font-weight: 600;
+    padding: 0.4em 0.6em;
+    border-radius: 4px;
+}
+
+.badge-success {
+    background-color: #21d4a9;
+}
+
+.badge-info {
+    background-color: #2193b0;
+}
+
+.badge-warning {
+    background-color: #f9d423;
+    color: #212529;
+}
+
+.badge-danger {
+    background-color: #eb3349;
+}
+
+/* Filter card */
+.filter-card .form-control {
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+}
+
+.filter-card select.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.filter-btn {
+    border-radius: 4px;
+    padding: 8px 12px;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Timeline styling */
+.timeline-wrapper {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    position: relative;
+    border-left: 2px solid #007bff;
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.timeline-badge {
+    position: absolute;
+    left: -10px;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #007bff;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 10px;
+    z-index: 10;
+}
+
+.timeline-panel {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Add loading spinner for charts */
+.chart-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 100;
+}
+
+.chart-loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Loading indicators */
+#performance-loading,
+#distribution-loading,
+#timeline-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Animation for charts */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.highcharts-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    [id^="highcharts-"] {
+        height: 250px !important;
+    }
+}

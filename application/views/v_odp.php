@@ -20,8 +20,11 @@
 
 			<section class="content">
 				<div class="container-fluid">
+					<!-- Include custom CSS for ODP -->
+					<link rel="stylesheet" href="<?= base_url() ?>assets/css/odp-custom.css">
+
 					<!-- Filter Card -->
-					<div class="card card-primary card-outline">
+					<div class="card filter-card card-primary card-outline fade-in-up">
 						<div class="card-header">
 							<h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filter Data</h3>
 							<div class="card-tools">
@@ -172,75 +175,79 @@
 
 						<!-- Chart Row -->
 						<div class="row">
-							<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
-								<!-- Monthly Performance -->
-								<div class="col-md-8">
-									<div class="card card-primary">
-										<div class="card-header">
-											<h3 class="card-title">
-												<i class="fas fa-chart-line mr-1"></i>
-												Performa ODP Bulanan Tahun <?= $lap_tahun ?>
-											</h3>
-											<div class="card-tools">
-												<button type="button" class="btn btn-tool" data-card-widget="collapse">
-													<i class="fas fa-minus"></i>
-												</button>
-											</div>
-										</div>
-										<div class="card-body">
-											<div id="monthlyPerformanceChart" style="height: 300px;"></div>
-										</div>
-									</div>
-								</div>
-							<?php endif; ?>
-
-							<!-- Case Type Distribution -->
-							<div class="<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? 'col-md-4' : 'col-md-6' ?>">
-								<div class="card card-success">
-									<div class="card-header">
+							<!-- Performa ODP Bulanan -->
+							<div class="col-md-6">
+								<div class="card">
+									<div class="card-header bg-primary text-white">
 										<h3 class="card-title">
-											<i class="fas fa-chart-pie mr-1"></i>
-											Distribusi Jenis Perkara
+											<i class="fas fa-chart-line mr-1"></i>
+											Performa ODP Bulanan Tahun <?= $lap_tahun ?>
 										</h3>
 										<div class="card-tools">
-											<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<button type="button" class="btn btn-tool text-white" data-card-widget="collapse">
 												<i class="fas fa-minus"></i>
 											</button>
 										</div>
 									</div>
 									<div class="card-body">
-										<?php if (!empty($perkara_distribution)): ?>
-											<div id="perkaraDistributionChart" style="height: 300px;"></div>
-										<?php else: ?>
-											<div class="alert alert-warning">
-												<i class="fas fa-info-circle"></i> Tidak ada data untuk ditampilkan.
-											</div>
-										<?php endif; ?>
+										<!-- Menambahkan pesan loading -->
+										<div id="performance-loading" class="text-center p-3">
+											<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
+										</div>
+										<div id="monthly-performance-chart" style="min-height: 300px; width: 100%;"></div>
 									</div>
 								</div>
 							</div>
 
-							<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
-								<!-- ODP Status -->
-								<div class="col-md-6">
-									<div class="card card-info">
-										<div class="card-header">
-											<h3 class="card-title">
-												<i class="fas fa-chart-bar mr-1"></i>
-												Status One Day Publish
-											</h3>
-											<div class="card-tools">
-												<button type="button" class="btn btn-tool" data-card-widget="collapse">
-													<i class="fas fa-minus"></i>
-												</button>
-											</div>
-										</div>
-										<div class="card-body">
-											<div id="odpStatusChart" style="height: 300px;"></div>
+							<!-- Distribusi Jenis Perkara -->
+							<div class="col-md-6">
+								<div class="card">
+									<div class="card-header bg-success text-white">
+										<h3 class="card-title">
+											<i class="fas fa-chart-pie mr-1"></i>
+											Distribusi Jenis Perkara
+										</h3>
+										<div class="card-tools">
+											<button type="button" class="btn btn-tool text-white" data-card-widget="collapse">
+												<i class="fas fa-minus"></i>
+											</button>
 										</div>
 									</div>
+									<div class="card-body">
+										<!-- Menambahkan pesan loading -->
+										<div id="distribution-loading" class="text-center p-3">
+											<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
+										</div>
+										<div id="case-distribution-chart" style="min-height: 300px; width: 100%;"></div>
+									</div>
 								</div>
-							<?php endif; ?>
+							</div>
+						</div>
+
+						<!-- Timeline Performance -->
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header bg-purple text-white">
+										<h3 class="card-title">
+											<i class="fas fa-calendar-alt mr-1"></i>
+											Timeline ODP <?= $lap_tahun ?>
+										</h3>
+										<div class="card-tools">
+											<button type="button" class="btn btn-tool text-white" data-card-widget="collapse">
+												<i class="fas fa-minus"></i>
+											</button>
+										</div>
+									</div>
+									<div class="card-body">
+										<!-- Menambahkan pesan loading -->
+										<div id="timeline-loading" class="text-center p-3">
+											<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
+										</div>
+										<div id="odp-timeline-chart" style="min-height: 250px; width: 100%;"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<!-- Additional Info Card -->
@@ -328,6 +335,7 @@
 												$badgeClass = 'badge-secondary';
 												$badgeText = 'Tidak';
 
+												// ODP status
 												if ($row->is_odp === 'Ya') {
 													$rowClass = 'table-success';
 													$badgeClass = 'badge-success';
@@ -365,7 +373,6 @@
 																<i class="fas fa-eye"></i>
 															</a>
 														<?php endif; ?>
-
 														<?php if (!empty($row->link_dirput)): ?>
 															<a href="<?= $row->link_dirput ?>" class="btn btn-xs btn-info" target="_blank" data-toggle="tooltip" title="Lihat Putusan">
 																<i class="fas fa-file-pdf"></i>
@@ -402,7 +409,7 @@
 						<div class="alert alert-warning alert-dismissible">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 							<h5><i class="icon fas fa-exclamation-triangle"></i> Tidak Ada Data</h5>
-							<p>Tidak ditemukan data ODP pada periode yang dipilih. Silahkan pilih periode lainnya.</p>
+							<p>Tidak ditemukan data ODP pada periode yang dipilih. Silahkan pilih periode lainnya.</p> No Data Message -->
 						</div>
 					<?php endif; ?>
 				</div>
@@ -463,393 +470,324 @@
 		</div>
 	</div>
 
-	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+	<!-- Gunakan hanya Highcharts (hapus ApexCharts) -->
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+	<!-- Load Select2 CSS dan JS -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+	<!-- Script untuk chart -->
 	<script>
 		$(function() {
-			// Initialize Select2
-			$('.select2').select2({
-				theme: 'bootstrap4'
-			});
+			// Initialize Select2, tooltips, etc.
+			if ($.fn.select2) {
+				$('.select2').select2({
+					theme: 'bootstrap4'
+				});
+			}
 
-			// Handle report type toggle
+			// Toggle bulan field
 			function toggleBulanField() {
 				if ($("#laporan_tahunan").is(":checked")) {
 					$("#bulan_container").hide();
-					$("#lap_bulan").prop("required", false);
-					$("#lap_bulan").prop("disabled", true);
+					$("#lap_bulan").prop("required", false).prop("disabled", true);
 				} else {
 					$("#bulan_container").show();
-					$("#lap_bulan").prop("required", true);
-					$("#lap_bulan").prop("disabled", false);
+					$("#lap_bulan").prop("required", true).prop("disabled", false);
 				}
 			}
-
-			// Initialize state and listen for changes
 			toggleBulanField();
-			$("input[name='jenis_filter']").change(function() {
-				toggleBulanField();
-			});
+			$("input[name='jenis_filter']").change(toggleBulanField);
 
 			// Initialize DataTables
-			$("#dataTable").DataTable({
-				"responsive": true,
-				"lengthChange": true,
-				"autoWidth": false,
-				"pageLength": 10,
-				"language": {
-					"lengthMenu": "Tampilkan _MENU_ data per halaman",
-					"zeroRecords": "Data tidak ditemukan",
-					"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-					"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
-					"infoFiltered": "(difilter dari _MAX_ total data)",
-					"search": "Cari:",
-					"paginate": {
-						"first": "Pertama",
-						"last": "Terakhir",
-						"next": "Selanjutnya",
-						"previous": "Sebelumnya"
+			if ($.fn.DataTable) {
+				$("#dataTable").DataTable({
+					// Definisi DataTable Anda
+					"responsive": true,
+					"lengthChange": true,
+					"autoWidth": false,
+					"pageLength": 10,
+					"language": {
+						"search": "Cari:",
+						"lengthMenu": "Tampilkan _MENU_ baris per halaman",
+						"zeroRecords": "Tidak ada data yang ditemukan",
+						"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+						"infoEmpty": "Tidak ada data untuk ditampilkan",
+						"infoFiltered": "(disaring dari _MAX_ total data)",
+						"paginate": {
+							"first": "Pertama",
+							"last": "Terakhir",
+							"next": "Selanjutnya",
+							"previous": "Sebelumnya"
+						}
 					}
-				},
-				"buttons": [{
-						extend: 'excel',
-						text: 'Excel',
-						title: 'Data One Day Publish <?= !empty($lap_bulan) ? $nama_bulan[$lap_bulan] . " " . $lap_tahun : "Tahun " . $lap_tahun ?>',
-						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5, 6, 7]
-						},
-						className: 'btn-success'
-					},
-					{
-						extend: 'pdf',
-						text: 'PDF',
-						title: 'Data One Day Publish <?= !empty($lap_bulan) ? $nama_bulan[$lap_bulan] . " " . $lap_tahun : "Tahun " . $lap_tahun ?>',
-						exportOptions: {
-							columns: [0, 1, 2, 3, 4, 5, 6, 7]
-						},
-						className: 'btn-danger',
-						orientation: 'landscape'
-					}
-				]
-			}).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
-
-			// Export buttons binding
-			$('.export-excel').click(function(e) {
-				e.preventDefault();
-				$('.buttons-excel').click();
-			});
-
-			$('.export-pdf').click(function(e) {
-				e.preventDefault();
-				$('.buttons-pdf').click();
-			});
-
-			// View detail handler
-			$('.view-detail').click(function() {
-				$('#detail-nomor').text($(this).data('nomor'));
-				$('#detail-jenis').text($(this).data('jenis'));
-				$('#detail-putus').text($(this).data('putus'));
-				$('#detail-minutasi').text($(this).data('minutasi'));
-				$('#detail-publish').text($(this).data('publish'));
-				$('#detail-selisih').text($(this).data('selisih') + ' hari');
-				$('#detail-status').text($(this).data('status'));
-				$('#detail-filename').text($(this).data('filename'));
-				$('#detailModal').modal('show');
-			});
+				});
+			}
 
 			// Initialize tooltips
 			$('[data-toggle="tooltip"]').tooltip();
 
+			// Export handlers
+			$('.export-excel').click(function(e) {
+				e.preventDefault();
+				window.location.href = '<?= site_url('Odp/export_excel/' . (isset($lap_bulan) ? $lap_bulan : 'all') . '/' . $lap_tahun) ?>';
+			});
+
 			<?php if (!empty($datafilter)): ?>
-				// Initialize charts using ChartHelper
-				setTimeout(function() {
-					// Debug canvas elements
-					ChartHelper.debugCanvas('perkaraDistributionChart');
-					ChartHelper.debugCanvas('odpStatusChart');
-					ChartHelper.debugCanvas('monthlyPerformanceChart');
 
-					<?php if (isset($jenis_filter) && $jenis_filter === 'tahunan' && !empty($monthly_performance)): ?>
-						// Monthly Performance Chart
-						if (document.getElementById('monthlyPerformanceChart')) {
-							var monthlyData = {
-								labels: [
-									'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-									'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
-								],
-								datasets: [{
-										label: 'Total Perkara',
-										backgroundColor: 'rgba(60, 141, 188, 0.3)',
-										borderColor: 'rgba(60, 141, 188, 1)',
-										pointRadius: 3,
-										pointBackgroundColor: 'rgba(60, 141, 188, 1)',
-										pointBorderColor: '#fff',
-										pointHoverRadius: 5,
-										pointHoverBackgroundColor: '#fff',
-										pointHoverBorderColor: 'rgba(60, 141, 188, 1)',
-										data: [
-											<?php
-											$monthData = array_fill(1, 12, 0);
-											if (!empty($monthly_performance)) {
-												foreach ($monthly_performance as $item) {
-													$monthData[(int)$item->month_num] = $item->total_putus;
-												}
-											}
-											echo implode(', ', $monthData);
-											?>
-										],
-										type: 'line',
-										fill: false
-									},
-									{
-										label: 'One Day Publish',
-										backgroundColor: 'rgba(40, 167, 69, 0.7)',
-										borderColor: 'rgba(40, 167, 69, 1)',
-										borderWidth: 1,
-										data: [
-											<?php
-											$monthData = array_fill(1, 12, 0);
-											if (!empty($monthly_performance)) {
-												foreach ($monthly_performance as $item) {
-													$monthData[(int)$item->month_num] = $item->total_odp_same_day;
-												}
-											}
-											echo implode(', ', $monthData);
-											?>
-										]
-									}
-								]
-							};
+				console.log('Initializing charts...');
 
-							var options = {
-								responsive: true,
-								maintainAspectRatio: false,
-								scales: {
-									yAxes: [{
-										ticks: {
-											beginAtZero: true
-										}
-									}]
-								}
-							};
+				// Create data arrays
+				try {
+					// Monthly names
+					const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
 
-							ChartHelper.initChart('monthlyPerformanceChart', 'bar', monthlyData, options);
-						}
-					<?php endif; ?>
-
-					<?php if (!empty($perkara_distribution)): ?>
-						// Case Type Distribution Chart
-						if (document.getElementById('perkaraDistributionChart')) {
-							var perkaraData = {
-								labels: [
-									<?php
-									$types = [];
-									foreach ($perkara_distribution as $item) {
-										$types[] = '"' . $item->jenis_perkara_nama . '"';
-									}
-									echo implode(', ', $types);
-									?>
-								],
-								datasets: [{
-									data: [
-										<?php
-										$counts = [];
-										foreach ($perkara_distribution as $item) {
-											$counts[] = $item->total_cases;
-										}
-										echo implode(', ', $counts);
-										?>
-									],
-									backgroundColor: [
-										'#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',
-										'#e83e8c', '#6610f2', '#6f42c1', '#fd7e14', '#20c997', '#17a2b8'
-									]
-								}]
-							};
-
-							var options = {
-								responsive: true,
-								maintainAspectRatio: false,
-								legend: {
-									position: '<?= (isset($jenis_filter) && $jenis_filter === 'tahunan') ? "right" : "bottom" ?>'
-								}
-							};
-
-							ChartHelper.initChart('perkaraDistributionChart', 'doughnut', perkaraData, options);
-						}
-					<?php endif; ?>
-
-					<?php if (!(isset($jenis_filter) && $jenis_filter === 'tahunan')): ?>
-						// ODP Status Chart
-						if (document.getElementById('odpStatusChart')) {
-							var odpData = {
-								labels: ['ODP (Hari Sama)', 'ODP (1 Hari)', 'Tidak ODP'],
-								datasets: [{
-									data: [
-										<?= isset($stats->total_odp_same_day) ? $stats->total_odp_same_day : 0 ?>,
-										<?= isset($stats->total_odp_one_day) && isset($stats->total_odp_same_day) ?
-											$stats->total_odp_one_day - $stats->total_odp_same_day : 0 ?>,
-										<?= isset($stats->total_putus) && isset($stats->total_odp_one_day) ?
-											$stats->total_putus - $stats->total_odp_one_day : 0 ?>
-									],
-									backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
-								}]
-							};
-
-							var options = {
-								responsive: true,
-								maintainAspectRatio: false,
-								legend: {
-									position: 'bottom'
-								}
-							};
-
-							ChartHelper.initChart('odpStatusChart', 'pie', odpData, options);
-						}
-					<?php endif; ?>
-				}, 800); // Larger delay to ensure DOM is fully ready
-
-				// Export to Excel
-				$('#exportExcel').click(function() {
-					exportTimelineToExcel();
-				});
-
-				// Function to export timeline to Excel
-				function exportTimelineToExcel() {
-					// Create workbook and worksheet
-					const wb = XLSX.utils.book_new();
-					wb.Props = {
-						Title: "Timeline Perkara <?= isset($perkara->nomor_perkara) ? $perkara->nomor_perkara : '' ?>",
-						Subject: "Timeline",
-						Author: "SIPP",
-						CreatedDate: new Date()
-					};
-
-					// Create worksheet
-					const ws = XLSX.utils.aoa_to_sheet([]);
-
-					// Add perkara information
-					XLSX.utils.sheet_add_aoa(ws, [
-						["TIMELINE PERKARA"],
-						[""],
-						["Informasi Perkara:"],
-						["Nomor Perkara:", "<?= isset($perkara->nomor_perkara) ? $perkara->nomor_perkara : '-' ?>"],
-						["Jenis Perkara:", "<?= isset($perkara->jenis_perkara_nama) ? $perkara->jenis_perkara_nama : '-' ?>"],
-						["Tanggal Daftar:", "<?= isset($perkara->tanggal_pendaftaran) ? date('d-m-Y', strtotime($perkara->tanggal_pendaftaran)) : '-' ?>"],
-						["Status Perkara:", "<?= isset($perkara->status_perkara) ? $perkara->status_perkara : 'Tidak diketahui' ?>"],
-						["Penggugat/Pemohon:", "<?= isset($perkara->nama_p) ? $perkara->nama_p : '-' ?>"],
-						["Tergugat/Termohon:", "<?= isset($perkara->nama_t) ? $perkara->nama_t : '-' ?>"],
-						[""]
-					], {
-						origin: 0
-					});
-
-					// Add timeline headers
-					XLSX.utils.sheet_add_aoa(ws, [
-						["TIMELINE EVENTS"],
-						[""],
-						["Tanggal", "Waktu", "Jenis Event", "Judul", "Deskripsi", "Keterangan"]
-					], {
-						origin: {
-							r: 11,
-							c: 0
-						}
-					});
-
-					// Extract timeline data
-					const timelineData = [];
-					<?php if (!empty($timeline)): ?>
-						<?php foreach ($timeline as $index => $item): ?>
-							timelineData.push([
-								"<?= date('d-m-Y', strtotime($item->tanggal)) ?>",
-								"<?= date('H:i', strtotime($item->tanggal)) ?>",
-								"<?= $item->jenis_event ?>",
-								"<?= addslashes($item->judul) ?>",
-								"<?= addslashes($item->deskripsi) ?>",
-								"<?= isset($item->keterangan) ? addslashes($item->keterangan) : '' ?>"
-							]);
-						<?php endforeach; ?>
-					<?php endif; ?>
-
-					// Add timeline data to worksheet
-					if (timelineData.length > 0) {
-						XLSX.utils.sheet_add_aoa(ws, timelineData, {
-							origin: {
-								r: 14,
-								c: 0
+					// 1. Monthly performance data
+					const totalCasesData = [
+						<?php
+						$monthData = array_fill(0, 12, 0);
+						if (!empty($monthly_performance)) {
+							foreach ($monthly_performance as $item) {
+								$monthData[(int)$item->month_num - 1] = (int)$item->total_putus;
 							}
-						});
-					} else {
-						XLSX.utils.sheet_add_aoa(ws, [
-							["Tidak ada data timeline untuk perkara ini."]
-						], {
-							origin: {
-								r: 14,
-								c: 0
-							}
-						});
-					}
-
-					// Set column widths
-					const cols = [{
-							wch: 15
-						}, // Tanggal
-						{
-							wch: 10
-						}, // Waktu
-						{
-							wch: 15
-						}, // Jenis Event
-						{
-							wch: 30
-						}, // Judul
-						{
-							wch: 50
-						}, // Deskripsi
-						{
-							wch: 30
-						} // Keterangan
+						}
+						echo implode(', ', $monthData);
+						?>
 					];
-					ws['!cols'] = cols;
 
-					// Add worksheet to workbook
-					XLSX.utils.book_append_sheet(wb, ws, "Timeline");
+					console.log('Total cases data:', totalCasesData);
 
-					// Generate Excel file and trigger download
-					const wbout = XLSX.write(wb, {
-						bookType: 'xlsx',
-						type: 'binary'
-					});
-
-					function s2ab(s) {
-						const buf = new ArrayBuffer(s.length);
-						const view = new Uint8Array(buf);
-						for (let i = 0; i < s.length; i++) {
-							view[i] = s.charCodeAt(i) & 0xFF;
+					const odpData = [
+						<?php
+						$odpData = array_fill(0, 12, 0);
+						if (!empty($monthly_performance)) {
+							foreach ($monthly_performance as $item) {
+								$odpData[(int)$item->month_num - 1] = (int)$item->total_odp_same_day;
+							}
 						}
-						return buf;
-					}
+						echo implode(', ', $odpData);
+						?>
+					];
 
-					// Create download link
-					const filename = 'Timeline_<?= isset($perkara->nomor_perkara) ? str_replace("/", "_", $perkara->nomor_perkara) : "Perkara" ?>_<?= date("Ymd") ?>.xlsx';
-					const blob = new Blob([s2ab(wbout)], {
-						type: 'application/octet-stream'
-					});
+					console.log('ODP data:', odpData);
 
-					// IE/Edge support
-					if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-						window.navigator.msSaveOrOpenBlob(blob, filename);
-					} else {
-						const url = URL.createObjectURL(blob);
-						const a = document.createElement('a');
-						a.href = url;
-						a.download = filename;
-						document.body.appendChild(a);
-						a.click();
+					// Initialize monthly performance chart
+					setTimeout(function() {
+						console.log('Creating monthly performance chart...');
+
+						try {
+							// Hide loading indicator
+							$('#performance-loading').hide();
+
+							// Monthly Performance Chart
+							Highcharts.chart('monthly-performance-chart', {
+								chart: {
+									type: 'column',
+									backgroundColor: '#ffffff'
+								},
+								title: {
+									text: null
+								},
+								credits: {
+									enabled: false
+								},
+								xAxis: {
+									categories: monthNames,
+									crosshair: true
+								},
+								yAxis: {
+									min: 0,
+									title: {
+										text: 'Jumlah Perkara'
+									}
+								},
+								tooltip: {
+									headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+									pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+										'<td style="padding:0"><b>{point.y} perkara</b></td></tr>',
+									footerFormat: '</table>',
+									shared: true,
+									useHTML: true
+								},
+								plotOptions: {
+									column: {
+										pointPadding: 0.2,
+										borderWidth: 0
+									}
+								},
+								series: [{
+									name: 'Total Perkara',
+									color: '#007bff',
+									data: totalCasesData
+								}, {
+									name: 'ODP',
+									color: '#28a745',
+									data: odpData
+								}]
+							});
+
+							console.log('Monthly performance chart created successfully');
+						} catch (error) {
+							console.error('Error creating monthly chart:', error);
+							$('#monthly-performance-chart').html('<div class="alert alert-danger">Gagal membuat chart. Error: ' + error.message + '</div>');
+						}
+					}, 500);
+
+					// Case distribution data
+					<?php if (!empty($perkara_distribution)): ?>
+
+						// Format case distribution data
+						const caseData = [
+							<?php
+							if (!empty($perkara_distribution)) {
+								foreach ($perkara_distribution as $item) {
+									echo "{
+								name: '" . addslashes($item->jenis_perkara_nama) . "',
+								y: " . (int)$item->total_cases . "
+							},";
+								}
+							}
+							?>
+						];
+
+						console.log('Case distribution data:', caseData);
+
+						// Initialize case distribution chart
 						setTimeout(function() {
-							document.body.removeChild(a);
-							window.URL.revokeObjectURL(url);
-						}, 0);
-					}
+							console.log('Creating case distribution chart...');
+
+							try {
+								// Hide loading indicator
+								$('#distribution-loading').hide();
+
+								// Create case distribution chart
+								Highcharts.chart('case-distribution-chart', {
+									chart: {
+										plotBackgroundColor: null,
+										plotBorderWidth: null,
+										plotShadow: false,
+										type: 'pie',
+										backgroundColor: '#ffffff'
+									},
+									title: {
+										text: null
+									},
+									credits: {
+										enabled: false
+									},
+									tooltip: {
+										pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b><br>Total: {point.y} perkara'
+									},
+									accessibility: {
+										point: {
+											valueSuffix: '%'
+										}
+									},
+									plotOptions: {
+										pie: {
+											allowPointSelect: true,
+											cursor: 'pointer',
+											dataLabels: {
+												enabled: true,
+												format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+											}
+										}
+									},
+									series: [{
+										name: 'Jenis Perkara',
+										colorByPoint: true,
+										data: caseData
+									}]
+								});
+
+								console.log('Case distribution chart created successfully');
+							} catch (error) {
+								console.error('Error creating distribution chart:', error);
+								$('#case-distribution-chart').html('<div class="alert alert-danger">Gagal membuat chart. Error: ' + error.message + '</div>');
+							}
+						}, 800);
+					<?php endif; ?>
+
+					// Timeline data
+					const odpPercentage = [
+						<?php
+						$pctData = array_fill(0, 12, 0);
+						if (!empty($monthly_performance)) {
+							foreach ($monthly_performance as $item) {
+								if ((int)$item->total_putus > 0) {
+									$pct = round(((int)$item->total_odp_same_day / (int)$item->total_putus) * 100, 1);
+								} else {
+									$pct = 0;
+								}
+								$pctData[(int)$item->month_num - 1] = $pct;
+							}
+						}
+						echo implode(', ', $pctData);
+						?>
+					];
+
+					console.log('ODP percentage data:', odpPercentage);
+
+					// Initialize timeline chart
+					setTimeout(function() {
+						console.log('Creating timeline chart...');
+
+						try {
+							// Hide loading indicator
+							$('#timeline-loading').hide();
+
+							// Create timeline chart
+							Highcharts.chart('odp-timeline-chart', {
+								chart: {
+									type: 'areaspline',
+									backgroundColor: '#ffffff'
+								},
+								title: {
+									text: null
+								},
+								credits: {
+									enabled: false
+								},
+								xAxis: {
+									categories: monthNames
+								},
+								yAxis: {
+									title: {
+										text: 'Persentase ODP (%)'
+									},
+									labels: {
+										format: '{value}%'
+									},
+									min: 0,
+									max: 100
+								},
+								tooltip: {
+									pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}%</b><br/>'
+								},
+								plotOptions: {
+									areaspline: {
+										fillOpacity: 0.5
+									}
+								},
+								series: [{
+									name: 'Persentase ODP',
+									data: odpPercentage,
+									color: '#8e44ad'
+								}]
+							});
+
+							console.log('Timeline chart created successfully');
+						} catch (error) {
+							console.error('Error creating timeline chart:', error);
+							$('#odp-timeline-chart').html('<div class="alert alert-danger">Gagal membuat chart. Error: ' + error.message + '</div>');
+						}
+					}, 1000);
+
+				} catch (error) {
+					console.error('Error in chart initialization:', error);
 				}
 			<?php endif; ?>
 		});
