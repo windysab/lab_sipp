@@ -1,6 +1,18 @@
 <body class="hold-transition sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper">
+			<!-- Load CSS for charts -->
+			<link rel="stylesheet" href="<?= base_url() ?>assets/css/odm-charts.css">
+			<!-- Ensure Chart.js is loaded -->
+			<script>
+				if (typeof Chart === 'undefined') {
+					document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"><\/script>');
+				}
+			</script>
+
+			<!-- Load custom CSS for ODM charts -->
+			<link rel="stylesheet" href="<?= base_url() ?>assets/css/odm-custom.css">
+
 			<!-- Content Header -->
 			<section class="content-header">
 				<div class="container-fluid">
@@ -95,7 +107,7 @@
 					</div>
 
 					<?php if (!empty($datafilter)): ?>
-						<!-- Prominent Export Buttons - Add after filter card but before statistics/data table -->
+						<!-- Prominent Export Buttons -->
 						<div class="row mb-4">
 							<div class="col-md-12">
 								<div class="bg-light p-3" style="border-radius: 5px; border: 1px solid #ddd;">
@@ -224,7 +236,13 @@
 										</div>
 									</div>
 									<div class="card-body">
-										<canvas id="odmPieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+										<!-- Add loading indicator -->
+										<div id="odm-chart-loading" class="text-center p-3">
+											<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
+										</div>
+										<div id="odm-chart-container" style="position: relative; height: 300px;">
+											<canvas id="odmPieChart"></canvas>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -283,16 +301,16 @@
 														$odm_count = isset($odm_by_type[$type]) ? $odm_by_type[$type] : 0;
 														$percentage = round(($odm_count / $count) * 100, 1);
 														echo "<tr>
-                                                                <td>{$type}</td>
-                                                                <td class='text-center'>{$count}</td>
-                                                                <td class='text-center'>{$odm_count}</td>
-                                                                <td class='text-center'>
-                                                                    {$percentage}%
-                                                                    <div class='progress progress-xs'>
-                                                                        <div class='progress-bar bg-success' style='width: {$percentage}%'></div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>";
+                                                              <td>{$type}</td>
+                                                              <td class='text-center'>{$count}</td>
+                                                              <td class='text-center'>{$odm_count}</td>
+                                                              <td class='text-center'>
+                                                                  {$percentage}%
+                                                                  <div class='progress progress-xs'>
+                                                                      <div class='progress-bar bg-success' style='width: {$percentage}%'></div>
+                                                                  </div>
+                                                              </td>
+                                                          </tr>";
 													}
 													?>
 												</tbody>
@@ -354,6 +372,7 @@
 										<?php
 										$no = 1;
 										foreach ($datafilter as $row):
+											// Calculate days and ODM status
 											$putus_date = new DateTime($row->tanggal_putusan);
 											$minutasi_date = new DateTime($row->tanggal_minutasi);
 											$interval = $putus_date->diff($minutasi_date);
@@ -447,13 +466,13 @@
 					"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
 					"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
 					"infoFiltered": "(difilter dari _MAX_ total data)",
-					"search": "Cari:",
 					"paginate": {
 						"first": "Pertama",
 						"last": "Terakhir",
 						"next": "Selanjutnya",
 						"previous": "Sebelumnya"
-					}
+					},
+					"search": "Cari:"
 				},
 				"dom": 'Bfrtip',
 				"buttons": [{
@@ -508,6 +527,9 @@
 							}, 1000);
 						}
 					}
+				],
+				"order": [
+					[0, "asc"]
 				]
 			});
 
@@ -516,54 +538,81 @@
 				e.preventDefault();
 				dataTable.button('.buttons-excel').trigger();
 			});
+
 			$('.export-csv').click(function(e) {
 				e.preventDefault();
 				dataTable.button('.buttons-csv').trigger();
 			});
+
 			$('.export-pdf').click(function(e) {
 				e.preventDefault();
 				dataTable.button('.buttons-pdf').trigger();
 			});
+
 			$('.print-data').click(function(e) {
 				e.preventDefault();
 				dataTable.button('.buttons-print').trigger();
 			});
 
 			<?php if (!empty($datafilter)): ?>
-				// Initialize pie chart
-				var pieChartCanvas = $('#odmPieChart').get(0).getContext('2d');
-				var pieData = {
-					labels: ['One Day Minute', 'Lebih dari 1 hari'],
-					datasets: [{
-						data: [<?= isset($odm_count) ? $odm_count : 0 ?>, <?= count($datafilter) - (isset($odm_count) ? $odm_count : 0) ?>],
-						backgroundColor: ['#28a745', '#dc3545'],
-					}]
-				};
-				var pieOptions = {
-					maintainAspectRatio: false,
-					responsive: true,
-					legend: {
-						position: 'right',
-					},
-					tooltips: {
-						callbacks: {
-							label: function(tooltipItem, data) {
-								var dataset = data.datasets[tooltipItem.datasetIndex];
-								var total = dataset.data.reduce(function(previousValue, currentValue) {
-									return previousValue + currentValue;
-								});
-								var currentValue = dataset.data[tooltipItem.index];
-								var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-								return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-							}
-						}
+				// Calculate ODM count for chart data
+				<?php
+				// Check and calculate ODM data explicitly here
+				$odm_count = 0;
+				$non_odm_count = 0;
+
+				foreach ($datafilter as $row) {
+					if (date('Y-m-d', strtotime($row->tanggal_putusan)) === date('Y-m-d', strtotime($row->tanggal_minutasi))) {
+						$odm_count++;
+					} else {
+						$non_odm_count++;
 					}
-				};
-				var pieChart = new Chart(pieChartCanvas, {
-					type: 'pie',
-					data: pieData,
-					options: pieOptions
-				});
+				}
+				?>
+
+				// Log data availability for debugging
+				console.log('ODM count:', <?= $odm_count ?>, 'Non-ODM count:', <?= $non_odm_count ?>);
+
+				// Check if Chart.js is loaded
+				if (typeof Chart === 'undefined') {
+					console.error('Chart.js belum dimuat! Coba refresh halaman.');
+					$('#odm-chart-loading').hide();
+					$('#odm-chart-container').html('<div class="alert alert-danger">Chart.js tidak dimuat dengan benar. Coba refresh halaman.</div>');
+				} else {
+					console.log('Chart.js loaded successfully. Initializing pie chart...');
+
+					// Always remove loading after a short delay, even if chart fails
+					setTimeout(function() {
+						$('#odm-chart-loading').hide();
+					}, 1500);
+
+					// Create a simpler chart with validation
+					try {
+						// Very simple chart configuration
+						var ctx = document.getElementById('odmPieChart').getContext('2d');
+						var data = {
+							labels: ['One Day Minute', 'Lebih dari 1 hari'],
+							datasets: [{
+								data: [<?= $odm_count ?>, <?= $non_odm_count ?>],
+								backgroundColor: ['#28a745', '#dc3545']
+							}]
+						};
+
+						new Chart(ctx, {
+							type: 'pie',
+							data: data,
+							options: {
+								responsive: true,
+								maintainAspectRatio: false
+							}
+						});
+
+						console.log('Chart initialized successfully');
+					} catch (e) {
+						console.error('Error creating chart:', e);
+						$('#odm-chart-container').html('<div class="alert alert-danger">Error: ' + e.message + '</div>');
+					}
+				}
 			<?php endif; ?>
 
 			// Initialize tooltips
