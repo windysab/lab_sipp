@@ -153,7 +153,7 @@
 						</div>
 					</div>
 
-					<!-- Charts Row -->
+					<!-- Chart Row -->
 					<div class="row">
 						<!-- Monthly Statistics Chart -->
 						<div class="col-md-8">
@@ -170,8 +170,16 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<div class="chart">
-										<canvas id="monthlyChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+									<!-- Tambahkan Id untuk pesan error -->
+									<div id="monthlyChartError" class="alert alert-danger" style="display: none;"></div>
+
+									<!-- Loading indicator -->
+									<div id="monthlyChartLoading" class="text-center">
+										<i class="fas fa-spinner fa-spin"></i> Memuat chart...
+									</div>
+
+									<div class="chart-container" style="position: relative; height: 300px;">
+										<canvas id="monthlyChart" width="100%" height="300"></canvas>
 									</div>
 								</div>
 							</div>
@@ -192,8 +200,16 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<div class="chart">
-										<canvas id="caseTypeChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+									<!-- Tambahkan Id untuk pesan error -->
+									<div id="caseTypeChartError" class="alert alert-danger" style="display: none;"></div>
+
+									<!-- Loading indicator -->
+									<div id="caseTypeChartLoading" class="text-center">
+										<i class="fas fa-spinner fa-spin"></i> Memuat chart...
+									</div>
+
+									<div class="chart-container" style="position: relative; height: 300px;">
+										<canvas id="caseTypeChart" width="100%" height="300"></canvas>
 									</div>
 								</div>
 							</div>
@@ -320,15 +336,17 @@
 		</div>
 	</div>
 
+	<!-- Tambahkan Chart.js dari CDN sebelum script lainnya -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
 	<script>
-		$(function() {
+		$(document).ready(function() {
 			// Initialize DataTable
 			$("#dataTable").DataTable({
 				"responsive": true,
 				"lengthChange": true,
 				"autoWidth": false,
 				"buttons": ["copy", "excel", "pdf", "print"],
-				"pageLength": 25,
 				"language": {
 					"lengthMenu": "Tampilkan _MENU_ data per halaman",
 					"zeroRecords": "Data tidak ditemukan",
@@ -345,112 +363,182 @@
 				}
 			});
 
-			// Monthly Chart
-			var monthlyChartCanvas = document.getElementById('monthlyChart');
-			if (monthlyChartCanvas) {
-				var monthlyChart = new Chart(monthlyChartCanvas, {
-					type: 'bar',
-					data: {
-						labels: [<?php
-											$months = [];
-											foreach ($monthly_stats as $stat) {
-												$months[] = "'" . substr($stat->month_name, 0, 3) . "'";
-											}
-											echo implode(',', $months);
-											?>],
-						datasets: [{
-								label: 'Total Perkara',
-								backgroundColor: 'rgba(60,141,188,0.9)',
-								borderColor: 'rgba(60,141,188,0.8)',
-								pointRadius: false,
-								pointColor: '#3b8bba',
-								pointStrokeColor: 'rgba(60,141,188,1)',
-								pointHighlightFill: '#fff',
-								pointHighlightStroke: 'rgba(60,141,188,1)',
-								data: [<?php
-												$totals = [];
-												foreach ($monthly_stats as $stat) {
-													$totals[] = $stat->total_cases;
-												}
-												echo implode(',', $totals);
-												?>]
-							},
-							{
-								label: 'Perkara Putus',
-								backgroundColor: 'rgba(40,167,69,0.9)',
-								borderColor: 'rgba(40,167,69,0.8)',
-								pointRadius: false,
-								pointColor: '#28a745',
-								pointStrokeColor: 'rgba(40,167,69,1)',
-								pointHighlightFill: '#fff',
-								pointHighlightStroke: 'rgba(40,167,69,1)',
-								data: [<?php
-												$decided = [];
-												foreach ($monthly_stats as $stat) {
-													$decided[] = $stat->total_decided;
-												}
-												echo implode(',', $decided);
-												?>]
-							}
-						]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						scales: {
-							xAxes: [{
-								stacked: false,
-								gridLines: {
-									display: false
-								}
-							}],
-							yAxes: [{
-								stacked: false,
-								gridLines: {
-									display: true
-								}
-							}]
-						}
-					}
-				});
+			// Fungsi untuk menampilkan error chart
+			function showChartError(elementId, message) {
+				console.error(message);
+				$('#' + elementId + 'Loading').hide();
+				$('#' + elementId + 'Error').text(message).show();
 			}
 
-			// Case Type Chart
-			var caseTypeChartCanvas = document.getElementById('caseTypeChart');
-			if (caseTypeChartCanvas) {
-				var caseTypeChart = new Chart(caseTypeChartCanvas, {
-					type: 'doughnut',
-					data: {
-						labels: [
-							<?php
-							$caseTypeLabels = [];
-							foreach ($case_types as $type) {
-								$caseTypeLabels[] = "'" . $type->jenis_perkara_nama . "'";
-							}
-							echo implode(',', $caseTypeLabels);
-							?>
-						],
-						datasets: [{
-							data: [
-								<?php
-								$caseCounts = [];
-								foreach ($case_types as $type) {
-									$caseCounts[] = $type->count;
-								}
-								echo implode(',', $caseCounts);
-								?>
-							],
-							backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#6610f2', '#fd7e14'],
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						legend: {
-							position: 'right'
+			// Cek apakah Chart.js sudah dimuat
+			if (typeof Chart === 'undefined') {
+				showChartError('monthlyChart', 'Chart.js tidak tersedia. Memuat dari CDN...');
+				showChartError('caseTypeChart', 'Chart.js tidak tersedia. Memuat dari CDN...');
+
+				// Muat Chart.js dari CDN sebagai fallback
+				$.getScript("https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js")
+					.done(function() {
+						console.log("Chart.js berhasil dimuat dari CDN");
+						initializeCharts();
+					})
+					.fail(function() {
+						showChartError('monthlyChart', 'Gagal memuat Chart.js dari CDN');
+						showChartError('caseTypeChart', 'Gagal memuat Chart.js dari CDN');
+					});
+			} else {
+				// Chart.js tersedia, lanjutkan dengan inisialisasi
+				setTimeout(initializeCharts, 500); // Berikan sedikit waktu untuk DOM siap
+			}
+
+			// Fungsi untuk inisialisasi semua chart
+			function initializeCharts() {
+				try {
+					// Monthly Chart - Konversi data PHP ke JavaScript
+					var monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+
+					var totalCases = [
+						<?php
+						$months_data = [];
+						foreach ($monthly_stats as $stat) {
+							$months_data[] = isset($stat->total_cases) ? intval($stat->total_cases) : 0;
 						}
+						echo implode(',', $months_data);
+						?>
+					];
+
+					var decidedCases = [
+						<?php
+						$decided_data = [];
+						foreach ($monthly_stats as $stat) {
+							$decided_data[] = isset($stat->total_decided) ? intval($stat->total_decided) : 0;
+						}
+						echo implode(',', $decided_data);
+						?>
+					];
+
+					console.log('Monthly data:', {
+						labels: monthlyLabels,
+						totalCases,
+						decidedCases
+					});
+
+					// Cek jika ada data untuk chart
+					var hasMonthlyData = totalCases.some(val => val > 0) || decidedCases.some(val => val > 0);
+
+					if (!hasMonthlyData) {
+						$('#monthlyChartLoading').hide();
+						$('#monthlyChart').parent().html('<div class="alert alert-info">Tidak ada data untuk ditampilkan</div>');
+					} else {
+						// Buat chart bulanan
+						var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+						new Chart(monthlyCtx, {
+							type: 'bar',
+							data: {
+								labels: monthlyLabels,
+								datasets: [{
+										label: 'Total Perkara',
+										backgroundColor: '#4e73df',
+										borderColor: '#4e73df',
+										data: totalCases
+									},
+									{
+										label: 'Perkara Putus',
+										backgroundColor: '#1cc88a',
+										borderColor: '#1cc88a',
+										data: decidedCases
+									}
+								]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								legend: {
+									display: true,
+									position: 'top'
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											beginAtZero: true
+										}
+									}]
+								}
+							}
+						});
+						$('#monthlyChartLoading').hide();
 					}
-				});
+
+					// Case Type Chart - Pie chart untuk distribusi jenis perkara
+					var caseTypeLabels = [
+						<?php
+						$labels = [];
+						foreach ($case_types as $type) {
+							$labels[] = "'" . addslashes($type->jenis_perkara_nama) . "'";
+						}
+						echo implode(',', $labels);
+						?>
+					];
+
+					var caseTypeData = [
+						<?php
+						$data = [];
+						foreach ($case_types as $type) {
+							$data[] = isset($type->count) ? intval($type->count) : 0;
+						}
+						echo implode(',', $data);
+						?>
+					];
+
+					console.log('Case type data:', {
+						labels: caseTypeLabels,
+						data: caseTypeData
+					});
+
+					// Cek jika ada data untuk chart
+					if (caseTypeLabels.length === 0 || caseTypeData.every(val => val === 0)) {
+						$('#caseTypeChartLoading').hide();
+						$('#caseTypeChart').parent().html('<div class="alert alert-info">Tidak ada data untuk ditampilkan</div>');
+					} else {
+						// Buat chart jenis perkara
+						var caseTypeCtx = document.getElementById('caseTypeChart').getContext('2d');
+						new Chart(caseTypeCtx, {
+							type: 'doughnut',
+							data: {
+								labels: caseTypeLabels,
+								datasets: [{
+									data: caseTypeData,
+									backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#5a5c69', '#6f42c1', '#fd7e14', '#20c9a6', '#858796'],
+									hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#f4b619', '#e02d1b', '#484a52', '#5d36a4', '#fd6a00', '#169b7a', '#6e707e'],
+									hoverBorderColor: "rgba(234, 236, 244, 1)",
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								legend: {
+									display: true,
+									position: 'right'
+								},
+								tooltips: {
+									backgroundColor: "rgb(255,255,255)",
+									bodyFontColor: "#858796",
+									borderColor: '#dddfeb',
+									borderWidth: 1,
+									xPadding: 15,
+									yPadding: 15,
+									displayColors: false,
+									caretPadding: 10,
+								}
+							}
+						});
+						$('#caseTypeChartLoading').hide();
+					}
+
+				} catch (error) {
+					console.error('Error initializing charts:', error);
+					showChartError('monthlyChart', 'Terjadi kesalahan: ' + error.message);
+					showChartError('caseTypeChart', 'Terjadi kesalahan: ' + error.message);
+				}
 			}
 		});
 	</script>
