@@ -1,4 +1,4 @@
-<body class="hold-transition sidebar-mini">
+ <body class="hold-transition sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper">
 			<section class="content-header">
