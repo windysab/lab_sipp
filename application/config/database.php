@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+date_default_timezone_set('Asia/Jakarta'); // Set default timezone for Indonesia, adjust as needed
 
 
 $active_group = 'default';
@@ -49,4 +50,3 @@ $db['default'] = array(
 // 	'failover' => array(),
 // 	'save_queries' => TRUE
 // );
-
