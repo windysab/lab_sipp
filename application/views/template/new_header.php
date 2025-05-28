@@ -213,6 +213,12 @@
 	<!-- Chart.js -->
 	<script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
 	<script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Select2 CSS dan JS -->
+	<link href="<?= base_url() ?>assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+	<link href="<?= base_url() ?>assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+	<script src="<?= base_url() ?>assets/plugins/select2/js/select2.full.min.js"></script>
+
 	<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
 	<script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 	<script>
@@ -343,9 +349,13 @@
 
 				<li class="nav-item">
 					<a class="nav-link" data-widget="fullscreen" href="#" role="button" title="Layar Penuh">
-						<i class="fas fa-expand-arrows-alt"></i>
-					</a>
-				</li>
-			</ul>
+
+
+
+
+
+
+						<!-- /.navbar -->
 		</nav>
-		<!-- /.navbar -->
+		</ul>
+		</li> </a> <i class="fas fa-expand-arrows-alt"></i>

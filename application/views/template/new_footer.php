@@ -120,6 +120,8 @@
 
 <!-- Chart Helper for consistent chart initialization -->
 <script src="<?= base_url() ?>assets/js/chart-helper.js"></script>
+<!-- Tambahkan script inisialisasi komponen -->
+<script src="<?= base_url() ?>assets/js/components-init.js"></script>
 
 </body>
 
