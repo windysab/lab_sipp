@@ -489,16 +489,21 @@
 				});
 			}
 
-			// Toggle bulan field
+			// More effective toggle function for the month field
 			function toggleBulanField() {
+				console.log("Toggle function called");
 				if ($("#laporan_tahunan").is(":checked")) {
+					console.log("Tahunan selected - hiding month");
 					$("#bulan_container").hide();
-					$("#lap_bulan").prop("required", false).prop("disabled", true);
+					$("#lap_bulan").val("").prop("disabled", true).trigger("change.select2");
 				} else {
+					console.log("Bulanan selected - showing month");
 					$("#bulan_container").show();
-					$("#lap_bulan").prop("required", true).prop("disabled", false);
+					$("#lap_bulan").prop("disabled", false).trigger("change.select2");
 				}
 			}
+
+			// Run on page load and when radio buttons change
 			toggleBulanField();
 			$("input[name='jenis_filter']").change(toggleBulanField);
 
