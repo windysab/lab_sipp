@@ -18,16 +18,9 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="<?php echo base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="<?php echo base_url() ?>assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-	$.widget.bridge('uibutton', $.ui.button)
-</script>
+<script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="<?php echo base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+<script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables & Plugins -->
 <script src="<?= base_url() ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -40,89 +33,62 @@
 <script src="<?= base_url() ?>assets/plugins/pdfmake/vfs_fonts.js"></script>
 <script src="<?= base_url() ?>assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="<?= base_url() ?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<!-- overlayScrollbars -->
-<script src="<?php echo base_url() ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- Select2 -->
+<script src="<?= base_url() ?>assets/plugins/select2/js/select2.full.min.js"></script>
+
+<!-- Chart.js -->
+<script src="<?= base_url() ?>assets/plugins/chart.js/Chart.min.js"></script>
+
 <!-- AdminLTE App -->
-<script src="<?php echo base_url() ?>assets/dist/js/adminlte.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 
+<!-- Component Initializer -->
 <script>
 	$(function() {
-		// Initialize DataTables with export buttons
-		$("#example1").DataTable({
-			"responsive": true,
-			"lengthChange": true,
-			"autoWidth": false,
-			"dom": '<"top d-flex justify-content-between"Bf>rt<"bottom d-flex justify-content-between"lip>',
-			"buttons": [{
-					extend: "copy",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-copy"></i> Salin'
-				},
-				{
-					extend: "csv",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-file-csv"></i> CSV'
-				},
-				{
-					extend: "excel",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-file-excel"></i> Excel'
-				},
-				{
-					extend: "pdf",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-file-pdf"></i> PDF'
-				},
-				{
-					extend: "print",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-print"></i> Cetak'
-				},
-				{
-					extend: "colvis",
-					className: "btn-sm btn-secondary",
-					text: '<i class="fas fa-columns"></i> Kolom'
-				}
-			],
-			"language": {
-				"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-				"infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
-				"infoFiltered": "(disaring dari _MAX_ total data)",
-				"search": "Cari:",
-				"lengthMenu": "Tampilkan _MENU_ data",
-				"zeroRecords": "Tidak ada data yang cocok",
-				"paginate": {
-					"first": "Pertama",
-					"last": "Terakhir",
-					"next": "Selanjutnya",
-					"previous": "Sebelumnya"
-				}
-			}
-		}).buttons().container().appendTo('#example1_wrapper .top');
+		// Initialize tooltips
+		if (typeof $().tooltip === 'function') {
+			$('[data-toggle="tooltip"]').tooltip();
+		}
 
-		// Enable tooltips
-		$('[data-toggle="tooltip"]').tooltip();
+		// Initialize Select2
+		if (typeof $().select2 === 'function') {
+			$('.select2').select2({
+				theme: 'bootstrap4'
+			});
+		} else {
+			console.error('Select2 is not loaded correctly');
+		}
 
-		// Highlight active menu
-		const currentPath = window.location.pathname.split('/').pop().toLowerCase();
-		$('.nav-sidebar a').each(function() {
-			const href = $(this).attr('href');
-			if (href && href.toLowerCase().indexOf(currentPath) !== -1) {
-				$(this).addClass('active');
-				$(this).parents('.nav-item').addClass('menu-open');
-				$(this).parents('.nav-item').children('.nav-link').addClass('active');
-			}
-		});
+		// Initialize DataTables
+		if (typeof $().DataTable === 'function') {
+			$('.dataTable').each(function() {
+				var tableId = $(this).attr('id');
+				if (!$.fn.DataTable.isDataTable('#' + tableId)) {
+					$('#' + tableId).DataTable({
+						"responsive": true,
+						"lengthChange": true,
+						"autoWidth": false,
+						"language": {
+							"search": "Cari:",
+							"lengthMenu": "Tampilkan _MENU_ data per halaman",
+							"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+							"infoEmpty": "Tidak ada data yang ditampilkan",
+							"infoFiltered": "(difilter dari _MAX_ data)",
+							"zeroRecords": "Tidak ada data yang cocok ditemukan",
+							"paginate": {
+								"first": "Pertama",
+								"last": "Terakhir",
+								"next": "Selanjutnya",
+								"previous": "Sebelumnya"
+							}
+						}
+					});
+				}
+			});
+		}
 	});
 </script>
-
-<!-- Chart Helper for consistent chart initialization -->
-<script src="<?= base_url() ?>assets/js/chart-helper.js"></script>
-<!-- Tambahkan script inisialisasi komponen -->
-<script src="<?= base_url() ?>assets/js/components-init.js"></script>
-
 </body>
 
 </html>
