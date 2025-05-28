@@ -72,59 +72,77 @@ class M_rekap_ecourt extends CI_Model
 	 */
 	public function get_monthly_stats($tahun, $jenis_perkara = null)
 	{
+		// Create array of month objects instead of associative array
 		$monthly_stats = [];
 
-		// Initialize months
+		// Initialize month names in Indonesian
+		$month_names = [
+			'Januari',
+			'Februari',
+			'Maret',
+			'April',
+			'Mei',
+			'Juni',
+			'Juli',
+			'Agustus',
+			'September',
+			'Oktober',
+			'November',
+			'Desember'
+		];
+
+		// Initialize months with standard objects
 		for ($month = 1; $month <= 12; $month++) {
-			$monthly_stats[$month] = [
-				'month_name' => date('F', mktime(0, 0, 0, $month, 1)),
-				'month_num' => $month,
-				'total_cases' => 0,
-				'total_decided' => 0
-			];
+			$month_obj = new stdClass();
+			$month_obj->month_name = $month_names[$month - 1];
+			$month_obj->month_num = $month;
+			$month_obj->total_cases = 0;
+			$month_obj->total_decided = 0;
+
+			$monthly_stats[$month] = $month_obj;
 		}
 
-		// Get monthly case counts
-		$this->db->select('MONTH(pe.tanggal_pendaftaran) as month, COUNT(*) as count');
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara p', 'pe.nomor_perkara = p.nomor_perkara', 'left');
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $tahun);
+		try {
+			// Get monthly case counts - with better SQL for performance
+			$sql = "SELECT 
+					MONTH(pe.tanggal_pendaftaran) as month, 
+					COUNT(*) as total_count,
+					SUM(CASE WHEN pput.tanggal_putusan IS NOT NULL THEN 1 ELSE 0 END) as decided_count
+				FROM 
+					perkara_efiling pe
+					LEFT JOIN perkara p ON pe.nomor_perkara = p.nomor_perkara
+					LEFT JOIN perkara_putusan pput ON p.perkara_id = pput.perkara_id
+				WHERE 
+					YEAR(pe.tanggal_pendaftaran) = ?";
 
-		if (!empty($jenis_perkara)) {
-			$this->db->where('p.jenis_perkara_nama', $jenis_perkara);
-		}
+			$params = [$tahun];
 
-		$this->db->group_by('MONTH(pe.tanggal_pendaftaran)');
-		$result = $this->db->get()->result();
-
-		foreach ($result as $row) {
-			if (isset($monthly_stats[$row->month])) {
-				$monthly_stats[$row->month]['total_cases'] = $row->count;
+			if (!empty($jenis_perkara)) {
+				$sql .= " AND p.jenis_perkara_nama = ?";
+				$params[] = $jenis_perkara;
 			}
-		}
 
-		// Get monthly decided case counts
-		$this->db->select('MONTH(pe.tanggal_pendaftaran) as month, COUNT(*) as count');
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara p', 'pe.nomor_perkara = p.nomor_perkara', 'left');
-		$this->db->join('perkara_putusan pp', 'p.perkara_id = pp.perkara_id', 'left');
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $tahun);
-		$this->db->where('pp.tanggal_putusan IS NOT NULL');
+			$sql .= " GROUP BY MONTH(pe.tanggal_pendaftaran)";
 
-		if (!empty($jenis_perkara)) {
-			$this->db->where('p.jenis_perkara_nama', $jenis_perkara);
-		}
+			$query = $this->db->query($sql, $params);
+			$result = $query->result();
 
-		$this->db->group_by('MONTH(pe.tanggal_pendaftaran)');
-		$result = $this->db->get()->result();
-
-		foreach ($result as $row) {
-			if (isset($monthly_stats[$row->month])) {
-				$monthly_stats[$row->month]['total_decided'] = $row->count;
+			// Update the initialized array with actual counts
+			foreach ($result as $row) {
+				if (isset($monthly_stats[$row->month])) {
+					$monthly_stats[$row->month]->total_cases = (int)$row->total_count;
+					$monthly_stats[$row->month]->total_decided = (int)$row->decided_count;
+				}
 			}
-		}
 
-		return array_values($monthly_stats);
+			// Convert to indexed array for easier consumption in JavaScript
+			return array_values($monthly_stats);
+		} catch (Exception $e) {
+			log_message('error', 'Error in get_monthly_stats: ' . $e->getMessage());
+
+			// Return empty initialized data on error
+			return array_values($monthly_stats);
+		}
 	}
 
 	/**

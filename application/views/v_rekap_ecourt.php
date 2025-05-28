@@ -170,15 +170,15 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<!-- Tambahkan Id untuk pesan error -->
+									<!-- Chart error messages container -->
 									<div id="monthlyChartError" class="alert alert-danger" style="display: none;"></div>
 
 									<!-- Loading indicator -->
-									<div id="monthlyChartLoading" class="text-center">
-										<i class="fas fa-spinner fa-spin"></i> Memuat chart...
+									<div id="monthlyChartLoading" class="text-center p-3">
+										<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
 									</div>
 
-									<div class="chart-container" style="position: relative; height: 300px;">
+									<div id="monthlyChartContainer" style="height: 300px;">
 										<canvas id="monthlyChart" width="100%" height="300"></canvas>
 									</div>
 								</div>
@@ -200,15 +200,15 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<!-- Tambahkan Id untuk pesan error -->
-									<div id="caseTypeChartError" class="alert alert-danger" style="display: none;"></div>
+									<!-- Chart error messages container -->
+									<div id="pieChartError" class="alert alert-danger" style="display: none;"></div>
 
 									<!-- Loading indicator -->
-									<div id="caseTypeChartLoading" class="text-center">
-										<i class="fas fa-spinner fa-spin"></i> Memuat chart...
+									<div id="pieChartLoading" class="text-center p-3">
+										<i class="fas fa-spinner fa-spin mr-2"></i> Memuat chart...
 									</div>
 
-									<div class="chart-container" style="position: relative; height: 300px;">
+									<div id="pieChartContainer" style="height: 300px;">
 										<canvas id="caseTypeChart" width="100%" height="300"></canvas>
 									</div>
 								</div>

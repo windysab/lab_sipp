@@ -1,0 +1,70 @@
+/**
+ * Chart styles for SIPP application
+ * Ensures proper chart display and responsiveness
+ */
+
+/* Chart container styles */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Make sure chart fills container properly */
+canvas.chart-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Chart loading indicator */
+.chart-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 5;
+}
+
+/* Chart error container */
+.chart-error {
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Empty data message */
+.chart-empty-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 20px;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+/* Chart canvas when hidden */
+canvas.chartjs-hidden {
+    display: none;
+}
+
+/* Chart canvas when rendering */
+canvas.chartjs-rendering {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Chart canvas when rendered */
+canvas.chartjs-rendered {
+    opacity: 1;
+}

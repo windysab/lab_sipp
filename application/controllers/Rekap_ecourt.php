@@ -44,11 +44,41 @@ class Rekap_ecourt extends CI_Controller
         $data['selected_year'] = $tahun;
         $data['selected_jenis_perkara'] = $jenis_perkara;
 
+        // Add debug info for chart data
+        $data['debug_mode'] = true;
+
+        // Preprocess monthly data for better chart rendering
+        $monthly_stats = $this->M_rekap_ecourt->get_monthly_stats($tahun, $jenis_perkara);
+        $data['monthly_stats'] = $this->_prepare_chart_data($monthly_stats);
+
         // Load views
         $this->load->view('template/new_header');
         $this->load->view('template/new_sidebar');
         $this->load->view('v_rekap_ecourt', $data);
         $this->load->view('template/new_footer');
+    }
+
+    /**
+     * Prepare chart data for better rendering
+     *
+     * @param array $monthly_stats Raw monthly statistics
+     * @return array Processed data for charts
+     */
+    private function _prepare_chart_data($monthly_stats)
+    {
+        // Handle empty data
+        if (empty($monthly_stats)) {
+            log_message('debug', 'No monthly data available for charts');
+            return [];
+        }
+
+        // Ensure all data is numeric
+        foreach ($monthly_stats as &$month) {
+            $month->total_cases = (int)$month->total_cases;
+            $month->total_decided = (int)$month->total_decided;
+        }
+
+        return $monthly_stats;
     }
 
     /**
