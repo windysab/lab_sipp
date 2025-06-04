@@ -1,0 +1,242 @@
+{source}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<style>
+		.event-container {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+			max-width: 100%;
+			margin: 0 auto;
+			background: #fff;
+		}
+
+		.event-header {
+			background: linear-gradient(135deg, #046354, #024a3e);
+			color: white;
+			padding: 15px;
+			text-align: center;
+			font-weight: bold;
+			font-size: 18px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.scrollable {
+			overflow-y: auto;
+			max-height: 350px;
+			padding: 0;
+			background: #f8f9fa;
+			scroll-behavior: smooth;
+		}
+
+		.event {
+			display: flex;
+			border-bottom: 1px solid #e9ecef;
+			padding: 15px;
+			transition: all 0.3s ease;
+			background: #fff;
+			margin: 10px;
+			border-radius: 6px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+		}
+
+		.event:hover {
+			background-color: #f8f9fa;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.event-time {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: #046354;
+			color: white;
+			padding: 8px 15px;
+			border-radius: 6px;
+			margin-right: 15px;
+			min-width: 80px;
+			text-align: center;
+		}
+
+		.date {
+			font-size: 22px;
+			font-weight: bold;
+			line-height: 1;
+		}
+
+		.month {
+			font-size: 14px;
+			text-transform: uppercase;
+			margin-top: 3px;
+		}
+
+		.event-content {
+			flex: 1;
+		}
+
+		.event-title {
+			font-weight: bold;
+			margin-bottom: 5px;
+			color: #046354;
+			font-size: 16px;
+		}
+
+		.event-description {
+			color: #555;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		.event-icon {
+			margin-right: 10px;
+			color: #046354;
+		}
+
+		/* Custom scrollbar */
+		.scrollable::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.scrollable::-webkit-scrollbar-track {
+			background: #f1f1f1;
+			border-radius: 10px;
+		}
+
+		.scrollable::-webkit-scrollbar-thumb {
+			background: #046354;
+			border-radius: 10px;
+		}
+
+		.scrollable::-webkit-scrollbar-thumb:hover {
+			background: #024a3e;
+		}
+
+		/* Animation for new events */
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.event {
+			animation: fadeIn 0.5s ease-out forwards;
+		}
+
+		.event:nth-child(1) {
+			animation-delay: 0.1s;
+		}
+
+		.event:nth-child(2) {
+			animation-delay: 0.3s;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="event-container">
+		<div class="event-header">
+			<i class="fas fa-calendar-alt"></i> Agenda Kegiatan - Juni 2024
+		</div>
+		<div class="scrollable">
+			<div class="event">
+				<div class="event-time">
+					<span class="date">02</span>
+					<span class="month">JUN</span>
+				</div>
+				<div class="event-content">
+					<div class="event-title">
+						<i class="fas fa-flag event-icon"></i>Peringatan Hari Lahir Pancasila
+					</div>
+					<div class="event-description">
+						Pengadilan Agama Amuntai melaksanakan upacara peringatan Hari Lahir Pancasila dengan khidmat dan
+						penuh semangat kebangsaan.
+					</div>
+				</div>
+			</div>
+
+			<div class="event">
+				<div class="event-time">
+					<span class="date">02</span>
+					<span class="month">JUN</span>
+				</div>
+				<div class="event-content">
+					<div class="event-title">
+						<i class="fas fa-user-plus event-icon"></i>Penyambutan CPNS Mahkamah Agung RI
+					</div>
+					<div class="event-description">
+						Pengadilan Agama Amuntai Kelas IB, YM Bapak Bahrul Maji, S.H.I., didampingi oleh Wakil Ketua
+						Bapak H. Abdurrahman, S.Ag., M.H., serta jajaran Pejabat Fungsional dan Struktural, menyambut
+						hangat kedatangan Calon Pegawai Negeri Sipil (CPNS) Mahkamah Agung Republik Indonesia Tahun
+						Anggaran 2024 yang ditempatkan di lingkungan Pengadilan Agama Amuntai Kelas IB.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Improved smooth scroll function
+		let isScrolling = false;
+		let scrollingElement = document.querySelector('.scrollable');
+		let scrollSpeed = 1;
+		let pauseScrolling = false;
+
+		// Initialize auto-scroll after 2 seconds
+		setTimeout(function () {
+			startScrolling();
+		}, 2000);
+
+		function startScrolling() {
+			if (isScrolling) return;
+			isScrolling = true;
+
+			let scrollInterval = setInterval(function () {
+				if (pauseScrolling) return;
+
+				let maxScroll = scrollingElement.scrollHeight - scrollingElement.clientHeight;
+				if (scrollingElement.scrollTop < maxScroll) {
+					scrollingElement.scrollTop += scrollSpeed;
+				} else {
+					// When reached bottom, pause briefly then scroll back to top
+					pauseScrolling = true;
+					setTimeout(function () {
+						scrollingElement.scrollTop = 0;
+						setTimeout(function () {
+							pauseScrolling = false;
+						}, 1000);
+					}, 2000);
+				}
+			}, 30);
+		}
+
+		// Pause scrolling on mouse enter
+		scrollingElement.addEventListener('mouseenter', function () {
+			pauseScrolling = true;
+		});
+
+		// Resume scrolling on mouse leave
+		scrollingElement.addEventListener('mouseleave', function () {
+			pauseScrolling = false;
+		});
+	</script>
+</body>
+
+</html>
+<!--
+-->
+{/source}
