@@ -24,7 +24,8 @@ class M_odm extends CI_Model
                 pp.tanggal_minutasi,
                 DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan) AS selisih_hari,
                 CASE 
-                    WHEN DATE(pp.tanggal_minutasi) = DATE(pp.tanggal_putusan) THEN 'Ya' 
+                    WHEN DATE(pp.tanggal_minutasi) = DATE(pp.tanggal_putusan) THEN 'Ya'
+                    WHEN DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan) <= 1 THEN 'Ya (1 Hari)'
                     ELSE 'Tidak' 
                 END AS is_odm
             FROM 
@@ -58,9 +59,10 @@ class M_odm extends CI_Model
 		// Query untuk statistik dasar dengan satu query (lebih efisien)
 		$sql = "SELECT 
                 COUNT(*) AS total_count,
-                SUM(CASE WHEN DATE(pp.tanggal_minutasi) = DATE(pp.tanggal_putusan) THEN 1 ELSE 0 END) AS odm_count,
+                SUM(CASE WHEN DATE(pp.tanggal_minutasi) = DATE(pp.tanggal_putusan) THEN 1 ELSE 0 END) AS odm_same_day,
+                SUM(CASE WHEN DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan) <= 1 THEN 1 ELSE 0 END) AS odm_one_day,
                 AVG(DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan)) AS avg_days,
-                COUNT(CASE WHEN DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan) > 0 THEN 1 END) AS delay_count,
+                COUNT(CASE WHEN DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan) > 1 THEN 1 END) AS delay_count,
                 MAX(DATEDIFF(pp.tanggal_minutasi, pp.tanggal_putusan)) AS max_delay
             FROM 
                 perkara p
@@ -71,7 +73,12 @@ class M_odm extends CI_Model
                 AND pp.tanggal_minutasi IS NOT NULL";
 
 		$query = $this->db->query($sql, array($lap_tahun, $lap_bulan));
-		return $query->row();
+		$stats = $query->row();
+
+		// Tambahkan total ODM yang mencakup same day dan one day
+		$stats->odm_count = $stats->odm_same_day + ($stats->odm_one_day - $stats->odm_same_day);
+
+		return $stats;
 	}
 
 	/**

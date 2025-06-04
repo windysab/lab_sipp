@@ -377,9 +377,23 @@
 											$minutasi_date = new DateTime($row->tanggal_minutasi);
 											$interval = $putus_date->diff($minutasi_date);
 											$days = $interval->days;
-											$is_odm = date('Y-m-d', strtotime($row->tanggal_putusan)) === date('Y-m-d', strtotime($row->tanggal_minutasi));
+
+											// Determine row class and badge based on ODM status
+											if ($row->is_odm === 'Ya') {
+												$rowClass = 'table-success';
+												$badgeClass = 'badge-success';
+												$badgeText = 'One Day Minute';
+											} elseif ($row->is_odm === 'Ya (1 Hari)') {
+												$rowClass = 'table-info';
+												$badgeClass = 'badge-info';
+												$badgeText = 'One Day Minute (1 Hari)';
+											} else {
+												$rowClass = '';
+												$badgeClass = $days <= 7 ? 'badge-warning' : 'badge-danger';
+												$badgeText = $days <= 7 ? 'Dalam Batas Waktu' : 'Terlambat';
+											}
 										?>
-											<tr>
+											<tr class="<?= $rowClass ?>">
 												<td class="text-center"><?= $no++ ?></td>
 												<td><?= $row->nomor_perkara ?></td>
 												<td><?= $row->jenis_perkara_nama ?></td>
@@ -388,6 +402,8 @@
 												<td class="text-center">
 													<?php if ($days == 0): ?>
 														<span class="badge badge-success">0</span>
+													<?php elseif ($days <= 1): ?>
+														<span class="badge badge-info">1</span>
 													<?php elseif ($days <= 7): ?>
 														<span class="badge badge-warning"><?= $days ?></span>
 													<?php else: ?>
@@ -395,13 +411,7 @@
 													<?php endif; ?>
 												</td>
 												<td>
-													<?php if ($is_odm): ?>
-														<span class="badge badge-success">One Day Minute</span>
-													<?php elseif ($days <= 7): ?>
-														<span class="badge badge-info">Dalam Batas Waktu</span>
-													<?php else: ?>
-														<span class="badge badge-danger">Terlambat</span>
-													<?php endif; ?>
+													<span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
 												</td>
 												<td class="text-center">
 													<?php if (!empty($row->perkara_id)): ?>
@@ -416,12 +426,17 @@
 								</table>
 							</div>
 							<div class="card-footer">
-								<div class="text-right">
-									<small class="text-muted">
-										Total data: <?= count($datafilter) ?> |
-										One Day Minute: <?= isset($odm_count) ? $odm_count : 0 ?> (<?= round((isset($odm_count) ? $odm_count : 0) / count($datafilter) * 100, 1) ?>%) |
-										Diperbarui: <?= date('d-m-Y H:i:s') ?>
-									</small>
+								<div class="row">
+									<div class="col-md-6">
+										<span class="text-muted"><i class="fas fa-info-circle mr-1"></i> Keterangan:</span>
+										<ul class="list-inline ml-4 mb-0">
+											<li class="list-inline-item"><span class="badge badge-success">One Day Minute</span> = Minutasi hari yang sama dengan putusan</li>
+											<li class="list-inline-item"><span class="badge badge-info">One Day Minute (1 Hari)</span> = Minutasi 1 hari setelah putusan</li>
+										</ul>
+									</div>
+									<div class="col-md-6 text-right">
+										<small class="text-muted">Total data: <?= count($datafilter) ?> | Diperbarui: <?= date('d-m-Y H:i:s') ?></small>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -557,13 +572,16 @@
 			<?php if (!empty($datafilter)): ?>
 				// Calculate ODM count for chart data
 				<?php
-				// Check and calculate ODM data explicitly here
-				$odm_count = 0;
+				// Hitung data ODM dengan kategori baru
+				$odm_same_day = 0;
+				$odm_one_day = 0;
 				$non_odm_count = 0;
 
 				foreach ($datafilter as $row) {
-					if (date('Y-m-d', strtotime($row->tanggal_putusan)) === date('Y-m-d', strtotime($row->tanggal_minutasi))) {
-						$odm_count++;
+					if ($row->is_odm === 'Ya') {
+						$odm_same_day++;
+					} elseif ($row->is_odm === 'Ya (1 Hari)') {
+						$odm_one_day++;
 					} else {
 						$non_odm_count++;
 					}
@@ -571,7 +589,7 @@
 				?>
 
 				// Log data availability for debugging
-				console.log('ODM count:', <?= $odm_count ?>, 'Non-ODM count:', <?= $non_odm_count ?>);
+				console.log('ODM sama hari:', <?= $odm_same_day ?>, 'ODM 1 hari:', <?= $odm_one_day ?>, 'Non-ODM:', <?= $non_odm_count ?>);
 
 				// Check if Chart.js is loaded
 				if (typeof Chart === 'undefined') {
@@ -591,10 +609,10 @@
 						// Very simple chart configuration
 						var ctx = document.getElementById('odmPieChart').getContext('2d');
 						var data = {
-							labels: ['One Day Minute', 'Lebih dari 1 hari'],
+							labels: ['ODM (Hari Yang Sama)', 'ODM (1 Hari Setelah)', 'Lebih dari 1 hari'],
 							datasets: [{
-								data: [<?= $odm_count ?>, <?= $non_odm_count ?>],
-								backgroundColor: ['#28a745', '#dc3545']
+								data: [<?= $odm_same_day ?>, <?= $odm_one_day ?>, <?= $non_odm_count ?>],
+								backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
 							}]
 						};
 
