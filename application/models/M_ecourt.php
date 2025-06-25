@@ -12,34 +12,36 @@ class M_ecourt extends CI_Model
 	 */
 	public function ecourt($jenis_perkara, $lap_bulan, $lap_tahun)
 	{
-		// Security: use query binding to prevent SQL injection
-		// Use proper SQL for the CASE WHEN statement
+		// Initialize row counter
+		$this->db->query('SET @row_number := 0');
+
+		// Use direct SQL query approach to match your working SQL
 		$this->db->select('
-            pe.efiling_id,
-            p.perkara_id,
+            (@row_number := @row_number + 1) as jumlah,
             pp1.nama as nama_pihak,
             ph.email,
             p.jenis_perkara_nama,
             p.nomor_perkara,
-            pe.tanggal_pendaftaran,
-            CASE WHEN p.nomor_perkara IS NOT NULL THEN "Teregistrasi" ELSE "Pendaftaran" END as status
-        ', FALSE); // Important: FALSE parameter disables escaping for raw SQL
+            tanggal_pendaftaran,
+            CASE WHEN p.nomor_perkara IS NOT NULL THEN "Teregistrasi" ELSE "Pendaftaran" END as status,
+            p.perkara_id
+        ', FALSE);
 
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara_efiling_id pei', 'pe.efiling_id = pei.efiling_id', 'left');
-		$this->db->join('perkara p', 'p.perkara_id = pei.perkara_id OR p.nomor_perkara = pe.nomor_perkara', 'left');
-		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id AND pp1.urutan = 1', 'left');
-		$this->db->join('pihak ph', 'pp1.pihak_id = ph.id', 'left');
+		$this->db->from('perkara p');
+		$this->db->join('perkara_efiling_id pei', 'p.perkara_id = pei.perkara_id', 'inner');
+		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id', 'inner');
+		$this->db->join('pihak ph', 'pp1.pihak_id = ph.id', 'inner');
 
 		// Apply filters
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $lap_tahun);
-		$this->db->where('MONTH(pe.tanggal_pendaftaran)', $lap_bulan);
+		$this->db->where('YEAR(tanggal_pendaftaran)', $lap_tahun);
+		$this->db->where('MONTH(tanggal_pendaftaran)', $lap_bulan);
+		$this->db->where('pp1.urutan', '1');
 
 		if ($jenis_perkara !== 'all') {
 			$this->db->like('p.nomor_perkara', $jenis_perkara, 'both');
 		}
 
-		$this->db->order_by('pe.tanggal_pendaftaran', 'DESC');
+		$this->db->order_by('p.perkara_id', 'ASC');
 
 		$query = $this->db->get();
 		return $query->result();
