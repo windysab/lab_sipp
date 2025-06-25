@@ -93,6 +93,30 @@
 						</div>
 					</div>
 					<?php if (isset($_POST['btn'])): ?>
+						<?php if (!empty($datafilter)): ?>
+							<!-- Prominent Export Buttons -->
+							<div class="row mb-4">
+								<div class="col-md-12">
+									<div class="bg-light p-3" style="border-radius: 5px; border: 1px solid #ddd;">
+										<h5><i class="fas fa-file-export mr-2"></i> Export Data Penyerahan Akta Cerai</h5>
+										<div class="mt-3">
+											<a href="<?= site_url('Penyerahan_ac/export_excel/' . (isset($_POST['lap_bulan']) ? $_POST['lap_bulan'] : date('m')) . '/' . (isset($_POST['lap_tahun']) ? $_POST['lap_tahun'] : date('Y'))) ?>" class="btn btn-success btn-lg">
+												<i class="fas fa-file-excel mr-2"></i> Export ke Excel
+											</a>
+											<button type="button" class="btn btn-danger btn-lg ml-2 export-pdf">
+												<i class="fas fa-file-pdf mr-2"></i> Export ke PDF
+											</button>
+											<button type="button" class="btn btn-primary btn-lg ml-2 print-data">
+												<i class="fas fa-print mr-2"></i> Cetak
+											</button>
+											<span class="text-muted ml-3">
+												<i class="fas fa-info-circle mr-1"></i> Klik tombol untuk mengunduh data dalam format yang diinginkan
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
 						<!-- Statistik Card -->
 						<?php if (isset($statistics) && !empty($datafilter)): ?>
 							<div class="row">

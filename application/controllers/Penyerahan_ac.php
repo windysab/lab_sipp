@@ -45,4 +45,30 @@ class Penyerahan_ac extends CI_Controller
 		$this->load->view('v_penyerahan_ac', $data);
 		$this->load->view('template/new_footer');
 	}
+
+	/**
+	 * Export data to Excel
+	 * @param string $bulan
+	 * @param string $tahun
+	 */
+	public function export_excel($bulan = null, $tahun = null)
+	{
+		// If parameters not provided via URL, try to get from POST
+		if (empty($bulan)) {
+			$bulan = $this->input->post('lap_bulan');
+			if (empty($bulan)) {
+				$bulan = date('m');
+			}
+		}
+
+		if (empty($tahun)) {
+			$tahun = $this->input->post('lap_tahun');
+			if (empty($tahun)) {
+				$tahun = date('Y');
+			}
+		}
+
+		// Call model's export method
+		$this->M_Penyerahan_ac->export_excel($bulan, $tahun);
+	}
 }
