@@ -56,26 +56,39 @@ class M_ecourt extends CI_Model
 	 */
 	public function get_stats($jenis_perkara, $lap_bulan, $lap_tahun)
 	{
+		$stats = new stdClass();
+
+		// Count total cases first
+		$this->db->select('COUNT(*) as total_count');
+		$this->db->from('perkara p');
+		$this->db->join('perkara_efiling_id pei', 'p.perkara_id = pei.perkara_id', 'inner');
+		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id', 'inner');
+		$this->db->where('YEAR(tanggal_pendaftaran)', $lap_tahun);
+		$this->db->where('MONTH(tanggal_pendaftaran)', $lap_bulan);
+		$this->db->where('pp1.urutan', '1');
+
+		$result = $this->db->get()->row();
+		$stats->total_count = $result->total_count;
+
 		// Count registered cases
 		$this->db->select('COUNT(*) as registered_count');
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara_efiling_id pei', 'pe.efiling_id = pei.efiling_id', 'left');
-		$this->db->join('perkara p', 'p.perkara_id = pei.perkara_id OR p.nomor_perkara = pe.nomor_perkara', 'left');
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $lap_tahun);
-		$this->db->where('MONTH(pe.tanggal_pendaftaran)', $lap_bulan);
+		$this->db->from('perkara p');
+		$this->db->join('perkara_efiling_id pei', 'p.perkara_id = pei.perkara_id', 'inner');
+		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id', 'inner');
+		$this->db->where('YEAR(tanggal_pendaftaran)', $lap_tahun);
+		$this->db->where('MONTH(tanggal_pendaftaran)', $lap_bulan);
 		$this->db->where('p.nomor_perkara IS NOT NULL');
 
 		$result = $this->db->get()->row();
-		$stats = new stdClass();
 		$stats->registered_count = $result->registered_count;
 
 		// Count Gugatan (Pdt.G) cases
 		$this->db->select('COUNT(*) as gugatan_count');
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara_efiling_id pei', 'pe.efiling_id = pei.efiling_id', 'left');
-		$this->db->join('perkara p', 'p.perkara_id = pei.perkara_id OR p.nomor_perkara = pe.nomor_perkara', 'left');
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $lap_tahun);
-		$this->db->where('MONTH(pe.tanggal_pendaftaran)', $lap_bulan);
+		$this->db->from('perkara p');
+		$this->db->join('perkara_efiling_id pei', 'p.perkara_id = pei.perkara_id', 'inner');
+		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id', 'inner');
+		$this->db->where('YEAR(tanggal_pendaftaran)', $lap_tahun);
+		$this->db->where('MONTH(tanggal_pendaftaran)', $lap_bulan);
 		$this->db->like('p.nomor_perkara', 'Pdt.G', 'both');
 
 		$result = $this->db->get()->row();
@@ -83,11 +96,11 @@ class M_ecourt extends CI_Model
 
 		// Count Permohonan (Pdt.P) cases
 		$this->db->select('COUNT(*) as permohonan_count');
-		$this->db->from('perkara_efiling pe');
-		$this->db->join('perkara_efiling_id pei', 'pe.efiling_id = pei.efiling_id', 'left');
-		$this->db->join('perkara p', 'p.perkara_id = pei.perkara_id OR p.nomor_perkara = pe.nomor_perkara', 'left');
-		$this->db->where('YEAR(pe.tanggal_pendaftaran)', $lap_tahun);
-		$this->db->where('MONTH(pe.tanggal_pendaftaran)', $lap_bulan);
+		$this->db->from('perkara p');
+		$this->db->join('perkara_efiling_id pei', 'p.perkara_id = pei.perkara_id', 'inner');
+		$this->db->join('perkara_pihak1 pp1', 'p.perkara_id = pp1.perkara_id', 'inner');
+		$this->db->where('YEAR(tanggal_pendaftaran)', $lap_tahun);
+		$this->db->where('MONTH(tanggal_pendaftaran)', $lap_bulan);
 		$this->db->like('p.nomor_perkara', 'Pdt.P', 'both');
 
 		$result = $this->db->get()->row();

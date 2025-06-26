@@ -117,7 +117,7 @@
 							<div class="col-lg-3 col-6">
 								<div class="small-box bg-info">
 									<div class="inner">
-										<h3><?= count($datafilter) ?></h3>
+										<h3><?= isset($stats->total_count) ? $stats->total_count : '0' ?></h3>
 										<p>Total Perkara E-Court</p>
 									</div>
 									<div class="icon">
