@@ -148,4 +148,128 @@ class M_ecourt extends CI_Model
 		$query = $this->db->get();
 		return $query->row();
 	}
+
+	/**
+	 * Export data to Excel format
+	 * 
+	 * @param string $jenis_perkara Type of case
+	 * @param string $lap_bulan Month (01-12)
+	 * @param string $lap_tahun Year
+	 * @return void Outputs Excel file for download
+	 */
+	public function export_excel($jenis_perkara, $lap_bulan, $lap_tahun)
+	{
+		// Get data
+		$data = $this->ecourt($jenis_perkara, $lap_bulan, $lap_tahun);
+
+		// Define month names for display
+		$nama_bulan = array(
+			'01' => 'Januari',
+			'02' => 'Februari',
+			'03' => 'Maret',
+			'04' => 'April',
+			'05' => 'Mei',
+			'06' => 'Juni',
+			'07' => 'Juli',
+			'08' => 'Agustus',
+			'09' => 'September',
+			'10' => 'Oktober',
+			'11' => 'November',
+			'12' => 'Desember'
+		);
+
+		// Get case type name for title
+		$jenis_text = ($jenis_perkara === 'Pdt.G') ? 'Gugatan' : (($jenis_perkara === 'Pdt.P') ? 'Permohonan' : 'Semua Jenis');
+
+		// Set filename
+		$month_label = isset($nama_bulan[$lap_bulan]) ? $nama_bulan[$lap_bulan] : 'Semua_Bulan';
+		$filename = "Data_Perkara_ECourt_{$jenis_text}_{$month_label}_{$lap_tahun}_" . date('Ymd_His') . ".xls";
+
+		// Set header for Excel download
+		header("Content-Type: application/vnd.ms-excel");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Cache-Control: max-age=0");
+
+		// Create Excel content (HTML table with Excel compatibility)
+		echo "
+		<html xmlns:o='urn:schemas-microsoft-com:office:office' 
+			  xmlns:x='urn:schemas-microsoft-com:office:excel' 
+			  xmlns='http://www.w3.org/TR/REC-html40'>
+		<head>
+			<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+			<style>
+				table {
+					border-collapse: collapse;
+					width: 100%;
+				}
+				th, td {
+					border: 1px solid #000000;
+					padding: 8px;
+					text-align: left;
+				}
+				th {
+					background-color: #4CAF50;
+					color: white;
+					font-weight: bold;
+				}
+				.txt-center {
+					text-align: center;
+				}
+				h3 {
+					text-align: center;
+				}
+				.registered {
+					background-color: #DFF0D8;
+					color: #3c763d;
+				}
+				.pending {
+					background-color: #FCF8E3;
+					color: #8a6d3b;
+				}
+			</style>
+		</head>
+		<body>
+			<h3>DATA PERKARA E-COURT " . (isset($nama_bulan[$lap_bulan]) ? $nama_bulan[$lap_bulan] . ' ' : '') . "$lap_tahun</h3>
+			<p>Jenis Perkara: $jenis_text</p>
+			<p>Tanggal Export: " . date('d-m-Y H:i:s') . "</p>
+			
+			<table border='1'>
+				<thead>
+					<tr>
+						<th class='txt-center'>No</th>
+						<th>Nama Penggugat/Pemohon</th>
+						<th>Email</th>
+						<th>Jenis Perkara</th>
+						<th>Nomor Perkara</th>
+						<th>Tanggal Daftar</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>";
+
+		$no = 1;
+		foreach ($data as $row) {
+			$status_class = $row->status === 'Teregistrasi' ? 'registered' : 'pending';
+
+			echo "<tr class='$status_class'>
+					<td class='txt-center'>$no</td>
+					<td>{$row->nama_pihak}</td>
+					<td>{$row->email}</td>
+					<td>{$row->jenis_perkara_nama}</td>
+					<td>{$row->nomor_perkara}</td>
+					<td>" . date('d-m-Y', strtotime($row->tanggal_pendaftaran)) . "</td>
+					<td>{$row->status}</td>
+				</tr>";
+			$no++;
+		}
+
+		echo "
+				</tbody>
+			</table>
+			
+			<p>Total data: " . count($data) . "</p>
+		</body>
+		</html>";
+		exit;
+	}
 }
