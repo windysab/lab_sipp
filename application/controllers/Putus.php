@@ -54,8 +54,16 @@ class Putus extends CI_Controller
 		$data['lap_tahun'] = $lap_tahun;
 		$data['search'] = $search;
 
+		// Build query string for pagination links
+		$query_params = [];
+		if (!empty($jenis_perkara)) $query_params['jenis_perkara'] = $jenis_perkara;
+		if (!empty($lap_bulan)) $query_params['lap_bulan'] = $lap_bulan;
+		if (!empty($lap_tahun)) $query_params['lap_tahun'] = $lap_tahun;
+		if (!empty($search)) $query_params['search'] = $search;
+		$query_string = http_build_query($query_params);
+
 		// Pagination config
-		$config['base_url'] = site_url('Putus/index');
+		$config['base_url'] = site_url('Putus/index') . ($query_string ? '?' . $query_string : '');
 		$config['total_rows'] = $this->M_putus->count_putus($jenis_perkara, $lap_bulan, $lap_tahun, $search);
 		$config['per_page'] = 25;
 		$config['page_query_string'] = TRUE;
