@@ -96,6 +96,32 @@ var ChartHelper = {
         if (rect.width === 0 || rect.height === 0) return false;
 
         return true;
+    },
+
+    /**
+     * Initialize all charts on the page
+     * This function can be called to initialize charts that are dynamically added
+     */
+    initAllCharts: function () {
+        console.log('ChartHelper: Initializing all charts on page');
+        
+        // Find all canvas elements with chart-related classes or data attributes
+        var canvases = document.querySelectorAll('canvas[id*="chart"], canvas[id*="Chart"], canvas.chart-canvas');
+        
+        if (canvases.length === 0) {
+            console.log('ChartHelper: No chart canvases found on page');
+            return;
+        }
+        
+        console.log('ChartHelper: Found ' + canvases.length + ' potential chart canvas(es)');
+        
+        // This is a placeholder - specific chart initialization should be handled
+        // by the individual page scripts, not by this helper
+        canvases.forEach(function(canvas) {
+            if (canvas.id) {
+                console.log('ChartHelper: Found canvas with ID: ' + canvas.id);
+            }
+        });
     }
 };
 

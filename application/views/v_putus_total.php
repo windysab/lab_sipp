@@ -363,15 +363,16 @@
 		</div>
 	</div>
 
-	<?php if (isset($stats) && !empty($datafilter)): ?>
-		<script src="<?= base_url('assets/plugins/chart.js/Chart.min.js') ?>"></script>
-		<script>
-			$(document).ready(function() {
-				// Initialize select2
-				$('.select2').select2({
-					theme: 'bootstrap4'
-				});
+	<!-- Chart.js -->
+	<script src="<?= base_url('assets/plugins/chart.js/Chart.min.js') ?>"></script>
+	<script>
+		$(document).ready(function() {
+			// Initialize select2
+			$('.select2').select2({
+				theme: 'bootstrap4'
+			});
 
+			<?php if (!empty($datafilter)): ?>
 				// Initialize DataTable
 				$('#dataTable').DataTable({
 					"responsive": true,
@@ -395,12 +396,13 @@
 				});
 
 				// Initialize Chart
-				var ctx = document.getElementById('caseDistributionChart').getContext('2d');
-				var caseDistributionChart = new Chart(ctx, {
-					type: 'horizontalBar',
-					data: {
-						labels: [
-							<?php
+				if (typeof Chart !== 'undefined' && document.getElementById('caseDistributionChart')) {
+					var ctx = document.getElementById('caseDistributionChart').getContext('2d');
+					
+					// Chart data
+					var chartLabels = [
+						<?php
+						if (!empty($datafilter)) {
 							$labels = [];
 							foreach ($datafilter as $row) {
 								// Truncate long names
@@ -410,68 +412,113 @@
 								$labels[] = "'" . addslashes($name) . "'";
 							}
 							echo implode(', ', $labels);
-							?>
-						],
-						datasets: [{
-							label: 'Jumlah Perkara Putus',
-							data: [
-								<?php
-								$data = [];
-								foreach ($datafilter as $row) {
-									$data[] = $row->putus;
-								}
-								echo implode(', ', $data);
-								?>
-							],
-							backgroundColor: [
-								<?php
-								$colors = [];
-								foreach ($datafilter as $row) {
-									if ($row->putus > 10) {
-										$colors[] = "'rgba(220, 53, 69, 0.7)'";
-									} elseif ($row->putus > 5) {
-										$colors[] = "'rgba(255, 193, 7, 0.7)'";
-									} else {
-										$colors[] = "'rgba(40, 167, 69, 0.7)'";
-									}
-								}
-								echo implode(', ', $colors);
-								?>
-							],
-							borderColor: [
-								<?php
-								$borderColors = [];
-								foreach ($datafilter as $row) {
-									if ($row->putus > 10) {
-										$borderColors[] = "'rgba(220, 53, 69, 1)'";
-									} elseif ($row->putus > 5) {
-										$borderColors[] = "'rgba(255, 193, 7, 1)'";
-									} else {
-										$borderColors[] = "'rgba(40, 167, 69, 1)'";
-									}
-								}
-								echo implode(', ', $borderColors);
-								?>
-							],
-							borderWidth: 1
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						scales: {
-							xAxes: [{
-								ticks: {
-									beginAtZero: true,
-									stepSize: 1
-								}
-							}]
 						}
+						?>
+					];
+					
+					var chartData = [
+						<?php
+						if (!empty($datafilter)) {
+							$data = [];
+							foreach ($datafilter as $row) {
+								$data[] = $row->putus;
+							}
+							echo implode(', ', $data);
+						}
+						?>
+					];
+					
+					var backgroundColors = [
+						<?php
+						if (!empty($datafilter)) {
+							$colors = [];
+							foreach ($datafilter as $row) {
+								if ($row->putus > 10) {
+									$colors[] = "'rgba(220, 53, 69, 0.7)'";
+								} elseif ($row->putus > 5) {
+									$colors[] = "'rgba(255, 193, 7, 0.7)'";
+								} else {
+									$colors[] = "'rgba(40, 167, 69, 0.7)'";
+								}
+							}
+							echo implode(', ', $colors);
+						}
+						?>
+					];
+					
+					var borderColors = [
+						<?php
+						if (!empty($datafilter)) {
+							$borderColors = [];
+							foreach ($datafilter as $row) {
+								if ($row->putus > 10) {
+									$borderColors[] = "'rgba(220, 53, 69, 1)'";
+								} elseif ($row->putus > 5) {
+									$borderColors[] = "'rgba(255, 193, 7, 1)'";
+								} else {
+									$borderColors[] = "'rgba(40, 167, 69, 1)'";
+								}
+							}
+							echo implode(', ', $borderColors);
+						}
+						?>
+					];
+
+					// Create chart only if we have data
+					if (chartLabels.length > 0 && chartData.length > 0) {
+						var caseDistributionChart = new Chart(ctx, {
+							type: 'horizontalBar',
+							data: {
+								labels: chartLabels,
+								datasets: [{
+									label: 'Jumlah Perkara Putus',
+									data: chartData,
+									backgroundColor: backgroundColors,
+									borderColor: borderColors,
+									borderWidth: 1
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								legend: {
+									display: true,
+									position: 'top'
+								},
+								scales: {
+									xAxes: [{
+										ticks: {
+											beginAtZero: true,
+											stepSize: 1
+										}
+									}],
+									yAxes: [{
+										ticks: {
+											fontSize: 10
+										}
+									}]
+								},
+								tooltips: {
+									mode: 'index',
+									intersect: false,
+									callbacks: {
+										label: function(tooltipItem, data) {
+											return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.xLabel + ' perkara';
+										}
+									}
+								}
+							}
+						});
+					} else {
+						// Show message if no data
+						$('#caseDistributionChart').parent().html('<div class="alert alert-info text-center"><i class="fas fa-info-circle"></i> Tidak ada data untuk ditampilkan dalam grafik</div>');
 					}
-				});
-			});
-		</script>
-	<?php endif; ?>
+				} else {
+					console.error('Chart.js library not loaded or canvas element not found');
+				}
+			<?php endif; ?>
+		});
+	</script>
 </body>
 
 </html>
