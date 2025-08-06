@@ -61,6 +61,12 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="<?php echo site_url('Putus_total') ?>" class="nav-link">
+								<i class="fas fa-chart-bar nav-icon"></i>
+								<p>Perkara Putus Total</p>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="<?php echo site_url('Sisa_bulan_ini') ?>" class="nav-link">
 								<i class="fas fa-calendar-week nav-icon"></i>
 								<p>Sisa Perkara Bulan Ini</p>
