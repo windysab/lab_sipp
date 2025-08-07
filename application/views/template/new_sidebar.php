@@ -67,6 +67,12 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="<?php echo site_url('Putus_uji') ?>" class="nav-link">
+								<i class="fas fa-check-circle nav-icon"></i>
+								<p>Perkara Putus Uji</p>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="<?php echo site_url('Putus_total') ?>" class="nav-link">
 								<i class="fas fa-chart-bar nav-icon"></i>
 								<p>Perkara Putus Total</p>
