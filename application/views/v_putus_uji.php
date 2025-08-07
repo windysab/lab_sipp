@@ -368,7 +368,14 @@
                       <tbody>
                         <?php
                          $no = 1;
-                         $total_putus = !empty($putus) ? array_sum(array_column($putus, 'putus')) : 0;
+                         // Calculate total putus correctly from object properties
+                         $total_putus = 0;
+                         if (!empty($putus)) {
+                           foreach ($putus as $item) {
+                             $total_putus += $item->putus;
+                           }
+                         }
+                         
                          foreach ($putus as $row) {
                            $percentage = $total_putus > 0 ? round(($row->putus / $total_putus) * 100, 1) : 0;
                           
