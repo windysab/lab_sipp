@@ -126,8 +126,8 @@
                       <span class="input-group-text"><i class="fas fa-balance-scale"></i></span>
                     </div>
                     <select name="jenis_perkara" class="form-control select2" required>
-                      <option value="Pdt.G" <?php echo (isset($_POST['jenis_perkara']) && $_POST['jenis_perkara'] === 'Pdt.G') ? 'selected' : ''; ?>>Perkara Gugatan (Pdt.G)</option>
-                      <option value="Pdt.P" <?php echo (isset($_POST['jenis_perkara']) && $_POST['jenis_perkara'] === 'Pdt.P') ? 'selected' : ''; ?>>Perkara Permohonan (Pdt.P)</option>
+                      <option value="Pdt.G" <?php echo ($jenis_perkara === 'Pdt.G') ? 'selected' : ''; ?>>Perkara Gugatan (Pdt.G)</option>
+                      <option value="Pdt.P" <?php echo ($jenis_perkara === 'Pdt.P') ? 'selected' : ''; ?>>Perkara Permohonan (Pdt.P)</option>
                     </select>
                   </div>
                 </div>
@@ -152,7 +152,7 @@
                           ];
                           $current_month = date('m');
                           foreach ($months as $value => $label) {
-                            $selected = (isset($_POST['lap_bulan']) && $_POST['lap_bulan'] === $value) ? 'selected' : (!isset($_POST['lap_bulan']) && $value == $current_month ? 'selected' : '');
+                            $selected = ($lap_bulan === $value) ? 'selected' : '';
                             echo "<option value=\"$value\" $selected>$label</option>";
                           }
                           ?>
@@ -169,7 +169,7 @@
                           <?php
                           $currentYear = date('Y');
                           for ($year = 2016; $year <= $currentYear + 1; $year++) {
-                            $selected = (isset($_POST['lap_tahun']) && $_POST['lap_tahun'] == $year) ? 'selected' : (!isset($_POST['lap_tahun']) && $year == $currentYear ? 'selected' : '');
+                            $selected = ($lap_tahun == $year) ? 'selected' : '';
                             echo "<option value=\"$year\" $selected>$year</option>";
                           }
                           ?>
@@ -185,7 +185,7 @@
                   <button type="submit" name="btn" value="Tampilkan" class="btn btn-primary">
                     <i class="fas fa-search mr-2"></i> Tampilkan Data
                   </button>
-                  <?php if (!empty($datafilter)): ?>
+                  <?php if (!empty($putus)): ?>
                     <button type="button" class="btn btn-success" onclick="exportToExcel()">
                       <i class="fas fa-file-excel mr-2"></i> Export Excel
                     </button>
@@ -196,53 +196,53 @@
           </div>
         </div>
         
-        <?php if (!empty($datafilter)): ?>
+        <?php if (!empty($putus)): ?>
           <!-- Statistics Cards -->
           <div class="row">
             <div class="col-lg-3 col-6">
-              <div class="small-box bg-info">
+              <div class="small-box bg-success">
                 <div class="inner">
-                  <h3><?= count($datafilter) ?></h3>
-                  <p>Total Majelis Hakim</p>
+                  <h3><?= $statistics['total_perkara'] ?></h3>
+                  <p>Total Perkara Putus</p>
                 </div>
                 <div class="icon">
-                  <i class="fas fa-user-friends"></i>
+                  <i class="fas fa-gavel"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  <?= isset($_POST['lap_bulan']) && isset($_POST['lap_tahun']) ? $months[$_POST['lap_bulan']] . ' ' . $_POST['lap_tahun'] : '' ?>
-                  <i class="fas fa-calendar-alt mx-1"></i>
+                  Semua data perkara putus
+                  <i class="fas fa-info-circle mx-1"></i>
                 </a>
               </div>
             </div>
             
             <div class="col-lg-3 col-6">
-               <div class="small-box bg-success">
-                 <div class="inner">
-                   <h3><?= !empty($datafilter) ? array_sum(array_column($datafilter, 'putus')) : 0 ?></h3>
-                   <p>Total Perkara Putus</p>
-                 </div>
-                 <div class="icon">
-                   <i class="fas fa-gavel"></i>
-                 </div>
-                 <a href="#" class="small-box-footer">
-                   Rata-rata: <?= !empty($datafilter) ? round(array_sum(array_column($datafilter, 'putus')) / count($datafilter), 1) : 0 ?> per majelis
-                   <i class="fas fa-info-circle mx-1"></i>
-                 </a>
-               </div>
-             </div>
-            
-            <div class="col-lg-3 col-6">
                <div class="small-box bg-warning">
                  <div class="inner">
-                   <h3><?= (!empty($datafilter) && !empty(array_column($datafilter, 'putus'))) ? max(array_column($datafilter, 'putus')) : 0 ?></h3>
+                   <h3><?= $statistics['beban_tertinggi'] ?></h3>
                    <p>Beban Tertinggi</p>
                  </div>
                  <div class="icon">
                    <i class="fas fa-chart-line"></i>
                  </div>
                  <a href="#" class="small-box-footer">
-                   Terendah: <?= (!empty($datafilter) && !empty(array_column($datafilter, 'putus'))) ? min(array_column($datafilter, 'putus')) : 0 ?>
-                   <i class="fas fa-info-circle mx-1"></i>
+                   Dari data majelis hakim
+                   <i class="fas fa-user-tie mx-1"></i>
+                 </a>
+               </div>
+             </div>
+            
+            <div class="col-lg-3 col-6">
+               <div class="small-box bg-info">
+                 <div class="inner">
+                   <h3><?= $statistics['beban_terendah'] ?></h3>
+                   <p>Beban Terendah</p>
+                 </div>
+                 <div class="icon">
+                   <i class="fas fa-chart-line"></i>
+                 </div>
+                 <a href="#" class="small-box-footer">
+                   Dari data majelis hakim
+                   <i class="fas fa-user-tie mx-1"></i>
                  </a>
                </div>
              </div>
@@ -250,15 +250,15 @@
             <div class="col-lg-3 col-6">
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3><?= isset($_POST['jenis_perkara']) ? $_POST['jenis_perkara'] : 'N/A' ?></h3>
+                  <h3><?= $jenis_perkara ?></h3>
                   <p>Jenis Perkara</p>
                 </div>
                 <div class="icon">
                   <i class="fas fa-balance-scale"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Filter Aktif
-                  <i class="fas fa-filter mx-1"></i>
+                  <?= $months[$lap_bulan] . ' ' . $lap_tahun ?>
+                  <i class="fas fa-calendar-alt mx-1"></i>
                 </a>
               </div>
             </div>
@@ -304,7 +304,7 @@
                     <tbody>
                       <?php
                       $high_load = 0; $medium_load = 0; $low_load = 0;
-                      foreach ($datafilter as $row) {
+                      foreach ($putus as $row) {
                         if ($row->putus > 10) $high_load++;
                         elseif ($row->putus > 5) $medium_load++;
                         else $low_load++;
@@ -341,7 +341,7 @@
           <div class="col-12">
             <div class="card card-outline card-primary">
               <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-table mr-1"></i> Data Perkara Putus <?php echo (isset($_POST['lap_bulan']) && isset($months[$_POST['lap_bulan']])) ? $months[$_POST['lap_bulan']] . ' ' . $_POST['lap_tahun'] : ''; ?></h3>
+                <h3 class="card-title"><i class="fas fa-table mr-1"></i> Data Perkara Putus <?= $months[$lap_bulan] . ' ' . $lap_tahun ?></h3>
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
@@ -353,7 +353,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <?php if (!empty($datafilter)): ?>
+                <?php if (!empty($putus)): ?>
                   <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped table-hover">
                       <thead class="thead-dark">
@@ -368,8 +368,8 @@
                       <tbody>
                         <?php
                          $no = 1;
-                         $total_putus = !empty($datafilter) ? array_sum(array_column($datafilter, 'putus')) : 0;
-                         foreach ($datafilter as $row) {
+                         $total_putus = !empty($putus) ? array_sum(array_column($putus, 'putus')) : 0;
+                         foreach ($putus as $row) {
                            $percentage = $total_putus > 0 ? round(($row->putus / $total_putus) * 100, 1) : 0;
                           
                           // Determine category and badge color
@@ -430,7 +430,7 @@
                             <span class="badge badge-info badge-lg">100%</span>
                           </th>
                           <th class="text-center">
-                            <span class="badge badge-secondary badge-lg"><?= count($datafilter) ?> Majelis</span>
+                            <span class="badge badge-secondary badge-lg"><?= count($putus) ?> Majelis</span>
                           </th>
                         </tr>
                       </tfoot>
@@ -508,13 +508,13 @@ $(function () {
         extend: 'excel',
         text: '<i class="fas fa-file-excel"></i> Excel',
         className: 'btn btn-success btn-sm',
-        title: 'Laporan Perkara Putus <?= isset($_POST["lap_bulan"]) && isset($_POST["lap_tahun"]) ? $months[$_POST["lap_bulan"]] . " " . $_POST["lap_tahun"] : "" ?>'
+        title: 'Laporan Perkara Putus <?= $months[$lap_bulan] . " " . $lap_tahun ?>'
       },
       {
         extend: 'pdf',
         text: '<i class="fas fa-file-pdf"></i> PDF',
         className: 'btn btn-danger btn-sm',
-        title: 'Laporan Perkara Putus <?= isset($_POST["lap_bulan"]) && isset($_POST["lap_tahun"]) ? $months[$_POST["lap_bulan"]] . " " . $_POST["lap_tahun"] : "" ?>'
+        title: 'Laporan Perkara Putus <?= $months[$lap_bulan] . " " . $lap_tahun ?>'
       },
       {
         extend: 'print',
@@ -528,13 +528,13 @@ $(function () {
            '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
   });
   
-  <?php if (!empty($datafilter)): ?>
+  <?php if (!empty($putus)): ?>
   // Chart Data
   const chartData = {
-    labels: [<?php foreach($datafilter as $row) echo '"' . addslashes($row->majelis_hakim_nama) . '",'; ?>],
+    labels: [<?php foreach($putus as $row) echo '"' . addslashes($row->majelis_hakim_nama) . '",'; ?>],
     datasets: [{
       label: 'Jumlah Perkara Putus',
-      data: [<?php foreach($datafilter as $row) echo $row->putus . ','; ?>],
+      data: [<?php foreach($putus as $row) echo $row->putus . ','; ?>],
       backgroundColor: [
         'rgba(255, 99, 132, 0.8)',
         'rgba(54, 162, 235, 0.8)',
