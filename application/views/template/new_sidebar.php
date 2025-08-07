@@ -55,9 +55,21 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="<?php echo site_url('Masuk_harian') ?>" class="nav-link">
+								<i class="fas fa-calendar-week nav-icon"></i>
+								<p>Perkara Masuk Harian</p>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="<?php echo site_url('Putus') ?>" class="nav-link">
 								<i class="fas fa-check-circle nav-icon"></i>
 								<p>Perkara Putus</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo site_url('Putus_uji') ?>" class="nav-link">
+								<i class="fas fa-check-circle nav-icon"></i>
+								<p>Perkara Putus Uji</p>
 							</a>
 						</li>
 						<li class="nav-item">
