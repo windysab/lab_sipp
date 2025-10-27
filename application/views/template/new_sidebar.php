@@ -73,6 +73,12 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="<?php echo site_url('Bht_putus') ?>" class="nav-link">
+								<i class="fas fa-file-signature nav-icon"></i>
+								<p>BHT Perkara Putus</p>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="<?php echo site_url('Putus_total') ?>" class="nav-link">
 								<i class="fas fa-chart-bar nav-icon"></i>
 								<p>Perkara Putus Total</p>
@@ -315,7 +321,7 @@
 				</li>
 
 				<li class="nav-header">DATA &amp; PENGEMBANGAN</li>
-				
+
 				<li class="nav-item">
 					<a href="<?= site_url('Biaya_perdata') ?>" class="nav-link">
 						<i class="nav-icon fas fa-money-bill-wave"></i>
